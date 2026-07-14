@@ -25,21 +25,58 @@
 
 ## 🚀 Getting Started
 
-Ventra is split into a robust Python FastAPI backend and a beautiful React frontend.
+Ventra operates on a hybrid architecture: the heavy SIP/WebRTC infrastructure runs in Docker (WSL), while the AI agents and UI run locally on Windows.
 
-### 1. Start the Backend (Brain)
+### 1. Docker Infrastructure (Run in WSL)
+To support real phone calls, we must spin up the SIP and WebRTC media servers. Open your WSL terminal in the project root:
+```bash
+docker-compose up -d
+```
+**Containers Created:**
+- 📞 **Asterisk**: The PBX SIP server that listens for your softphone connection on port `5061`.
+- 🌐 **LiveKit Server**: The WebRTC media engine for ultra-low latency audio streaming.
+- 🗄️ **Redis**: Required by LiveKit for state management.
+- 🌉 **LiveKit SIP Gateway**: A bridge that converts incoming Asterisk SIP calls into LiveKit WebRTC rooms.
+
+### 2. Local Windows Applications (Run in PowerShell/CMD)
+Once the Docker containers are running, open your Windows terminal to start the application layers.
+
+**Start the Web Backend (Admin Dashboard API):**
 ```bash
 cd backend
 python main.py
 ```
-*The backend runs on `localhost:8000` and manages all Gemini AI sessions, API keys, and latency tracking.*
+*Runs on `localhost:8000`.*
 
-### 2. Start the Frontend (Face)
+**Start the Ventra LiveKit Agent (AI Voice Brain):**
+```bash
+cd backend
+python livekit_agent.py
+```
+*This connects to the Docker LiveKit server and waits for incoming SIP calls to transcribe and respond using Gemini.*
+
+**Start the Frontend UI (Admin Dashboard):**
 ```bash
 cd frontend
 npm run dev
 ```
-*The frontend runs on Vite and contains Ventra's interactive animated UI and Admin Dashboard.*
+*Runs on `localhost:5173`. Click the Admin button and use passcode `admin123` to view live call metrics.*
+
+---
+
+## 🧪 Full Testing Phase (How to Call Ventra)
+
+Want to talk to Ventra using a real phone dialer? Follow these steps:
+
+1. **Download Zoiper** (or any SIP softphone) on your Windows machine or mobile phone on the same network.
+2. **Create a SIP Account in Zoiper**:
+   - **Username**: `100`
+   - **Password**: `secret`
+   - **Domain/Host**: `127.0.0.1:5061` (Use your computer's local IP address if calling from a mobile phone on the same WiFi).
+3. **Make the Call**:
+   - Dial extension **`200`** in Zoiper.
+   - Asterisk will instantly bridge your call to the LiveKit Server.
+   - The Python `livekit_agent.py` will answer the phone line, process your speech using STT, and reply natively over the call using Gemini!
 
 ---
 

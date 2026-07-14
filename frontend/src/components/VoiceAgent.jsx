@@ -43,7 +43,7 @@ const VoiceAgent = ({ roomId, onLeave }) => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/rooms/${roomId}/history`);
+        const response = await fetch(`http://localhost:8001/api/rooms/${roomId}/history`);
         const data = await response.json();
         setMessages(data.history || []);
         
@@ -102,7 +102,7 @@ const VoiceAgent = ({ roomId, onLeave }) => {
     setIsTyping(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const response = await fetch('http://localhost:8001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ room_id: roomId, message: text }),

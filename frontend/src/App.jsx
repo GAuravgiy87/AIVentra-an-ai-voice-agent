@@ -13,7 +13,7 @@ function App() {
   const createRoom = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/rooms', {
+      const response = await fetch('http://localhost:8001/api/rooms', {
         method: 'POST'
       });
       const data = await response.json();

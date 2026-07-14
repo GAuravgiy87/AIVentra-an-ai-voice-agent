@@ -3,3 +3,11 @@ uvicorn
 google-generativeai
 python-dotenv
 pydantic
+livekit-agents
+livekit-plugins-google
+livekit-plugins-silero
+whisper
+piper-tts
+librosa
+numpy
+vosk

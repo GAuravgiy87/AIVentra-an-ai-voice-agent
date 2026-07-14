@@ -1,4 +1,5 @@
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from typing import Dict, List
 import time
 import os
@@ -9,7 +10,7 @@ load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("GEMINI_API_KEY environment variable is not set")
-genai.configure(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
 DEFAULT_MODEL = "gemini-3.5-flash"
 
@@ -64,12 +65,9 @@ def get_admin_metrics():
 
 def create_room(room_id: str):
     if room_id not in rooms_sessions:
-        model = genai.GenerativeModel(
-            model_name=DEFAULT_MODEL,
-            system_instruction=SYSTEM_PROMPT
-        )
+        config = types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
         # Start a new chat session for this room
-        chat = model.start_chat(history=[])
+        chat = client.chats.create(model=DEFAULT_MODEL, config=config)
         rooms_sessions[room_id] = chat
         rooms_history[room_id] = [{"role": "system", "content": SYSTEM_PROMPT}]
 

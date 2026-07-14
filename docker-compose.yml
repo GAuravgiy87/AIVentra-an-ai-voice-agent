@@ -1,0 +1,41 @@
+services:
+  livekit:
+    image: livekit/livekit-server:latest
+    command: --config /etc/livekit.yaml --dev
+    ports:
+      - "7890:7880"
+      - "7891:7891"
+      - "7892:7882/udp"
+      - "50000-50050:50000-50050/udp"
+    environment:
+      - "LIVEKIT_KEYS=devkey: secret"
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml
+
+  redis:
+    image: redis:6-alpine
+
+  livekit-sip:
+    image: livekit/sip:latest
+    environment:
+      - LIVEKIT_URL=ws://livekit:7880
+      - LIVEKIT_API_KEY=devkey
+      - LIVEKIT_API_SECRET=secret
+      - REDIS_URL=redis://redis:6379/0
+    command: --config /sip/config.yaml
+    volumes:
+      - ./sip.yaml:/sip/config.yaml
+    depends_on:
+      - livekit
+      - redis
+
+  asterisk:
+    image: andrius/asterisk:latest
+    ports:
+      - "5061:5060/udp"
+      - "5061:5060/tcp" # Map to 5061 on host for TCP connection
+      - "10000-10050:10000-10050/udp"
+    volumes:
+      - ./asterisk/pjsip.conf:/etc/asterisk/pjsip.conf
+      - ./asterisk/extensions.conf:/etc/asterisk/extensions.conf
+      - ./asterisk/rtp.conf:/etc/asterisk/rtp.conf
