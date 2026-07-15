@@ -46,9 +46,24 @@ class WhisperSTT(STT):
         mono16k = librosa.resample(mono, orig_sr=frame.sample_rate, target_sr=16000)
         # Run transcription
         lang_str = language if isinstance(language, str) else None
-        result = self._whisper_model.transcribe(mono16k, language=lang_str)
+        result = self._whisper_model.transcribe(mono16k, language=lang_str, fp16=False)
         
-        text = result.get("text", "")
+        text = result.get("text", "").strip()
+        
+        # --- Noise & Whisper Hallucination Filter ---
+        # Whisper often hallucinates these phrases when it hears pure silence or background static.
+        # By dropping them, we prevent the LLM from being called unnecessarily, saving API limits!
+        noise_phrases = [
+            "thank you", "thank you.", "thank you for watching", "thank you for watching.", 
+            "thanks for watching", "thanks for watching.", "you.", "you", "subscribe", 
+            "subtitles by", "amara.org", "bye.", "bye", "thank you very much.", "thanks.", "thanks"
+        ]
+        
+        clean_text = text.lower().strip()
+        if clean_text in noise_phrases or len(clean_text.replace(".", "").strip()) <= 1:
+            text = "" # Discard the noise by returning an empty transcript
+        # --------------------------------------------
+        
         lang_code = language if isinstance(language, str) else "en"
         speech_data = SpeechData(language=lang_code, text=text, confidence=1.0)
         return SpeechEvent(type=SpeechEventType.FINAL_TRANSCRIPT, alternatives=[speech_data])

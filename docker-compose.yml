@@ -1,6 +1,7 @@
 services:
   livekit:
     image: livekit/livekit-server:latest
+    restart: always
     command: --config /etc/livekit.yaml --dev
     ports:
       - "7890:7880"
@@ -14,9 +15,11 @@ services:
 
   redis:
     image: redis:6-alpine
+    restart: always
 
   livekit-sip:
     image: livekit/sip:latest
+    restart: always
     environment:
       - LIVEKIT_URL=ws://livekit:7880
       - LIVEKIT_API_KEY=devkey
@@ -31,10 +34,16 @@ services:
 
   asterisk:
     image: andrius/asterisk:latest
+    restart: always
     ports:
-      - "5061:5060/udp"
-      - "5061:5060/tcp" # Map to 5061 on host for TCP connection
-      - "10000-10050:10000-10050/udp"
+      - "0.0.0.0:5061:5060/udp"
+      - "0.0.0.0:5061:5060/tcp" # Map to 5061 on host for TCP connection
+      - "0.0.0.0:20000:20000/udp"
+      - "0.0.0.0:20001:20001/udp"
+      - "0.0.0.0:20002:20002/udp"
+      - "0.0.0.0:20003:20003/udp"
+      - "0.0.0.0:20004:20004/udp"
+      - "0.0.0.0:20005:20005/udp"
     volumes:
       - ./asterisk/pjsip.conf:/etc/asterisk/pjsip.conf
       - ./asterisk/extensions.conf:/etc/asterisk/extensions.conf

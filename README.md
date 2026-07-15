@@ -46,7 +46,7 @@ Once the Docker containers are running, open your Windows terminal to start the 
 cd backend
 python main.py
 ```
-*Runs on `localhost:8000`.*
+*Runs on `localhost:8001`.*
 
 **Start the Ventra LiveKit Agent (AI Voice Brain):**
 ```bash

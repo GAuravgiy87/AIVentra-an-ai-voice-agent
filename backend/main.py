@@ -22,12 +22,27 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-class AdminLoginRequest(BaseModel):
-    password: str
-
 class RoomResponse(BaseModel):
     room_id: str
     message: str
+
+from typing import Optional
+
+class ReportMessageRequest(BaseModel):
+    room_id: str
+    role: str
+    content: str
+    latency_ms: Optional[int] = None
+
+@app.post("/api/admin/report_message")
+def report_message(request: ReportMessageRequest):
+    agent.add_report_message(
+        room_id=request.room_id,
+        role=request.role,
+        content=request.content,
+        latency_ms=request.latency_ms
+    )
+    return {"status": "ok"}
 
 @app.post("/api/rooms", response_model=RoomResponse)
 def create_new_room():
@@ -47,6 +62,9 @@ def chat(request: ChatRequest):
 def get_history(room_id: str):
     history = agent.get_room_history(room_id)
     return {"history": history}
+
+class AdminLoginRequest(BaseModel):
+    password: str
 
 @app.post("/api/admin/login")
 def admin_login(request: AdminLoginRequest):

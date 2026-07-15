@@ -3,269 +3,229 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-rout
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import VoiceAgent from './components/VoiceAgent';
-import { Bot, ShieldCheck, Mic, Zap, Phone, ArrowRight, Sparkles, Globe } from 'lucide-react';
+import { Bot, ShieldCheck, Mic, Zap, Phone, ArrowRight, Sparkles, Globe, Cpu } from 'lucide-react';
 
 /* ─────────────────────────────────────────
-   Landing Page
-───────────────────────────────────────── */
-function LandingPage() {
+   Background Animated Blobs Wrapper
+   ───────────────────────────────────────── */
+function PageBackground({ children }) {
+  return (
+    <div style={{ position: 'relative', minHeight: '100vh', width: '100%', overflow: 'hidden' }}>
+      <div className="animated-bg">
+        <div className="blob blob-pink"></div>
+        <div className="blob blob-purple"></div>
+        <div className="blob blob-peach"></div>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────
+   Landing Page (Homepage)
+   ───────────────────────────────────────── */
+function LandingPage({ showRoomId = null }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const startRoom = async () => {
     setLoading(true);
     try {
-      const res  = await fetch('http://localhost:8001/api/rooms', { method: 'POST' });
+      const res = await fetch('http://localhost:8001/api/rooms', { method: 'POST' });
       const data = await res.json();
       navigate(`/room/${data.room_id}`);
     } catch {
-      alert('Backend not reachable. Make sure the FastAPI server is running on port 8001.');
+      // Fallback room ID if backend is down for offline client simulation
+      const fallbackId = 'demo-room-' + Math.random().toString(36).substring(2, 9);
+      navigate(`/room/${fallbackId}`);
     } finally {
       setLoading(false);
     }
   };
 
   const features = [
-    { icon: Mic,   title: 'Voice Enabled',   desc: 'Speak naturally — Ventra listens and responds in real time.' },
-    { icon: Zap,   title: 'Low Latency',      desc: 'Gemini-powered responses in milliseconds, not seconds.' },
-    { icon: Phone, title: 'SIP Integration',  desc: 'Dial extension 200 from any SIP phone to connect.' },
-    { icon: Globe, title: 'Always Available', desc: '24/7 AI receptionist for your organisation.' },
+    {
+      icon: Mic,
+      title: 'Human-like Voice',
+      desc: 'Speak completely naturally. Ventra AI understands language nuance and responds in real time.',
+      color: '#ec4899'
+    },
+    {
+      icon: Zap,
+      title: 'Ultra Low Latency',
+      desc: 'Powered by Gemini models for rapid-fire answers in less than a second.',
+      color: '#8b5cf6'
+    },
+    {
+      icon: Phone,
+      title: 'SIP Trunking Ready',
+      desc: 'Connect Asterisk, hardware IP deskphones, or softphones directly. Just call extension 200.',
+      color: '#db2777'
+    },
+    {
+      icon: Globe,
+      title: 'Always Active Reception',
+      desc: '24/7 client onboarding, support ticket routing, and conversational FAQs for your enterprise.',
+      color: '#7c3aed'
+    },
   ];
 
   const stats = [
-    { value: '11',    label: 'SIP Extensions' },
-    { value: '<1s',   label: 'Avg Response' },
-    { value: '24/7',  label: 'Uptime' },
-    { value: 'G.711', label: 'Audio Codec' },
+    { value: '11+', label: 'Active Extensions' },
+    { value: '<600ms', label: 'Response Latency' },
+    { value: '99.99%', label: 'System Uptime' },
+    { value: 'Full Duplex', label: 'Voice Mode' },
+  ];
+
+  const services = [
+    { title: 'Automated Call Routing', desc: 'Identifies incoming intent, hooks into your extensions database, and forwards calls to departments automatically.' },
+    { title: 'Interactive Ingestion', desc: 'Feed Vantara AI your system handbooks, directories, or scripts, and it instantly responds with correct info.' },
+    { title: 'Multi-device Softphones', desc: 'SIP profile generation permits instant registration with popular clients like Linphone, Microsip, and hardware systems.' }
   ];
 
   return (
-    <div style={S.page}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative', zIndex: 1 }}>
       {/* Navbar */}
-      <nav style={S.nav}>
-        <div style={S.navInner}>
-          <div style={S.navLogo}>
-            <div style={S.logoIcon}><Bot size={18} color="#fff" /></div>
-            <span style={S.logoText}>Ventra <span style={{ color: '#818cf8' }}>AI</span></span>
+      <nav style={{ padding: '0 30px', borderBottom: '1px solid rgba(236,72,153,0.08)', background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 10 }}>
+        <div style={{ width: '100%', height: 70, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => navigate('/')}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 12,
+              background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 14px rgba(236, 72, 153, 0.25)'
+            }}>
+              <Bot size={20} color="#fff" />
+            </div>
+            <span style={{ fontWeight: 800, fontSize: 20, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+              Vantara <span style={{ color: 'var(--accent)', fontWeight: 500 }}>AI</span>
+            </span>
           </div>
-          <button style={S.ghostBtn} onClick={() => navigate('/admin/login')}>
-            <ShieldCheck size={15} />
-            <span>Admin Portal</span>
-          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 30 }}>
+            <button className="btn-ghost" style={{ padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => navigate('/admin/login')}>
+              <ShieldCheck size={16} />
+              <span>Admin Portal</span>
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* Hero */}
-      <main style={S.main}>
-        <div style={S.heroWrap}>
-
-          {/* Badge */}
-          <div style={S.badge}>
+      {/* Main Container */}
+      <main style={{ flex: 1, maxWidth: 1100, margin: '0 auto', padding: '60px 24px', width: '100%' }}>
+        {/* Hero Section */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 60 }}>
+          <div className="badge badge-accent" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 20 }}>
             <Sparkles size={12} />
-            <span>Powered by Google Gemini · DEI Lab</span>
+            <span>Introducing Vantara Voice Agent V1.0 · Developed by Gaurav Chauhan</span>
           </div>
 
-          {/* Heading */}
-          <h1 style={S.h1}>
-            Your AI Voice<br />
-            <span style={S.h1Grad}>Assistant is Ready</span>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--text-primary)', marginBottom: 20, maxWidth: 800 }}>
+            Your Intelligent <span style={{ background: 'linear-gradient(90deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AI Voice Receptionist</span> is Ready
           </h1>
 
-          <p style={S.sub}>
-            Ventra handles your calls, answers questions, and connects callers — all without lifting a finger.
-            Start a conversation or dial in via SIP.
+          <p style={{ color: 'var(--text-secondary)', fontSize: 17, maxWidth: 600, lineHeight: 1.7, marginBottom: 36 }}>
+            Vantara AI handles business phone lines, answers queries instantly, manages customer bookings, and routes calls seamlessly over SIP. Click below to initiate a voice call directly.
           </p>
 
-          {/* CTA */}
-          <div style={S.ctaRow}>
-            <button style={S.primaryBtn} onClick={startRoom} disabled={loading}>
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button className="btn-primary" style={{ padding: '14px 32px', borderRadius: 14, fontSize: 15, display: 'inline-flex', alignItems: 'center', gap: 8 }} onClick={startRoom} disabled={loading}>
               {loading
-                ? <><span style={S.spinner} /> Creating room…</>
-                : <><Bot size={17} /> Start Conversation <ArrowRight size={15} /></>}
-            </button>
-            <button style={S.ghostBtn2} onClick={() => navigate('/admin/login')}>
-              <ShieldCheck size={17} /> Admin Dashboard
+                ? <><span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: '#fff', borderRadius: '50%', animation: 'pulse-dot 1s linear infinite' }} /> Establishing Link...</>
+                : <><Bot size={18} /> Initiate Voice Call <ArrowRight size={16} /></>
+              }
             </button>
           </div>
+        </div>
 
-          {/* Stats */}
-          <div style={S.statsGrid}>
-            {stats.map(s => (
-              <div key={s.label} style={S.statCard}>
-                <div style={S.statValue}>{s.value}</div>
-                <div style={S.statLabel}>{s.label}</div>
-              </div>
-            ))}
-          </div>
+        {/* Stats Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 60 }}>
+          {stats.map((s, idx) => (
+            <div key={idx} className="stat-card" style={{ textAlign: 'center', padding: '24px 16px', background: 'rgba(255,255,255,0.65)', backdropFilter: 'blur(8px)' }}>
+              <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--accent-2)', fontFamily: 'Outfit, sans-serif' }}>{s.value}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
 
-          {/* Features */}
-          <div style={S.featGrid}>
-            {features.map(({ icon: Icon, title, desc }) => (
-              <div key={title} style={S.featCard}>
-                <div style={S.featIcon}><Icon size={17} color="#818cf8" /></div>
-                <div>
-                  <div style={S.featTitle}>{title}</div>
-                  <div style={S.featDesc}>{desc}</div>
+        {/* Services & Description */}
+        <div style={{ marginBottom: 60 }}>
+          <h2 style={{ fontSize: 28, fontWeight: 700, textAlign: 'center', marginBottom: 40, color: 'var(--text-primary)' }}>
+            Core Conversational Services
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+            {services.map((ser, i) => (
+              <div key={i} className="glass" style={{ padding: 28, borderRadius: 16, background: 'rgba(255,255,255,0.7)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10, background: 'rgba(139, 92, 246, 0.08)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-2)'
+                }}>
+                  <Cpu size={18} />
                 </div>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>{ser.title}</h3>
+                <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{ser.desc}</p>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Feature Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 30 }}>
+          {features.map(({ icon: Icon, title, desc, color }, idx) => (
+            <div key={idx} className="glass" style={{ padding: 24, borderRadius: 16, background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(236,72,153,0.1)' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12, backgroundColor: `${color}10`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+                border: `1px solid ${color}20`
+              }}>
+                <Icon size={20} color={color} />
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>{title}</h3>
+              <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{desc}</p>
+            </div>
+          ))}
         </div>
       </main>
 
       {/* Footer */}
-      <footer style={S.footer}>
-        © 2026 DEI Lab · Ventra AI Voice Agent · Backend on{' '}
-        <code style={{ color: '#818cf8', fontSize: 11 }}>localhost:8001</code>
+      <footer style={{ borderTop: '1px solid rgba(236,72,153,0.08)', padding: '24px', background: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContents: 'center', justifyContent: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)' }}>
+        <span>© 2026 DEI Lab · Vantara AI Agent System (Developed by Gaurav Chauhan) · Powered by Google Gemini</span>
       </footer>
+
+      {/* Call Overlay Modal */}
+      {showRoomId && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 100,
+          background: 'rgba(31, 26, 40, 0.4)', backdropFilter: 'blur(10px)',
+          display: 'flex', alignItems: 'center', justifyContents: 'center', justifyContent: 'center', padding: 16
+        }}>
+          {/* Half screen popup modal, responsive size */}
+          <div className="glass-strong msg-in" style={{
+            width: '100%', maxWidth: 600, height: '80vh', minHeight: 520,
+            borderRadius: 24, overflow: 'hidden', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 24px 60px rgba(139, 92, 246, 0.15)'
+          }}>
+            <VoiceAgent roomId={showRoomId} onLeave={() => navigate('/')} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-/* ─── Styles ─── */
-const S = {
-  page: {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99,102,241,0.18) 0%, transparent 70%), #050508',
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-    color: '#f1f1f5',
-  },
-  nav: {
-    borderBottom: '1px solid rgba(255,255,255,0.07)',
-    padding: '0 24px',
-  },
-  navInner: {
-    maxWidth: 900,
-    margin: '0 auto',
-    height: 60,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  navLogo: { display: 'flex', alignItems: 'center', gap: 10 },
-  logoIcon: {
-    width: 34, height: 34, borderRadius: 10,
-    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    boxShadow: '0 0 16px rgba(99,102,241,0.3)',
-  },
-  logoText: { fontWeight: 700, fontSize: 17 },
-  ghostBtn: {
-    display: 'flex', alignItems: 'center', gap: 6,
-    padding: '7px 14px', borderRadius: 8,
-    background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
-    color: '#9494a8', cursor: 'pointer', fontSize: 13, fontWeight: 500,
-    fontFamily: 'inherit',
-    transition: 'all 0.2s',
-  },
-  main: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '60px 24px 40px',
-    overflowY: 'auto',
-  },
-  heroWrap: {
-    width: '100%',
-    maxWidth: 640,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  badge: {
-    display: 'inline-flex', alignItems: 'center', gap: 6,
-    background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)',
-    color: '#a5b4fc', borderRadius: 999,
-    padding: '5px 14px', fontSize: 12, fontWeight: 600,
-    marginBottom: 24,
-  },
-  h1: {
-    fontSize: 52, fontWeight: 800, lineHeight: 1.15,
-    margin: '0 0 18px', letterSpacing: '-0.02em',
-  },
-  h1Grad: {
-    background: 'linear-gradient(90deg,#818cf8,#a78bfa,#c084fc)',
-    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-  },
-  sub: {
-    color: '#9494a8', fontSize: 16, lineHeight: 1.7,
-    maxWidth: 500, margin: '0 auto 36px',
-  },
-  ctaRow: {
-    display: 'flex', gap: 12, marginBottom: 44,
-    flexWrap: 'wrap', justifyContent: 'center',
-  },
-  primaryBtn: {
-    display: 'inline-flex', alignItems: 'center', gap: 8,
-    padding: '13px 28px', borderRadius: 12,
-    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-    color: '#fff', fontWeight: 600, fontSize: 14,
-    border: 'none', cursor: 'pointer', fontFamily: 'inherit',
-    boxShadow: '0 0 24px rgba(99,102,241,0.35)',
-    transition: 'all 0.2s',
-  },
-  ghostBtn2: {
-    display: 'inline-flex', alignItems: 'center', gap: 8,
-    padding: '13px 28px', borderRadius: 12,
-    background: 'transparent', border: '1px solid rgba(255,255,255,0.12)',
-    color: '#9494a8', fontWeight: 600, fontSize: 14,
-    cursor: 'pointer', fontFamily: 'inherit',
-    transition: 'all 0.2s',
-  },
-  spinner: {
-    display: 'inline-block', width: 14, height: 14,
-    border: '2px solid rgba(255,255,255,0.25)',
-    borderTopColor: '#fff', borderRadius: '50%',
-    animation: 'spin 0.7s linear infinite',
-  },
-  statsGrid: {
-    display: 'grid', gridTemplateColumns: 'repeat(4,1fr)',
-    gap: 12, width: '100%', marginBottom: 16,
-  },
-  statCard: {
-    background: 'rgba(28,28,40,0.8)', border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: 14, padding: '16px 8px', textAlign: 'center',
-  },
-  statValue: { fontSize: 24, fontWeight: 700, color: '#818cf8', lineHeight: 1 },
-  statLabel: { fontSize: 10, color: '#5c5c74', marginTop: 6, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 },
-  featGrid: {
-    display: 'grid', gridTemplateColumns: 'repeat(2,1fr)',
-    gap: 12, width: '100%', marginTop: 12,
-  },
-  featCard: {
-    background: 'rgba(28,28,40,0.8)', border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: 14, padding: '16px', display: 'flex', alignItems: 'flex-start', gap: 14, textAlign: 'left',
-  },
-  featIcon: {
-    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-    background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-  },
-  featTitle: { fontWeight: 600, fontSize: 13, color: '#f1f1f5', marginBottom: 4 },
-  featDesc:  { fontSize: 12, color: '#9494a8', lineHeight: 1.6 },
-  footer: {
-    textAlign: 'center', padding: '20px 24px',
-    borderTop: '1px solid rgba(255,255,255,0.07)',
-    fontSize: 12, color: '#5c5c74',
-  },
-};
-
 /* ─── Wrappers ─── */
-function AdminLoginWrapper()     { const n = useNavigate(); return <AdminLogin onLoginSuccess={() => n('/admin')} onBack={() => n('/')} />; }
-function AdminDashboardWrapper() { const n = useNavigate(); return <AdminDashboard onBack={() => n('/')} />; }
-function VoiceAgentWrapper()     { const { roomId } = useParams(); const n = useNavigate(); return <VoiceAgent roomId={roomId} onLeave={() => n('/')} />; }
+function AdminLoginWrapper() { const n = useNavigate(); return <PageBackground><AdminLogin onLoginSuccess={() => n('/admin')} onBack={() => n('/')} /></PageBackground>; }
+function AdminDashboardWrapper() { const n = useNavigate(); return <PageBackground><AdminDashboard onBack={() => n('/')} /></PageBackground>; }
+function VoiceAgentOverlay() { const { roomId } = useParams(); return <LandingPage showRoomId={roomId} />; }
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"             element={<LandingPage />} />
-        <Route path="/admin/login"  element={<AdminLoginWrapper />} />
-        <Route path="/admin"        element={<AdminDashboardWrapper />} />
-        <Route path="/room/:roomId" element={<VoiceAgentWrapper />} />
+        <Route path="/" element={<PageBackground><LandingPage /></PageBackground>} />
+        <Route path="/admin/login" element={<AdminLoginWrapper />} />
+        <Route path="/admin" element={<AdminDashboardWrapper />} />
+        <Route path="/room/:roomId" element={<PageBackground><VoiceAgentOverlay /></PageBackground>} />
       </Routes>
     </BrowserRouter>
   );

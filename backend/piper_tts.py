@@ -1,9 +1,10 @@
 import numpy as np
-import librosa
 import asyncio
 from livekit.agents import tts, utils
 from livekit.agents.types import DEFAULT_API_CONNECT_OPTIONS
 from piper import PiperVoice
+
+import scipy.signal
 
 class PiperTTSWrapper(tts.TTS):
     """LiveKit TTS plugin that wraps Piper TTS.
@@ -13,7 +14,7 @@ class PiperTTSWrapper(tts.TTS):
         self.engine = PiperVoice.load(model_path)
         super().__init__(
             capabilities=tts.TTSCapabilities(streaming=False),
-            sample_rate=48000,
+            sample_rate=24000,
             num_channels=1,
         )
 
@@ -35,18 +36,22 @@ class PiperChunkedStream(tts.ChunkedStream):
                 return b""
             # Concatenate all float arrays
             audio = np.concatenate([c.audio_float_array for c in chunks])
-            # Resample to 48 kHz for LiveKit
-            audio48k = librosa.resample(audio, orig_sr=22050, target_sr=48000)
-            resampled_int16 = (audio48k * 32767).astype(np.int16).tobytes()
+            
+            # High-quality anti-aliased resampling to standard WebRTC 24kHz using scipy
+            target_len = int(len(audio) * 24000 / 22050)
+            audio24k = scipy.signal.resample(audio, target_len)
+            
+            resampled_int16 = (audio24k * 32767).astype(np.int16).tobytes()
             return resampled_int16
 
         audio_bytes = await asyncio.to_thread(_do_synth)
         
         output_emitter.initialize(
             request_id=utils.shortuuid(),
-            sample_rate=48000,
+            sample_rate=24000,
             num_channels=1,
             mime_type="audio/pcm",
         )
         if audio_bytes:
             output_emitter.push(audio_bytes)
+

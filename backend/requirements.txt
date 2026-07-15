@@ -6,7 +6,7 @@ pydantic
 livekit-agents
 livekit-plugins-google
 livekit-plugins-silero
-whisper
+openai-whisper
 piper-tts
 librosa
 numpy
