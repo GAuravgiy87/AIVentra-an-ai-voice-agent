@@ -1858,3 +1858,717 @@ RuntimeError: AgentSession isn't running
 2026-07-16 13:05:44,722 [INFO] livekit.agents: draining worker
 2026-07-16 13:05:44,734 [WARNING] livekit.agents: exiting forcefully
 2026-07-16 13:05:45,921 [INFO] livekit.agents: registered worker
+2026-07-16 13:21:53,887 [INFO] livekit.agents: starting worker
+2026-07-16 13:21:53,888 [INFO] livekit.agents: plugin registered
+2026-07-16 13:21:53,888 [INFO] livekit.agents: plugin registered
+2026-07-16 13:21:53,901 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 13:21:53,946 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:21:54,050 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:21:54,050 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:21:54,050 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:21:54,066 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:21:54,066 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:21:54,066 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:21:54,066 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:21:54,451 [INFO] livekit.agents: registered worker
+2026-07-16 13:23:39,686 [INFO] livekit.agents: received job request
+2026-07-16 13:23:40,337 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:23:40,350 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:23:40,500 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:23:40,793 [ERROR] livekit.agents: unhandled exception while running the job task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py", line 334, in _traceable_entrypoint
+    await self._job_entrypoint_fnc(job_ctx)
+  File "D:\voiceagent\backend\livekit_agent.py", line 120, in entrypoint
+    for p in ctx.room.participants.values():
+             ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Room' object has no attribute 'participants'
+2026-07-16 13:25:17,611 [INFO] livekit.agents: draining worker
+2026-07-16 13:25:17,612 [INFO] livekit.agents: shutting down worker
+2026-07-16 13:25:17,819 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 13:25:28,887 [INFO] livekit.agents: starting worker
+2026-07-16 13:25:28,887 [INFO] livekit.agents: plugin registered
+2026-07-16 13:25:28,887 [INFO] livekit.agents: plugin registered
+2026-07-16 13:25:28,903 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 13:25:28,936 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:25:28,936 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:25:28,936 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:25:28,936 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:25:28,936 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:25:28,936 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:25:28,936 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:25:28,936 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:25:29,310 [INFO] livekit.agents: registered worker
+2026-07-16 13:25:45,438 [INFO] livekit.agents: received job request
+2026-07-16 13:25:45,529 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:25:45,530 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:25:45,601 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:25:48,813 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:25:49,892 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:25:50,784 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:25:50,785 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:26:35,660 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 13:26:41,524 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:27:01,915 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:27:01,916 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:27:01,916 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 13:27:08,995 [INFO] livekit.agents: received job request
+2026-07-16 13:27:08,998 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:27:09,087 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:27:09,090 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:27:12,302 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:27:13,361 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:28:15,401 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:28:23,562 [INFO] livekit.agents: draining worker
+2026-07-16 13:28:23,802 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 13:29:54,871 [INFO] livekit.agents: starting worker
+2026-07-16 13:29:54,871 [INFO] livekit.agents: plugin registered
+2026-07-16 13:29:54,871 [INFO] livekit.agents: plugin registered
+2026-07-16 13:29:54,888 [INFO] livekit.agents: HTTP server listening on :62335
+2026-07-16 13:29:55,242 [INFO] livekit.agents: registered worker
+2026-07-16 13:29:58,866 [INFO] livekit.agents: received job request
+2026-07-16 13:29:58,866 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:29:58,882 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:29:58,882 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:29:59,048 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:29:59,195 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:30:00,293 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:30:01,059 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:30:15,899 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:30:35,911 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:30:35,913 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 13:31:04,922 [INFO] livekit.agents: shutting down worker
+2026-07-16 13:31:05,062 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:284> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:31:54,612 [INFO] livekit.agents: starting worker
+2026-07-16 13:31:54,612 [INFO] livekit.agents: plugin registered
+2026-07-16 13:31:54,612 [INFO] livekit.agents: plugin registered
+2026-07-16 13:31:54,622 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 13:31:54,655 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:31:54,655 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:31:54,655 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:31:54,655 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:31:54,662 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:31:54,662 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:31:54,662 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:31:54,662 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:31:55,020 [INFO] livekit.agents: registered worker
+2026-07-16 13:32:12,540 [INFO] livekit.agents: received job request
+2026-07-16 13:32:12,606 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:32:12,606 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:32:12,694 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:32:14,365 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:32:15,447 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:33:17,490 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:33:37,546 [INFO] livekit.agents: draining worker
+2026-07-16 13:33:37,724 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 13:33:50,979 [INFO] livekit.agents: starting worker
+2026-07-16 13:33:50,989 [INFO] livekit.agents: plugin registered
+2026-07-16 13:33:50,989 [INFO] livekit.agents: plugin registered
+2026-07-16 13:33:50,990 [INFO] livekit.agents: HTTP server listening on :62442
+2026-07-16 13:33:51,364 [INFO] livekit.agents: registered worker
+2026-07-16 13:33:56,452 [INFO] livekit.agents: received job request
+2026-07-16 13:33:56,452 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:33:56,469 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:33:56,470 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:33:56,623 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:33:58,455 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:33:59,535 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:34:00,304 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:34:11,777 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:34:31,913 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:34:31,914 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 13:36:41,327 [INFO] livekit.agents: received job request
+2026-07-16 13:36:41,328 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:36:41,336 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:36:41,336 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:36:41,339 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:36:43,125 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:36:44,167 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:36:44,862 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:36:58,677 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:37:18,912 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 1729
+2026-07-16 13:37:18,915 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:39:29,329 [INFO] livekit.agents: received job request
+2026-07-16 13:39:29,330 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:39:29,338 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:39:29,339 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:39:29,342 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:39:31,121 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:39:32,225 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:39:32,608 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-239' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:288> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:39:32,848 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:39:47,637 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:40:07,913 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 3706
+2026-07-16 13:40:07,914 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:40:40,741 [INFO] livekit.agents: received job request
+2026-07-16 13:40:40,742 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:40:40,750 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:40:40,751 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:40:40,754 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:40:42,531 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:40:43,589 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:40:44,172 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:41:44,197 [INFO] livekit.agents: shutting down worker
+2026-07-16 13:41:44,380 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-64' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:288> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:41:44,381 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-419' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:288> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:41:44,381 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-598' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:288> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:43:27,478 [INFO] livekit.agents: starting worker
+2026-07-16 13:43:27,478 [INFO] livekit.agents: plugin registered
+2026-07-16 13:43:27,478 [INFO] livekit.agents: plugin registered
+2026-07-16 13:43:27,493 [INFO] livekit.agents: HTTP server listening on :55132
+2026-07-16 13:43:27,848 [INFO] livekit.agents: registered worker
+2026-07-16 13:44:36,335 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 13:44:36,343 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 13:44:40,394 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 13:44:46,426 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 13:44:54,459 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 13:45:02,461 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 13:45:12,463 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 13:45:22,452 [INFO] livekit.agents: registered worker
+2026-07-16 13:45:46,072 [INFO] livekit.agents: shutting down worker
+2026-07-16 13:45:57,298 [INFO] livekit.agents: starting worker
+2026-07-16 13:45:57,298 [INFO] livekit.agents: plugin registered
+2026-07-16 13:45:57,298 [INFO] livekit.agents: plugin registered
+2026-07-16 13:45:57,311 [INFO] livekit.agents: HTTP server listening on :63619
+2026-07-16 13:45:57,679 [INFO] livekit.agents: registered worker
+2026-07-16 13:45:59,782 [INFO] livekit.agents: received job request
+2026-07-16 13:45:59,789 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:45:59,789 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:45:59,789 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:45:59,964 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:46:00,571 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:46:01,654 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:46:02,461 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:46:22,943 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:46:42,967 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:46:42,968 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 13:50:32,327 [INFO] livekit.agents: shutting down worker
+2026-07-16 13:50:32,456 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:299> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:54:52,847 [INFO] livekit.agents: starting worker
+2026-07-16 13:54:52,847 [INFO] livekit.agents: plugin registered
+2026-07-16 13:54:52,847 [INFO] livekit.agents: plugin registered
+2026-07-16 13:54:52,864 [INFO] livekit.agents: HTTP server listening on :51714
+2026-07-16 13:54:53,235 [INFO] livekit.agents: registered worker
+2026-07-16 13:55:08,908 [INFO] livekit.agents: received job request
+2026-07-16 13:55:08,909 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:55:08,919 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:55:08,919 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:55:09,081 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:55:09,383 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:55:10,487 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:55:11,246 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:55:14,708 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:55:33,965 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:55:33,965 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:55:51,275 [INFO] livekit.agents: received job request
+2026-07-16 13:55:51,276 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 13:55:51,285 [INFO] livekit.agents: initializing job runner
+2026-07-16 13:55:51,285 [INFO] livekit.agents: job runner initialized
+2026-07-16 13:55:51,288 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 13:55:51,564 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 13:55:52,611 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 13:55:53,301 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 13:55:53,316 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 13:56:16,311 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:56:36,964 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 51
+2026-07-16 13:56:36,965 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:00:00,102 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:00:00,251 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-162' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:03:57,361 [INFO] livekit.agents: starting worker
+2026-07-16 14:03:57,361 [INFO] livekit.agents: plugin registered
+2026-07-16 14:03:57,361 [INFO] livekit.agents: plugin registered
+2026-07-16 14:03:57,367 [INFO] livekit.agents: HTTP server listening on :49288
+2026-07-16 14:03:57,725 [INFO] livekit.agents: registered worker
+2026-07-16 14:04:08,967 [INFO] livekit.agents: received job request
+2026-07-16 14:04:08,968 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:04:08,976 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:04:08,977 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:04:09,167 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:04:09,460 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:04:10,644 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:04:11,390 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:04:40,696 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:05:00,966 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:05:00,966 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:11:20,591 [INFO] livekit.agents: received job request
+2026-07-16 14:11:20,592 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:11:20,603 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:11:20,603 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:11:21,155 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:11:28,980 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:11:29,188 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 14:18:14,939 [INFO] livekit.agents: starting worker
+2026-07-16 14:18:14,940 [INFO] livekit.agents: plugin registered
+2026-07-16 14:18:14,940 [INFO] livekit.agents: plugin registered
+2026-07-16 14:18:14,951 [INFO] livekit.agents: HTTP server listening on :59769
+2026-07-16 14:18:15,318 [INFO] livekit.agents: registered worker
+2026-07-16 14:18:59,405 [INFO] livekit.agents: received job request
+2026-07-16 14:18:59,406 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:18:59,414 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:18:59,415 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:18:59,578 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:18:59,870 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:19:00,953 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:19:01,710 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:19:30,995 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:19:50,962 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:19:50,964 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:19:50,965 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:20:27,841 [INFO] livekit.agents: received job request
+2026-07-16 14:20:27,842 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:20:27,851 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:20:27,852 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:20:27,855 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:20:37,845 [WARNING] livekit.agents: The room connection was not established within 10 seconds after calling job_entry. This might mean that job_ctx.connect() was never invoked, or that no AgentSession with an active RoomIO has been started.
+2026-07-16 14:20:42,870 [WARNING] livekit: livekit::rtc_engine:516:livekit::rtc_engine - failed to connect: Connection("wait_pc_connection timed out"), retrying... (1/3)
+2026-07-16 14:20:42,871 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:20:43,152 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:20:44,244 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:20:45,035 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:23:49,298 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:23:49,428 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:23:49,430 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-343' coro=<report_to_dashboard_async() running at D:\voiceagent\backend\livekit_agent.py:31> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:23:49,431 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task cancelling name='Task-354' coro=<staggered_race.<locals>.run_one_coro() done, defined at C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\aiohappyeyeballs\_staggered.py:105> wait_for=<_OverlappedFuture cancelled>>
+2026-07-16 14:23:49,431 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-268' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:24:17,745 [INFO] livekit.agents: starting worker
+2026-07-16 14:24:17,745 [INFO] livekit.agents: plugin registered
+2026-07-16 14:24:17,745 [INFO] livekit.agents: plugin registered
+2026-07-16 14:24:17,762 [INFO] livekit.agents: HTTP server listening on :51913
+2026-07-16 14:24:18,113 [INFO] livekit.agents: registered worker
+2026-07-16 14:24:42,069 [INFO] livekit.agents: received job request
+2026-07-16 14:24:42,076 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:24:42,082 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:24:42,085 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:24:42,270 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:24:42,560 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:24:43,655 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:24:44,407 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:25:13,698 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:25:33,963 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:25:33,964 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:25:33,965 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:26:12,619 [INFO] livekit.agents: received job request
+2026-07-16 14:26:12,620 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:26:12,631 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:26:12,631 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:26:12,634 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:26:12,914 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:26:14,123 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:26:14,857 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:27:01,097 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:27:09,637 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:27:09,641 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 3665
+2026-07-16 14:27:09,857 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:27:09,858 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-268' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:28:11,266 [INFO] livekit.agents: starting worker
+2026-07-16 14:28:11,267 [INFO] livekit.agents: plugin registered
+2026-07-16 14:28:11,267 [INFO] livekit.agents: plugin registered
+2026-07-16 14:28:11,281 [INFO] livekit.agents: HTTP server listening on :58678
+2026-07-16 14:28:11,678 [INFO] livekit.agents: registered worker
+2026-07-16 14:28:29,442 [INFO] livekit.agents: received job request
+2026-07-16 14:28:29,443 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:28:29,450 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:28:29,452 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:28:29,654 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:28:29,817 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:28:30,950 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:28:31,766 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:29:03,007 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:29:23,968 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:29:23,970 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:29:23,970 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:35:23,616 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:35:23,745 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:37:31,659 [INFO] livekit.agents: starting worker
+2026-07-16 14:37:31,659 [INFO] livekit.agents: plugin registered
+2026-07-16 14:37:31,659 [INFO] livekit.agents: plugin registered
+2026-07-16 14:37:31,669 [INFO] livekit.agents: HTTP server listening on :50633
+2026-07-16 14:37:32,032 [INFO] livekit.agents: registered worker
+2026-07-16 14:37:42,846 [INFO] livekit.agents: received job request
+2026-07-16 14:37:42,849 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:37:42,857 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:37:42,858 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:37:43,043 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:37:43,327 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:37:44,458 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:37:46,357 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:38:16,509 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:38:36,966 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:38:36,968 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:41:08,719 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:41:08,849 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:41:19,256 [INFO] livekit.agents: starting worker
+2026-07-16 14:41:19,257 [INFO] livekit.agents: plugin registered
+2026-07-16 14:41:19,257 [INFO] livekit.agents: plugin registered
+2026-07-16 14:41:19,266 [INFO] livekit.agents: HTTP server listening on :55513
+2026-07-16 14:41:19,617 [INFO] livekit.agents: registered worker
+2026-07-16 14:41:24,040 [INFO] livekit.agents: received job request
+2026-07-16 14:41:24,041 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:41:24,049 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:41:24,050 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:41:24,221 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:41:24,369 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:41:25,467 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:41:26,248 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 14:41:57,516 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 14:42:17,963 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 14:42:17,965 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 14:44:01,657 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 14:44:01,663 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 14:44:03,663 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 14:44:04,015 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:44:04,158 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-62' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:311> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 14:46:29,557 [INFO] livekit.agents: starting worker
+2026-07-16 14:46:29,557 [INFO] livekit.agents: plugin registered
+2026-07-16 14:46:29,557 [INFO] livekit.agents: plugin registered
+2026-07-16 14:46:29,570 [INFO] livekit.agents: HTTP server listening on :55539
+2026-07-16 14:46:29,925 [INFO] livekit.agents: registered worker
+2026-07-16 14:50:36,040 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 14:50:36,047 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 14:50:38,057 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 14:50:42,053 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 14:50:50,084 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 14:51:00,116 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 14:51:10,122 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 14:51:20,119 [INFO] livekit.agents: registered worker
+2026-07-16 14:57:51,726 [INFO] livekit.agents: shutting down worker
+2026-07-16 14:59:32,855 [INFO] livekit.agents: starting worker
+2026-07-16 14:59:32,855 [INFO] livekit.agents: plugin registered
+2026-07-16 14:59:32,855 [INFO] livekit.agents: plugin registered
+2026-07-16 14:59:32,872 [INFO] livekit.agents: HTTP server listening on :63173
+2026-07-16 14:59:33,223 [INFO] livekit.agents: registered worker
+2026-07-16 14:59:43,584 [INFO] livekit.agents: received job request
+2026-07-16 14:59:43,585 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 14:59:43,594 [INFO] livekit.agents: initializing job runner
+2026-07-16 14:59:43,594 [INFO] livekit.agents: job runner initialized
+2026-07-16 14:59:43,813 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 14:59:44,101 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 14:59:45,207 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 14:59:45,973 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:00:15,251 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 15:00:35,364 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:00:35,365 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:00:35,365 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 15:06:11,291 [INFO] livekit.agents: shutting down worker
+2026-07-16 15:16:06,327 [INFO] livekit.agents: starting worker
+2026-07-16 15:16:06,327 [INFO] livekit.agents: plugin registered
+2026-07-16 15:16:06,327 [INFO] livekit.agents: plugin registered
+2026-07-16 15:16:06,339 [INFO] livekit.agents: HTTP server listening on :52752
+2026-07-16 15:16:06,719 [INFO] livekit.agents: registered worker
+2026-07-16 15:16:21,361 [INFO] livekit.agents: received job request
+2026-07-16 15:16:21,362 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:16:21,371 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:16:21,372 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:16:21,533 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:16:21,839 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:16:23,006 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:16:23,006 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:16:23,782 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:16:37,546 [INFO] livekit.agents: received job request
+2026-07-16 15:16:37,547 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:16:37,555 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:16:37,556 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:16:37,559 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:16:37,767 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:16:38,864 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:16:38,865 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:16:39,572 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:16:42,363 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:16:57,368 [WARNING] livekit.agents: entrypoint did not exit in time, cancelling
+2026-07-16 15:17:01,059 [INFO] livekit.agents: received job request
+2026-07-16 15:17:01,061 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:17:01,069 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:17:01,070 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:17:01,072 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:17:11,072 [WARNING] livekit.agents: The room connection was not established within 10 seconds after calling job_entry. This might mean that job_ctx.connect() was never invoked, or that no AgentSession with an active RoomIO has been started.
+2026-07-16 15:17:13,366 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:17:13,367 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:17:13,368 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 49
+2026-07-16 15:17:16,089 [WARNING] livekit: livekit::rtc_engine:516:livekit::rtc_engine - failed to connect: Connection("wait_pc_connection timed out"), retrying... (1/3)
+2026-07-16 15:17:16,090 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:17:16,372 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:17:17,431 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:17:17,432 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:17:18,094 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:17:23,223 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 2008
+2026-07-16 15:17:23,236 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-16 15:17:24,409 [INFO] livekit.agents: shutting down worker
+2026-07-16 15:17:24,421 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 49
+2026-07-16 15:17:24,547 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task cancelling name='Task-455' coro=<staggered_race.<locals>.run_one_coro() running at C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\aiohappyeyeballs\_staggered.py:122> wait_for=<_OverlappedFuture cancelled>>
+2026-07-16 15:17:24,547 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-441' coro=<report_to_dashboard_async() running at D:\voiceagent\backend\livekit_agent.py:31> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-16 15:30:14,290 [INFO] livekit.agents: starting worker
+2026-07-16 15:30:14,290 [INFO] livekit.agents: plugin registered
+2026-07-16 15:30:14,290 [INFO] livekit.agents: plugin registered
+2026-07-16 15:30:14,325 [INFO] livekit.agents: HTTP server listening on :52553
+2026-07-16 15:30:14,705 [INFO] livekit.agents: registered worker
+2026-07-16 15:32:00,839 [INFO] livekit.agents: starting worker
+2026-07-16 15:32:00,840 [INFO] livekit.agents: plugin registered
+2026-07-16 15:32:00,840 [INFO] livekit.agents: plugin registered
+2026-07-16 15:32:00,861 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 15:32:00,915 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:32:00,915 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:32:00,916 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:32:00,916 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:32:00,919 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:32:00,919 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:32:00,920 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:32:00,920 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:32:01,289 [INFO] livekit.agents: registered worker
+2026-07-16 15:33:52,672 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 15:33:52,672 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 15:33:52,680 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 15:33:52,680 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 15:33:56,705 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 15:33:56,736 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 15:34:02,782 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 15:34:02,814 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 15:34:10,842 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 15:34:10,873 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 15:34:20,868 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:20,899 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:30,881 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:30,926 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:40,907 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:40,953 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:34:50,933 [INFO] livekit.agents: registered worker
+2026-07-16 15:34:50,964 [INFO] livekit.agents: registered worker
+2026-07-16 15:38:43,242 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 15:38:43,252 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 15:38:43,252 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 15:38:45,275 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 15:38:45,276 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 15:38:49,284 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 15:38:49,300 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 15:38:57,328 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 15:38:57,343 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 15:39:07,364 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:39:07,380 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:39:17,355 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:39:17,385 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:39:27,360 [INFO] livekit.agents: registered worker
+2026-07-16 15:39:27,405 [INFO] livekit.agents: registered worker
+2026-07-16 15:43:07,574 [INFO] livekit.agents: draining worker
+2026-07-16 15:43:07,575 [INFO] livekit.agents: shutting down worker
+2026-07-16 15:43:07,830 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 15:44:56,557 [INFO] livekit.agents: starting worker
+2026-07-16 15:44:56,557 [INFO] livekit.agents: plugin registered
+2026-07-16 15:44:56,557 [INFO] livekit.agents: plugin registered
+2026-07-16 15:44:56,571 [INFO] livekit.agents: HTTP server listening on :49870
+2026-07-16 15:44:56,971 [INFO] livekit.agents: registered worker
+2026-07-16 15:46:25,278 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 15:46:25,285 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 15:46:29,319 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 15:46:35,371 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 15:46:43,393 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 15:46:53,433 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:47:05,469 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:47:15,482 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 15:47:25,487 [INFO] livekit.agents: registered worker
+2026-07-16 15:48:09,015 [INFO] livekit.agents: starting worker
+2026-07-16 15:48:09,016 [INFO] livekit.agents: plugin registered
+2026-07-16 15:48:09,016 [INFO] livekit.agents: plugin registered
+2026-07-16 15:48:09,029 [INFO] livekit.agents: HTTP server listening on :51281
+2026-07-16 15:48:09,426 [INFO] livekit.agents: registered worker
+2026-07-16 15:53:51,013 [INFO] livekit.agents: shutting down worker
+2026-07-16 15:54:03,502 [INFO] livekit.agents: starting worker
+2026-07-16 15:54:03,502 [INFO] livekit.agents: plugin registered
+2026-07-16 15:54:03,502 [INFO] livekit.agents: plugin registered
+2026-07-16 15:54:03,515 [INFO] livekit.agents: HTTP server listening on :56016
+2026-07-16 15:54:03,898 [INFO] livekit.agents: registered worker
+2026-07-16 15:54:16,563 [INFO] livekit.agents: received job request
+2026-07-16 15:54:16,565 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:54:16,581 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:54:16,582 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:54:16,870 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:54:17,218 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:54:18,417 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:54:18,418 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:54:19,442 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:56:28,803 [INFO] livekit.agents: starting worker
+2026-07-16 15:56:28,803 [INFO] livekit.agents: plugin registered
+2026-07-16 15:56:28,803 [INFO] livekit.agents: plugin registered
+2026-07-16 15:56:28,818 [INFO] livekit.agents: HTTP server listening on :63219
+2026-07-16 15:56:29,224 [INFO] livekit.agents: registered worker
+2026-07-16 15:56:40,965 [INFO] livekit.agents: shutting down worker
+2026-07-16 15:56:53,582 [INFO] livekit.agents: starting worker
+2026-07-16 15:56:53,582 [INFO] livekit.agents: plugin registered
+2026-07-16 15:56:53,582 [INFO] livekit.agents: plugin registered
+2026-07-16 15:56:53,595 [INFO] livekit.agents: HTTP server listening on :53538
+2026-07-16 15:56:53,968 [INFO] livekit.agents: registered worker
+2026-07-16 15:56:56,234 [INFO] livekit.agents: received job request
+2026-07-16 15:56:56,235 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:56:56,246 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:56:56,246 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:56:56,453 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:56:56,754 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:56:57,887 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:56:57,889 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:56:58,809 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:59:03,980 [INFO] root: Human has been silent for 2 minutes. Prompting warning.
+2026-07-16 15:59:21,137 [INFO] livekit.agents: received job request
+2026-07-16 15:59:21,138 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 15:59:21,149 [INFO] livekit.agents: initializing job runner
+2026-07-16 15:59:21,150 [INFO] livekit.agents: job runner initialized
+2026-07-16 15:59:22,180 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 15:59:25,295 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 15:59:35,512 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 15:59:35,515 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 15:59:35,522 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-16 15:59:36,286 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 15:59:36,287 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 15:59:43,992 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 15:59:44,139 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 15:59:44,455 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 15:59:44,456 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 16:00:19,106 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:00:21,121 [ERROR] livekit.agents: AgentSession is closing due to unrecoverable error
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\stt\stt.py", line 216, in recognize
+    event = await self._recognize_impl(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\voiceagent\backend\whisper_stt.py", line 56, in _recognize_impl
+    result = self._whisper_model.transcribe(mono16k, language=lang_str, fp16=False)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\whisper\transcribe.py", line 139, in transcribe
+    mel = log_mel_spectrogram(audio, model.dims.n_mels, padding=N_SAMPLES)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\whisper\audio.py", line 152, in log_mel_spectrogram
+    mel_spec = filters @ magnitudes
+               ~~~~~~~~^~~~~~~~~~~~
+RuntimeError: expected m1 and m2 to have the same dtype, but got: float != double
+2026-07-16 16:00:28,174 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 16:00:28,174 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 16:02:22,154 [INFO] livekit.agents: starting worker
+2026-07-16 16:02:22,154 [INFO] livekit.agents: plugin registered
+2026-07-16 16:02:22,155 [INFO] livekit.agents: plugin registered
+2026-07-16 16:02:22,166 [INFO] livekit.agents: HTTP server listening on :65374
+2026-07-16 16:02:22,543 [INFO] livekit.agents: registered worker
+2026-07-16 16:02:27,805 [INFO] livekit.agents: received job request
+2026-07-16 16:02:27,807 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 16:02:27,816 [INFO] livekit.agents: initializing job runner
+2026-07-16 16:02:27,817 [INFO] livekit.agents: job runner initialized
+2026-07-16 16:02:27,821 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 16:02:28,106 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 16:02:29,184 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 16:02:29,185 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 16:02:30,351 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 16:02:59,174 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 16:03:16,643 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:03:51,815 [INFO] livekit.agents: starting worker
+2026-07-16 16:03:51,815 [INFO] livekit.agents: plugin registered
+2026-07-16 16:03:51,815 [INFO] livekit.agents: plugin registered
+2026-07-16 16:03:51,827 [INFO] livekit.agents: HTTP server listening on :57995
+2026-07-16 16:03:52,195 [INFO] livekit.agents: registered worker
+2026-07-16 16:04:02,453 [INFO] livekit.agents: starting worker
+2026-07-16 16:04:02,453 [INFO] livekit.agents: plugin registered
+2026-07-16 16:04:02,453 [INFO] livekit.agents: plugin registered
+2026-07-16 16:04:02,466 [INFO] livekit.agents: HTTP server listening on :58002
+2026-07-16 16:04:02,839 [INFO] livekit.agents: registered worker
+2026-07-16 16:04:07,586 [INFO] livekit.agents: received job request
+2026-07-16 16:04:07,587 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 16:04:07,597 [INFO] livekit.agents: initializing job runner
+2026-07-16 16:04:07,598 [INFO] livekit.agents: job runner initialized
+2026-07-16 16:04:07,795 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 16:04:08,107 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 16:04:09,296 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 16:04:09,297 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 16:04:09,721 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_yArQ7jfWFeUW.
+2026-07-16 16:04:09,721 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-16 16:04:10,130 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 16:04:15,283 [INFO] root: [Vantara]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-16 16:04:41,890 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:04:41,900 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 16:04:41,908 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-16 16:04:58,119 [INFO] livekit.agents: starting worker
+2026-07-16 16:04:58,119 [INFO] livekit.agents: plugin registered
+2026-07-16 16:04:58,119 [INFO] livekit.agents: plugin registered
+2026-07-16 16:04:58,134 [INFO] livekit.agents: HTTP server listening on :57494
+2026-07-16 16:04:58,518 [INFO] livekit.agents: registered worker
+2026-07-16 16:05:08,642 [INFO] livekit.agents: starting worker
+2026-07-16 16:05:08,642 [INFO] livekit.agents: plugin registered
+2026-07-16 16:05:08,642 [INFO] livekit.agents: plugin registered
+2026-07-16 16:05:08,655 [INFO] livekit.agents: HTTP server listening on :57500
+2026-07-16 16:05:09,026 [INFO] livekit.agents: registered worker
+2026-07-16 16:05:12,515 [INFO] livekit.agents: received job request
+2026-07-16 16:05:12,516 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 16:05:12,526 [INFO] livekit.agents: initializing job runner
+2026-07-16 16:05:12,527 [INFO] livekit.agents: job runner initialized
+2026-07-16 16:05:12,692 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 16:05:13,002 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 16:05:14,168 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 16:05:14,169 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 16:05:14,603 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_PXFG63XnJSvY.
+2026-07-16 16:05:14,603 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-16 16:05:15,027 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 16:07:21,068 [INFO] root: [Silence Warning]: Asking user if they are still there...
+2026-07-16 16:07:22,819 [INFO] root: [Vantara]: Hey, are you still there?
+2026-07-16 16:07:31,171 [INFO] root: [User state]: speaking
+2026-07-16 16:07:35,321 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 16:07:35,336 [INFO] root: [User]: Tell me about 5G.
+2026-07-16 16:07:47,649 [INFO] root: [Vantara]: 5G is the fifth generation of wireless technology, offering significantly faster data speeds, lower latency, and increased capacity compared to 4G.
+2026-07-16 16:09:31,318 [INFO] root: [Silence Warning]: Asking user if they are still there...
+2026-07-16 16:09:33,101 [INFO] root: [Vantara]: Hey, are you still there?
+2026-07-16 16:10:45,809 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:10:58,278 [INFO] livekit.agents: starting worker
+2026-07-16 16:10:58,278 [INFO] livekit.agents: plugin registered
+2026-07-16 16:10:58,278 [INFO] livekit.agents: plugin registered
+2026-07-16 16:10:58,291 [INFO] livekit.agents: HTTP server listening on :53889
+2026-07-16 16:10:58,667 [INFO] livekit.agents: registered worker
+2026-07-16 16:11:04,182 [INFO] livekit.agents: received job request
+2026-07-16 16:11:04,183 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 16:11:04,192 [INFO] livekit.agents: initializing job runner
+2026-07-16 16:11:04,193 [INFO] livekit.agents: job runner initialized
+2026-07-16 16:11:04,354 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 16:11:04,656 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 16:11:05,761 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 16:11:05,761 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 16:11:06,174 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_ZakvWHgzSjJ2.
+2026-07-16 16:11:06,174 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-16 16:11:06,562 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 16:11:21,335 [INFO] root: [User state]: speaking
+2026-07-16 16:11:28,420 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 16:11:28,429 [INFO] root: [User]: A while,
+2026-07-16 16:11:33,762 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:11:33,766 [INFO] root: [Vantara]: I'm sorry, I didn't catch that. Could you please repeat your
+2026-07-16 16:11:33,782 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 16:11:45,418 [INFO] livekit.agents: starting worker
+2026-07-16 16:11:45,419 [INFO] livekit.agents: plugin registered
+2026-07-16 16:11:45,419 [INFO] livekit.agents: plugin registered
+2026-07-16 16:11:45,430 [INFO] livekit.agents: HTTP server listening on :49509
+2026-07-16 16:11:45,793 [INFO] livekit.agents: registered worker
+2026-07-16 16:11:47,499 [INFO] livekit.agents: received job request
+2026-07-16 16:11:47,500 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-16 16:11:47,509 [INFO] livekit.agents: initializing job runner
+2026-07-16 16:11:47,510 [INFO] livekit.agents: job runner initialized
+2026-07-16 16:11:47,676 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 16:11:47,981 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 16:11:49,102 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 16:11:49,102 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-16 16:11:49,523 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_aWammLQCMvUQ.
+2026-07-16 16:11:49,523 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-16 16:11:49,926 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-16 16:12:15,177 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 16:13:07,489 [INFO] livekit.agents: shutting down worker
+2026-07-16 16:13:07,503 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8

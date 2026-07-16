@@ -43,7 +43,16 @@ class WhisperSTT(STT):
             mono = pcm
             
         # Resample to 16 kHz as required by Whisper
-        mono16k = librosa.resample(mono, orig_sr=frame.sample_rate, target_sr=16000)
+        if frame.sample_rate == 16000:
+            mono16k = mono
+        else:
+            src_len = len(mono)
+            target_len = int(src_len * 16000 / frame.sample_rate)
+            src_indices = np.arange(src_len)
+            dst_indices = np.linspace(0, src_len - 1, target_len)
+            mono16k = np.interp(dst_indices, src_indices, mono)
+        
+        mono16k = mono16k.astype(np.float32)
         # Run transcription
         lang_str = language if isinstance(language, str) else None
         result = self._whisper_model.transcribe(mono16k, language=lang_str, fp16=False)

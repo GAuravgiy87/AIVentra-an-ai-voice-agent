@@ -2,6 +2,7 @@ import asyncio
 import os
 from livekit import api
 from dotenv import load_dotenv
+from google.protobuf.duration_pb2 import Duration
 
 load_dotenv()
 
@@ -37,8 +38,11 @@ async def setup_sip():
     print("Creating SIP Inbound Trunk...")
     trunk_info = api.SIPInboundTrunkInfo(
         name="asterisk-trunk",
-        numbers=["ai", "100", "200"],
-        allowed_addresses=["0.0.0.0/0"]
+        numbers=["ai", "100", "200"] + [str(x) for x in range(201, 220)],
+        allowed_addresses=["0.0.0.0/0"],
+        media=api.SIPMediaConfig(
+            media_timeout=Duration(seconds=600)
+        )
     )
     req = api.CreateSIPInboundTrunkRequest(trunk=trunk_info)
     trunk = await lkapi.sip.create_sip_inbound_trunk(req)

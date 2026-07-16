@@ -26,14 +26,15 @@ tts_model = PiperTTSWrapper(model_path="D:/voiceagent/backend/piper/en_US-amy-me
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
 
-async def report_to_dashboard_async(room_id: str, role: str, content: str, latency_ms: int = None):
+async def report_to_dashboard_async(room_id: str, role: str, content: str, latency_ms: int = None, extension: str = None):
     try:
         async with aiohttp.ClientSession() as session_http:
             payload = {
                 "room_id": room_id,
                 "role": role,
                 "content": content,
-                "latency_ms": latency_ms
+                "latency_ms": latency_ms,
+                "extension": extension
             }
             async with session_http.post("http://localhost:8001/api/admin/report_message", json=payload) as response:
                 await response.read()
@@ -111,14 +112,116 @@ async def entrypoint(ctx: agents.JobContext):
     tts = tts_model
     vad = vad_model
 
-    # LLM stays the same (Gemini) - with custom timeout and custom fallback handling
-    llm = CustomGoogleLLM(
-        model="gemini-3.1-flash-lite",
-        http_options=types.HttpOptions(timeout=20000)
-    )
+    import json
+    dialed_number = None
+    caller_number = None
     
+    # Helper to retrieve value from dict using multiple potential key variations
+    def get_val(data, keys):
+        if not data:
+            return None
+        for k in keys:
+            if k in data and data[k]:
+                return str(data[k])
+        return None
 
-    
+    to_keys = ["to", "sip.to", "sip.trunkPhoneNumber", "trunkPhoneNumber"]
+    from_keys = ["from", "sip.from", "sip.phoneNumber", "phoneNumber"]
+
+    # 1. Try to read from Room Metadata (instant)
+    if ctx.room.metadata:
+        try:
+            meta = json.loads(ctx.room.metadata)
+            sip_info = meta.get("sip", {})
+            dialed_number = get_val(sip_info, to_keys) or get_val(meta, to_keys)
+            caller_number = get_val(sip_info, from_keys) or get_val(meta, from_keys)
+        except Exception:
+            pass
+
+    # 2. Try to read from Job Metadata (instant)
+    if not dialed_number and ctx.job.metadata:
+        try:
+            meta = json.loads(ctx.job.metadata)
+            sip_info = meta.get("sip", {})
+            dialed_number = get_val(sip_info, to_keys) or get_val(meta, to_keys)
+            caller_number = get_val(sip_info, from_keys) or get_val(meta, from_keys)
+        except Exception as e:
+            logging.warning(f"Failed to parse job metadata: {e}")
+
+    # 3. Fallback to remote participants (wait maximum 0.2 seconds only if it's a SIP call to prevent deadlocks)
+    if not dialed_number and ctx.room.name.startswith("sip-call-"):
+        for _ in range(3):
+            for p in ctx.room.remote_participants.values():
+                print(f"DEBUG: Remote Participant ID={p.identity}, attributes={p.attributes}", flush=True)
+                dialed_number = get_val(p.attributes, to_keys)
+                caller_number = get_val(p.attributes, from_keys)
+                if not caller_number:
+                    caller_number = p.identity
+                break
+            if dialed_number:
+                break
+            await asyncio.sleep(0.1)
+
+    import sqlite3
+    authorized = True
+    reject_reason = ""
+    user_model = "gemini"
+    user_model_name = "gemini-3.1-flash-lite"
+    user_name = "Vantara AI"
+
+    if dialed_number:
+        try:
+            conn = sqlite3.connect("calls.db")
+            cursor = conn.cursor()
+            
+            # Find the user who owns this AI extension
+            cursor.execute("SELECT id, name, ai_model, ai_model_name FROM users WHERE ai_extension = ?", (dialed_number,))
+            user_row = cursor.fetchone()
+            
+            if user_row:
+                user_id, user_name, user_model, user_model_name = user_row[0], user_row[1], user_row[2], user_row[3]
+                if not user_model_name:
+                    user_model_name = "llama3" if user_model == "ollama" else "gemini-3.1-flash-lite"
+                
+                # Check if the caller phone extension belongs to this user
+                cursor.execute("SELECT COUNT(*) FROM devices WHERE user_id = ? AND extension = ?", (user_id, caller_number))
+                device_count = cursor.fetchone()[0]
+                
+                if device_count == 0 and dialed_number.strip('+') != "200":
+                    authorized = False
+                    reject_reason = f"Access denied. Device {caller_number} is not authorized for AI Line {dialed_number}."
+            else:
+                # Default configuration checks for system extension 200
+                if dialed_number.strip('+') != "200":
+                    authorized = False
+                    reject_reason = f"Extension {dialed_number} is not configured."
+            
+            conn.close()
+        except Exception as e:
+            logging.warning(f"Failed to query routing DB: {e}")
+
+    # Configure the appropriate LLM
+    if not authorized:
+        # Load default LLM for error playback
+        llm = CustomGoogleLLM(
+            model="gemini-3.1-flash-lite",
+            http_options=types.HttpOptions(timeout=20000)
+        )
+    elif user_model.lower() == "ollama":
+        from livekit.plugins.openai import LLM as OpenAILLM
+        print(f"Routing call on line {dialed_number} to Ollama local model: {user_model_name}")
+        llm = OpenAILLM(
+            model=user_model_name,
+            base_url="http://localhost:11434/v1",
+            api_key="ollama"
+        )
+    else:
+        print(f"Routing call on line {dialed_number} to Gemini model: {user_model_name}")
+        llm = CustomGoogleLLM(
+            model=user_model_name,
+            http_options=types.HttpOptions(timeout=20000)
+        )
+
     session = agents.voice.AgentSession(
         stt=stt,
         llm=llm,
@@ -130,17 +233,32 @@ async def entrypoint(ctx: agents.JobContext):
     
     agent = agents.voice.Agent(
         instructions=(
-            "You are Vantara AI, a conversational voice agent developed by Gaurav Chauhan. "
+            f"You are {user_name}, a conversational voice agent. "
             "Answer phone calls concisely, professionally, and extremely briefly. "
             "CRITICAL: Keep your answers extremely short and concise, exactly like a real phone call (e.g. 1-2 sentences maximum). "
             "Answer ONLY what the user asks. No extra information, long paragraphs, or formatting. "
-            "Do NOT introduce yourself, say your name, or state that you are developed by Gaurav Chauhan in your responses "
+            "Do NOT introduce yourself, say your name, or state who you are in your responses "
             "unless the user explicitly asks for your name or who created you. Keep standard answers completely free of introductions."
         ),
         allow_interruptions=True,
     )
     
-    await session.start(agent=agent, room=ctx.room)
+    await session.start(agent=agent, room=ctx.room, room_input_options=agents.RoomInputOptions(close_on_disconnect=False))
+    logging.info(f"[Call Pickup]: Agent session started for room {ctx.room.name}.")
+
+    if not authorized:
+        logging.info(f"[REJECTING SIP CALL]: {reject_reason}")
+        try:
+            # Play greeting warning and leave
+            warning_text = "Access denied. You are not authorized to call this line."
+            if "not configured" in reject_reason:
+                warning_text = "The extension you dialed is not configured."
+            handle = session.say(warning_text, allow_interruptions=False)
+            await handle.wait_for_playout()
+        except Exception as e:
+            logging.warning(f"Error speaking reject warning: {e}")
+        await ctx.room.disconnect()
+        return
     
     last_human_speech_time = asyncio.get_event_loop().time()
     has_warned = False
@@ -153,9 +271,13 @@ async def entrypoint(ctx: agents.JobContext):
         if getattr(event, "new_state", "") == "speaking":
             last_human_speech_time = asyncio.get_event_loop().time()
             has_warned = False
+            logging.info(f"[User state]: {event.new_state}")
 
     @session.on("conversation_item_added")
     def on_conversation_item_added(event):
+        nonlocal last_human_speech_time, has_warned
+        if is_greeting_playing:
+            return
         item = event.item
         if hasattr(item, "role") and item.role in ("assistant", "user"):
             text = item.text_content
@@ -176,29 +298,23 @@ async def entrypoint(ctx: agents.JobContext):
                         except Exception:
                             pass
                 
-                print(f"\n[{role_label}]: {text.strip()}{token_usage_str}", flush=True)
+                logging.info(f"[{role_label}]: {text.strip()}{token_usage_str}")
 
-                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms))
+                # Extract caller extension (non-agent participant) to attribute calls to devices
+                caller_extension = None
+                for p in ctx.room.remote_participants.values():
+                    caller_extension = p.attributes.get("sip.from")
+                    if not caller_extension:
+                        caller_extension = p.identity
+                    break
 
-    async def monitor_silence():
-        nonlocal last_human_speech_time
-        while True:
-            await asyncio.sleep(1)
-            now = asyncio.get_event_loop().time()
-            elapsed = now - last_human_speech_time
-            
-            if elapsed >= 120:  # 2 minutes of silence
-                last_human_speech_time = now  # Reset silence timer
-                logging.info("Human has been silent for 2 minutes. Prompting warning.")
-                # Direct TTS (no AI generated response)
-                session.say("Hey, are you still there?", allow_interruptions=True)
-
-    asyncio.create_task(monitor_silence())
+                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension))
 
     # Greet the user immediately when they connect to the room via SIP
     # Removed short sleep to prevent initial greeting clipping and delay.
     # await asyncio.sleep(0.1)
     greeting_text = "Hello, welcome to D E I Lab! I am Ventra. How can I help you?"
+    logging.info(f"[Ventra Greeting]: {greeting_text}")
     greeting_handle = session.say(greeting_text, allow_interruptions=False)
     await greeting_handle.wait_for_playout()
     
@@ -212,6 +328,27 @@ async def entrypoint(ctx: agents.JobContext):
         session.history._items.clear()
         
     last_human_speech_time = asyncio.get_event_loop().time()
+
+    async def monitor_silence():
+        nonlocal last_human_speech_time, has_warned
+        while True:
+            await asyncio.sleep(1)
+            now = asyncio.get_event_loop().time()
+            elapsed = now - last_human_speech_time
+            
+            if not has_warned:
+                if elapsed >= 120:  # 2 minutes of silence
+                    has_warned = True
+                    last_human_speech_time = now
+                    logging.info("[Silence Warning]: Asking user if they are still there...")
+                    session.say("Hey, are you still there?", allow_interruptions=True)
+            else:
+                if elapsed >= 60:  # 1 minute after warning
+                    logging.info("[Silence Timeout]: Human silent for 3 minutes. Hanging up call.")
+                    await ctx.room.disconnect()
+                    break
+
+    asyncio.create_task(monitor_silence())
 
 if __name__ == "__main__":
     import livekit.plugins.silero as silero
