@@ -1701,3 +1701,160 @@ livekit.agents._exceptions.APIConnectionError: failed to generate LLM completion
 2026-07-15 17:24:07,251 [WARNING] livekit.agents: skipping user input, speech scheduling is paused
 2026-07-15 17:24:07,255 [WARNING] livekit.agents: transcript arrives after turn has been committed. consider raising `min_delay` in the endpointing options to accommodate a slow stt. subsequent occurrences will log at debug level.
 2026-07-15 17:24:07,269 [WARNING] livekit.agents: skipping user input, speech scheduling is paused
+2026-07-15 17:26:36,386 [INFO] livekit.agents: starting worker
+2026-07-15 17:26:36,387 [INFO] livekit.agents: plugin registered
+2026-07-15 17:26:36,387 [INFO] livekit.agents: plugin registered
+2026-07-15 17:26:36,398 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-15 17:26:36,436 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:26:36,437 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:26:36,437 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:26:36,437 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:26:36,439 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:26:36,440 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:26:36,440 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:26:36,441 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:26:36,458 [INFO] livekit.agents: registered worker
+2026-07-15 17:26:40,642 [INFO] livekit.agents: received job request
+2026-07-15 17:26:40,728 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:26:40,729 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:26:40,793 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-15 17:26:41,115 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-15 17:26:41,209 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-15 17:26:51,619 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-15 17:27:09,210 [INFO] livekit.agents: received job request
+2026-07-15 17:27:09,214 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-15 17:27:09,397 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:09,403 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:09,499 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-15 17:27:09,541 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-15 17:27:11,826 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-15 17:27:11,827 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-15 17:27:11,827 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 31
+2026-07-15 17:27:15,373 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-15 17:27:17,353 [INFO] livekit.agents: draining worker
+2026-07-15 17:27:17,529 [WARNING] livekit.agents: exiting forcefully
+2026-07-15 17:27:31,970 [INFO] livekit.agents: starting worker
+2026-07-15 17:27:31,971 [INFO] livekit.agents: plugin registered
+2026-07-15 17:27:31,971 [INFO] livekit.agents: plugin registered
+2026-07-15 17:27:31,984 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-15 17:27:32,020 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:32,020 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:32,020 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:32,021 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:32,023 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:32,023 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:32,024 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:32,025 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:32,054 [INFO] livekit.agents: registered worker
+2026-07-15 17:27:34,295 [INFO] livekit.agents: received job request
+2026-07-15 17:27:34,376 [INFO] livekit.agents: initializing job runner
+2026-07-15 17:27:34,378 [INFO] livekit.agents: job runner initialized
+2026-07-15 17:27:34,476 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-15 17:27:34,762 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-15 17:27:34,848 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-15 17:27:50,779 [INFO] livekit.agents: draining worker
+2026-07-15 17:27:50,985 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 11:12:58,811 [INFO] livekit.agents: starting worker
+2026-07-16 11:12:58,812 [INFO] livekit.agents: plugin registered
+2026-07-16 11:12:58,812 [INFO] livekit.agents: plugin registered
+2026-07-16 11:12:58,841 [INFO] livekit.agents: HTTP server listening on :54364
+2026-07-16 11:13:00,944 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 11:13:08,621 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 11:13:16,778 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 11:13:22,835 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 11:13:30,852 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 11:13:38,873 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 11:13:48,893 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 11:13:58,916 [INFO] livekit.agents: registered worker
+2026-07-16 11:30:02,429 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-16 11:30:02,438 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-16 11:30:06,489 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-16 11:30:12,516 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-16 11:30:20,532 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-16 11:30:28,547 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-16 11:30:38,565 [INFO] livekit.agents: registered worker
+2026-07-16 12:46:53,187 [INFO] livekit.agents: starting worker
+2026-07-16 12:46:53,209 [INFO] livekit.agents: plugin registered
+2026-07-16 12:46:53,209 [INFO] livekit.agents: plugin registered
+2026-07-16 12:46:53,224 [INFO] livekit.agents: HTTP server listening on :52343
+2026-07-16 12:46:53,660 [INFO] livekit.agents: registered worker
+2026-07-16 12:50:11,134 [INFO] livekit.agents: starting worker
+2026-07-16 12:50:11,134 [INFO] livekit.agents: plugin registered
+2026-07-16 12:50:11,134 [INFO] livekit.agents: plugin registered
+2026-07-16 12:50:11,145 [INFO] livekit.agents: HTTP server listening on :62737
+2026-07-16 12:50:11,501 [INFO] livekit.agents: registered worker
+2026-07-16 12:54:58,575 [INFO] livekit.agents: shutting down worker
+2026-07-16 12:55:16,142 [INFO] livekit.agents: starting worker
+2026-07-16 12:55:16,142 [INFO] livekit.agents: plugin registered
+2026-07-16 12:55:16,142 [INFO] livekit.agents: plugin registered
+2026-07-16 12:55:16,142 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 12:55:16,192 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:55:16,192 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:55:16,192 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:55:16,192 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:55:16,192 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:55:16,192 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:55:16,192 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:55:16,192 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:55:16,576 [INFO] livekit.agents: registered worker
+2026-07-16 12:56:00,030 [INFO] livekit.agents: draining worker
+2026-07-16 12:56:00,030 [INFO] livekit.agents: shutting down worker
+2026-07-16 12:56:00,221 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 12:56:12,909 [INFO] livekit.agents: starting worker
+2026-07-16 12:56:12,909 [INFO] livekit.agents: plugin registered
+2026-07-16 12:56:12,909 [INFO] livekit.agents: plugin registered
+2026-07-16 12:56:12,926 [INFO] livekit.agents: HTTP server listening on :8081
+2026-07-16 12:56:12,959 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:56:12,959 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:56:12,959 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:56:12,959 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:56:12,959 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:56:12,959 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:56:12,959 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:56:12,959 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:56:13,314 [INFO] livekit.agents: registered worker
+2026-07-16 12:56:28,469 [INFO] livekit.agents: received job request
+2026-07-16 12:56:29,033 [INFO] livekit.agents: initializing job runner
+2026-07-16 12:56:29,046 [INFO] livekit.agents: job runner initialized
+2026-07-16 12:56:29,650 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-16 12:56:29,946 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-16 12:56:31,064 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-16 12:56:40,764 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 12:58:46,769 [INFO] root: Human has been silent for 2 minutes. Prompting warning.
+2026-07-16 13:00:05,561 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:00:06,003 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 13:00:06,010 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:00:06,017 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:00:11,002 [INFO] livekit.agents: worker is at full capacity, marking as unavailable
+2026-07-16 13:00:13,511 [INFO] livekit.agents: worker is below capacity, marking as available
+2026-07-16 13:00:47,407 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 13:00:52,869 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:00:52,870 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:00:52,912 [WARNING] livekit.agents: skipping reply to user input, current speech generation cannot be interrupted
+2026-07-16 13:01:09,479 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:01:09,482 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-16 13:01:09,524 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-16 13:01:13,534 [INFO] livekit.agents: worker is at full capacity, marking as unavailable
+2026-07-16 13:01:16,021 [INFO] livekit.agents: worker is below capacity, marking as available
+2026-07-16 13:03:01,483 [INFO] root: Human has been silent for 2 minutes. Prompting warning.
+2026-07-16 13:04:59,799 [INFO] livekit.agents: closing agent session due to participant disconnect (disable via `RoomInputOptions.close_on_disconnect=False`)
+2026-07-16 13:05:01,486 [INFO] root: Human has been silent for 2 minutes. Prompting warning.
+2026-07-16 13:05:01,486 [ERROR] asyncio: Task exception was never retrieved
+future: <Task finished name='Task-104' coro=<entrypoint.<locals>.monitor_silence() done, defined at D:\voiceagent\backend\livekit_agent.py:176> exception=RuntimeError("AgentSession isn't running")>
+Traceback (most recent call last):
+  File "D:\voiceagent\backend\livekit_agent.py", line 187, in monitor_silence
+    now = asyncio.get_event_loop().time()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_session.py", line 1239, in say
+    raise RuntimeError("AgentSession isn't running")
+RuntimeError: AgentSession isn't running
+2026-07-16 13:05:36,451 [ERROR] livekit.agents: job shutdown is taking too much time..
+2026-07-16 13:05:44,609 [INFO] livekit.agents: starting worker
+2026-07-16 13:05:44,609 [INFO] livekit.agents: plugin registered
+2026-07-16 13:05:44,609 [INFO] livekit.agents: plugin registered
+2026-07-16 13:05:44,616 [INFO] livekit.agents: HTTP server listening on :49455
+2026-07-16 13:05:44,651 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-16 13:05:44,651 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-16 13:05:44,722 [INFO] livekit.agents: draining worker
+2026-07-16 13:05:44,734 [WARNING] livekit.agents: exiting forcefully
+2026-07-16 13:05:45,921 [INFO] livekit.agents: registered worker

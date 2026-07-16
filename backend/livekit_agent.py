@@ -21,7 +21,7 @@ load_dotenv()
 import aiohttp
 
 print("Loading AI Models into memory (this will take a few seconds)...")
-stt_model = WhisperSTT(model_name="base")
+stt_model = WhisperSTT(model_name="tiny")
 tts_model = PiperTTSWrapper(model_path="D:/voiceagent/backend/piper/en_US-amy-medium.onnx")
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
@@ -124,13 +124,20 @@ async def entrypoint(ctx: agents.JobContext):
         llm=llm,
         tts=tts,
         vad=vad,
-        allow_interruptions=False,
-        discard_audio_if_uninterruptible=False,
+        allow_interruptions=True,
+        discard_audio_if_uninterruptible=True,
     )
     
     agent = agents.voice.Agent(
-        instructions="You are Vantara AI, a conversational voice agent developed by Gaurav Chauhan. Answer phone calls concisely and professionally. You can understand and respond in both English and Hindi depending on what the user speaks. Always identify yourself as Vantara AI, developed by Gaurav Chauhan, if asked.",
-        allow_interruptions=False,
+        instructions=(
+            "You are Vantara AI, a conversational voice agent developed by Gaurav Chauhan. "
+            "Answer phone calls concisely, professionally, and extremely briefly. "
+            "CRITICAL: Keep your answers extremely short and concise, exactly like a real phone call (e.g. 1-2 sentences maximum). "
+            "Answer ONLY what the user asks. No extra information, long paragraphs, or formatting. "
+            "Do NOT introduce yourself, say your name, or state that you are developed by Gaurav Chauhan in your responses "
+            "unless the user explicitly asks for your name or who created you. Keep standard answers completely free of introductions."
+        ),
+        allow_interruptions=True,
     )
     
     await session.start(agent=agent, room=ctx.room)

@@ -41,8 +41,48 @@ def forward(port):
     except Exception as e:
         print(f"Failed to bind port {port}: {e}")
 
+def forward_tcp(port):
+    def handle_client(client_sock):
+        try:
+            remote_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            remote_sock.connect(('127.0.0.1', port))
+            
+            def pipe(src, dst):
+                try:
+                    while True:
+                        data = src.recv(4096)
+                        if not data:
+                            break
+                        dst.sendall(data)
+                except Exception:
+                    pass
+                finally:
+                    src.close()
+                    dst.close()
+            
+            threading.Thread(target=pipe, args=(client_sock, remote_sock), daemon=True).start()
+            threading.Thread(target=pipe, args=(remote_sock, client_sock), daemon=True).start()
+        except Exception as e:
+            print(f"[TCP {port}] Forwarding error: {e}")
+            client_sock.close()
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        server.bind(('0.0.0.0', port))
+        server.listen(100)
+        print(f"Forwarding TCP 0.0.0.0:{port} <-> 127.0.0.1:{port}", flush=True)
+        while True:
+            client, addr = server.accept()
+            threading.Thread(target=handle_client, args=(client,), daemon=True).start()
+    except Exception as e:
+        print(f"Failed to bind TCP port {port}: {e}")
+
 for p in range(20000, 20006):
     threading.Thread(target=forward, args=(p,), daemon=True).start()
+
+# Forward TCP port 5061 for SIP signaling
+threading.Thread(target=forward_tcp, args=(5061,), daemon=True).start()
 
 try:
     while True:

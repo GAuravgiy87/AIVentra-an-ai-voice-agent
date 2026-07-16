@@ -1,6 +1,6 @@
 import numpy as np
 import asyncio
-from livekit.agents import tts, utils
+from livekit.agents import tts, utils, APIConnectOptions
 from livekit.agents.types import DEFAULT_API_CONNECT_OPTIONS
 from piper import PiperVoice
 
@@ -19,13 +19,13 @@ class PiperTTSWrapper(tts.TTS):
         )
 
     def synthesize(
-        self, text: str, *, conn_options: tts.APIConnectOptions = DEFAULT_API_CONNECT_OPTIONS
+        self, text: str, *, conn_options: APIConnectOptions = DEFAULT_API_CONNECT_OPTIONS
     ) -> tts.ChunkedStream:
         return PiperChunkedStream(tts=self, input_text=text, conn_options=conn_options)
 
 
 class PiperChunkedStream(tts.ChunkedStream):
-    def __init__(self, *, tts: PiperTTSWrapper, input_text: str, conn_options: tts.APIConnectOptions) -> None:
+    def __init__(self, *, tts: PiperTTSWrapper, input_text: str, conn_options: APIConnectOptions) -> None:
         super().__init__(tts=tts, input_text=input_text, conn_options=conn_options)
         self._tts = tts
 
