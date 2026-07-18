@@ -2572,3 +2572,126 @@ RuntimeError: expected m1 and m2 to have the same dtype, but got: float != doubl
 2026-07-16 16:12:15,177 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-16 16:13:07,489 [INFO] livekit.agents: shutting down worker
 2026-07-16 16:13:07,503 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-18 11:00:59,883 [INFO] livekit.agents: starting worker
+2026-07-18 11:00:59,961 [INFO] livekit.agents: plugin registered
+2026-07-18 11:00:59,962 [INFO] livekit.agents: plugin registered
+2026-07-18 11:00:59,978 [INFO] livekit.agents: HTTP server listening on :50266
+2026-07-18 11:01:00,337 [INFO] livekit.agents: registered worker
+2026-07-18 11:07:19,377 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 11:07:19,385 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 11:07:23,411 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 11:07:29,427 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 11:07:37,466 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 11:07:47,508 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 11:07:57,533 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 11:08:07,543 [INFO] livekit.agents: registered worker
+2026-07-18 11:16:08,280 [INFO] livekit.agents: shutting down worker
+2026-07-18 11:16:28,471 [INFO] livekit.agents: starting worker
+2026-07-18 11:16:28,471 [INFO] livekit.agents: plugin registered
+2026-07-18 11:16:28,472 [INFO] livekit.agents: plugin registered
+2026-07-18 11:16:28,485 [INFO] livekit.agents: HTTP server listening on :56316
+2026-07-18 11:16:28,865 [INFO] livekit.agents: registered worker
+2026-07-18 11:16:33,548 [INFO] livekit.agents: received job request
+2026-07-18 11:16:33,549 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:16:33,557 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:16:33,558 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:16:34,425 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:16:34,730 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:16:35,897 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:16:35,898 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:16:36,340 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_esetptiYpjoy.
+2026-07-18 11:16:36,340 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 11:16:38,082 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:16:38,086 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:16:38,429 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:18:18,337 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:18:30,151 [INFO] livekit.agents: shutting down worker
+2026-07-18 11:18:30,163 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-18 11:19:45,938 [INFO] livekit.agents: starting worker
+2026-07-18 11:19:45,938 [INFO] livekit.agents: plugin registered
+2026-07-18 11:19:45,938 [INFO] livekit.agents: plugin registered
+2026-07-18 11:19:45,949 [INFO] livekit.agents: HTTP server listening on :56044
+2026-07-18 11:19:46,301 [INFO] livekit.agents: registered worker
+2026-07-18 11:21:29,087 [INFO] livekit.agents: received job request
+2026-07-18 11:21:29,088 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:21:29,096 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:21:29,097 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:21:29,257 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:21:29,549 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:21:30,707 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:21:30,708 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:21:31,139 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_q5KZinByTvP4.
+2026-07-18 11:21:31,139 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 11:21:31,525 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:21:42,423 [INFO] livekit.agents: received job request
+2026-07-18 11:21:42,424 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:21:42,433 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:21:42,433 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:21:42,436 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:21:42,712 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:21:43,787 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:21:43,788 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:21:44,169 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_rtHJZCmnUm3d.
+2026-07-18 11:21:44,169 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 11:21:44,507 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:21:45,523 [INFO] root: [User state]: speaking
+2026-07-18 11:21:52,336 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:23:49,520 [INFO] root: [Silence Warning]: Asking user if they are still there...
+2026-07-18 11:23:51,351 [INFO] root: [Vantara]: Hey, are you still there?
+2026-07-18 11:23:59,672 [INFO] root: [User state]: speaking
+2026-07-18 11:24:04,288 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:24:04,289 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:24:04,310 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:24:04,322 [INFO] root: [User]: How to get job in Microsoft?
+2026-07-18 11:24:20,320 [INFO] root: [Vantara]: You should visit the Microsoft Careers website to view open positions and submit your application online. Tailoring your resume to specific job descriptions and networking through professional platforms can also increase your chances.
+2026-07-18 11:24:23,471 [INFO] root: [User state]: speaking
+2026-07-18 11:24:31,705 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:24:31,737 [INFO] root: [User]: I am a FASHA graduate student in a fine tan most savory job in India.
+2026-07-18 11:24:47,513 [INFO] root: [Vantara]: I recommend searching on professional portals like LinkedIn or Naukri, specifically filtering for roles in India that match your profile. You may also want to reach out to recruiters directly or attend industry-specific job fairs.
+2026-07-18 11:24:49,622 [INFO] root: [User state]: speaking
+2026-07-18 11:25:01,414 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:25:01,415 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:25:01,462 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:25:01,466 [INFO] root: [User]: Next stop 10 more Polish subscribers come on Executivesull YouTube. One, 7 million subscribers may not continually take you far away. Ok, get going, we will see you in the next video. Thanks for watching, and I wish you a good day.
+2026-07-18 11:25:05,321 [INFO] root: [Vantara]: Understood. Have a good day.
+2026-07-18 11:25:09,522 [INFO] root: [User state]: speaking
+2026-07-18 11:25:19,267 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:25:19,307 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:25:24,952 [INFO] root: [User state]: speaking
+2026-07-18 11:25:30,186 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:25:30,197 [INFO] root: [User]: Can you hear the Queen? Can you hear the Queen?
+2026-07-18 11:25:35,895 [INFO] root: [Vantara]: No, I cannot hear anyone. I am a text-based AI assistant.
+2026-07-18 11:25:38,321 [INFO] root: [User state]: speaking
+2026-07-18 11:25:42,439 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:25:42,452 [INFO] root: [User]: Can you speak Hindi?
+2026-07-18 11:26:30,971 [INFO] root: [User state]: speaking
+2026-07-18 11:26:39,582 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 11:26:39,605 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-07-18 11:26:39,618 [INFO] root: [User]: Karaya Veela Chattari Bana.
+2026-07-18 11:26:55,338 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:26:55,339 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:27:14,700 [INFO] livekit.agents: shutting down worker
+2026-07-18 11:27:14,720 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 544
+2026-07-18 11:27:14,721 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-18 11:37:44,110 [INFO] livekit.agents: starting worker
+2026-07-18 11:37:44,112 [INFO] livekit.agents: plugin registered
+2026-07-18 11:37:44,112 [INFO] livekit.agents: plugin registered
+2026-07-18 11:37:44,160 [INFO] livekit.agents: HTTP server listening on :55636
+2026-07-18 11:37:44,509 [INFO] livekit.agents: registered worker
+2026-07-18 11:37:58,483 [INFO] livekit.agents: received job request
+2026-07-18 11:37:58,484 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:37:58,494 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:37:58,495 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:37:58,818 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:37:59,133 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:38:00,246 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:38:00,247 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:38:00,630 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_QFhpsuGs7mk6.
+2026-07-18 11:38:01,270 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:38:04,864 [INFO] root: [User state]: speaking
+2026-07-18 11:38:08,312 [INFO] root: [User state]: speaking
+2026-07-18 11:38:28,335 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-18 11:38:28,340 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:38:28,340 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 11:40:28,771 [INFO] livekit.agents: shutting down worker
+2026-07-18 11:40:28,784 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8

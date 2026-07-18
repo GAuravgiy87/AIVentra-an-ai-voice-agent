@@ -10,7 +10,7 @@ import asyncio
 from livekit import agents, rtc
 from livekit.plugins import google
 from whisper_stt import WhisperSTT
-from piper_tts import PiperTTSWrapper
+from piper_tts import PiperTTSWrapper, BilingualPiperTTS
 from livekit.agents.llm import ChatContext
 from google.genai import types
 import livekit.plugins.silero as silero
@@ -22,7 +22,10 @@ import aiohttp
 
 print("Loading AI Models into memory (this will take a few seconds)...")
 stt_model = WhisperSTT(model_name="tiny")
-tts_model = PiperTTSWrapper(model_path="D:/voiceagent/backend/piper/en_US-amy-medium.onnx")
+tts_model = BilingualPiperTTS(
+    en_model_path="D:/voiceagent/backend/piper/en_US-amy-medium.onnx",
+    hi_model_path="D:/voiceagent/backend/piper/hi_IN-pratham-medium.onnx"
+)
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
 
@@ -238,7 +241,8 @@ async def entrypoint(ctx: agents.JobContext):
             "CRITICAL: Keep your answers extremely short and concise, exactly like a real phone call (e.g. 1-2 sentences maximum). "
             "Answer ONLY what the user asks. No extra information, long paragraphs, or formatting. "
             "Do NOT introduce yourself, say your name, or state who you are in your responses "
-            "unless the user explicitly asks for your name or who created you. Keep standard answers completely free of introductions."
+            "unless the user explicitly asks for your name or who created you. Keep standard answers completely free of introductions. "
+            "CRITICAL: You must respond in the same language the user speaks to you. If the user speaks in Hindi, you must respond strictly in Hindi using Devanagari script (e.g. नमस्ते). If the user speaks in English, you must respond strictly in English (Latin script). Never mix scripts in a single sentence."
         ),
         allow_interruptions=True,
     )
@@ -250,9 +254,9 @@ async def entrypoint(ctx: agents.JobContext):
         logging.info(f"[REJECTING SIP CALL]: {reject_reason}")
         try:
             # Play greeting warning and leave
-            warning_text = "Access denied. You are not authorized to call this line."
+            warning_text = "प्रवेश निषेध। आप इस लाइन पर कॉल करने के लिए अधिकृत नहीं हैं।"
             if "not configured" in reject_reason:
-                warning_text = "The extension you dialed is not configured."
+                warning_text = "आपके द्वारा डायल किया गया एक्सटेंशन कॉन्फ़िगर नहीं है।"
             handle = session.say(warning_text, allow_interruptions=False)
             await handle.wait_for_playout()
         except Exception as e:
@@ -341,7 +345,7 @@ async def entrypoint(ctx: agents.JobContext):
                     has_warned = True
                     last_human_speech_time = now
                     logging.info("[Silence Warning]: Asking user if they are still there...")
-                    session.say("Hey, are you still there?", allow_interruptions=True)
+                    session.say("सुनिए, क्या आप अभी भी वहाँ हैं?", allow_interruptions=True)
             else:
                 if elapsed >= 60:  # 1 minute after warning
                     logging.info("[Silence Timeout]: Human silent for 3 minutes. Hanging up call.")

@@ -53,7 +53,7 @@ class WhisperSTT(STT):
             mono16k = np.interp(dst_indices, src_indices, mono)
         
         mono16k = mono16k.astype(np.float32)
-        # Run transcription
+        # Run transcription (None allows Whisper to dynamically auto-detect English or Hindi)
         lang_str = language if isinstance(language, str) else None
         result = self._whisper_model.transcribe(mono16k, language=lang_str, fp16=False)
         
