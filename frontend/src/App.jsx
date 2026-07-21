@@ -48,7 +48,7 @@ function LandingPage({ showRoomId = null }) {
     {
       icon: Mic,
       title: 'Human-like Voice',
-      desc: 'Speak completely naturally. Ventra AI understands language nuance and responds in real time.',
+      desc: 'Speak completely naturally. AI Voice Agent understands language nuance and responds in real time.',
       color: '#ec4899'
     },
     {
@@ -80,7 +80,7 @@ function LandingPage({ showRoomId = null }) {
 
   const services = [
     { title: 'Automated Call Routing', desc: 'Identifies incoming intent, hooks into your extensions database, and forwards calls to departments automatically.' },
-    { title: 'Interactive Ingestion', desc: 'Feed Vantara AI your system handbooks, directories, or scripts, and it instantly responds with correct info.' },
+    { title: 'Interactive Ingestion', desc: 'Feed AI Voice Agent your system handbooks, directories, or scripts, and it instantly responds with correct info.' },
     { title: 'Multi-device Softphones', desc: 'SIP profile generation permits instant registration with popular clients like Linphone, Microsip, and hardware systems.' }
   ];
 
@@ -99,7 +99,7 @@ function LandingPage({ showRoomId = null }) {
               <Bot size={20} color="#fff" />
             </div>
             <span style={{ fontWeight: 800, fontSize: 20, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-              Vantara <span style={{ color: 'var(--accent)', fontWeight: 500 }}>AI</span>
+              AI Voice <span style={{ color: 'var(--accent)', fontWeight: 500 }}>Agent</span>
             </span>
           </div>
 
@@ -138,7 +138,7 @@ function LandingPage({ showRoomId = null }) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 60 }}>
           <div className="badge badge-accent" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 20 }}>
             <Sparkles size={12} />
-            <span>Introducing Vantara Voice Agent V1.0 · Developed by Gaurav Chauhan</span>
+            <span>AI Voice Agent V1.0 · Developed by Gaurav Chauhan</span>
           </div>
 
           <h1 style={{ fontSize: '3.5rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--text-primary)', marginBottom: 20, maxWidth: 800 }}>
@@ -146,7 +146,7 @@ function LandingPage({ showRoomId = null }) {
           </h1>
 
           <p style={{ color: 'var(--text-secondary)', fontSize: 17, maxWidth: 600, lineHeight: 1.7, marginBottom: 36 }}>
-            Vantara AI handles business phone lines, answers queries instantly, manages customer bookings, and routes calls seamlessly over SIP. Click below to initiate a voice call directly.
+            AI Voice Agent handles business phone lines, answers queries instantly, manages customer bookings, and routes calls seamlessly over SIP. Click below to initiate a voice call directly.
           </p>
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -210,7 +210,7 @@ function LandingPage({ showRoomId = null }) {
 
       {/* Footer */}
       <footer style={{ borderTop: '1px solid rgba(236,72,153,0.08)', padding: '24px', background: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContents: 'center', justifyContent: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)' }}>
-        <span>© 2026 DEI Lab · Vantara AI Agent System (Developed by Gaurav Chauhan) · Powered by Google Gemini</span>
+        <span>© 2026 DEI Lab · AI Voice Agent System (Developed by Gaurav Chauhan) · Powered by Google Gemini</span>
       </footer>
 
       {/* Call Overlay Modal */}

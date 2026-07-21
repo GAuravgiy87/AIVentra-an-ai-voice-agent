@@ -52,7 +52,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
         // Mock fallback greeting for local demonstration without backend
         if (!hasGreetedRef.current) {
           hasGreetedRef.current = true;
-          const greetingText = "Hello, welcome to D E I Lab! I am Vantara, How can I assist you today?";
+          const greetingText = "Hello! I am your AI Voice Agent. How can I assist you today?";
           setMessages([{ role: 'assistant', content: greetingText }]);
           speak(greetingText);
         }
@@ -93,9 +93,9 @@ export default function VoiceAgent({ roomId, onLeave }) {
     } catch {
       // Simulate client response if backend is offline
       setTimeout(() => {
-        let simulatedReply = "This is a simulated response. The Vantara backend is currently unreachable, but the speech and chat modules are fully functional.";
+        let simulatedReply = "This is a simulated response. The AI Voice Agent backend is currently unreachable, but the speech and chat modules are fully functional.";
         if (text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
-          simulatedReply = "Hello! I am Vantara AI, developed by Gaurav Chauhan. I can help route calls to extensions 100 to 110, or answer questions about DEI Lab. How can I help you?";
+          simulatedReply = "Hello! I am AI Voice Agent, developed by Gaurav Chauhan. I can help route calls to extensions 100 to 110, or answer questions. How can I help you?";
         } else if (text.toLowerCase().includes('extension') || text.toLowerCase().includes('route')) {
           simulatedReply = "I can forward you to extension 101 or 105. Please let me know who you'd like to contact.";
         }
@@ -169,7 +169,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
         </div>
 
         <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>
-          Calling Vantara AI
+          Calling AI Voice Agent
         </h3>
         <p className="badge badge-accent" style={{ marginBottom: 12 }}>
           Extension 200 · Developed by Gaurav Chauhan
@@ -217,7 +217,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
             <Bot size={16} color="#fff" />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>Vantara AI Voice Agent</div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-primary)' }}>AI Voice Agent</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--green)' }} className="pulse-dot" />
               <span style={{ fontSize: 9, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -271,7 +271,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
           }} />
 
           {/* Actual Face Avatar Image */}
-          <img src="/vantara_avatar.png" alt="Vantara AI" style={{
+          <img src="/vantara_avatar.png" alt="AI Voice Agent" style={{
             width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover',
             border: `3px solid ${isSpeaking ? 'var(--accent)' : (isListening ? 'var(--accent-2)' : 'rgba(236,72,153,0.15)')}`,
             boxShadow: '0 8px 24px rgba(139, 92, 246, 0.15)',
@@ -282,10 +282,10 @@ export default function VoiceAgent({ roomId, onLeave }) {
         </div>
 
         <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', textAlign: 'center', minHeight: 18 }}>
-          {isListening && <span style={{ color: 'var(--accent)' }}>Vantara is Listening... Speak now</span>}
-          {isSpeaking && <span style={{ color: 'var(--accent-2)' }}>Vantara is Speaking</span>}
-          {isTyping && <span style={{ color: 'var(--text-muted)' }}>Vantara is thinking...</span>}
-          {!isListening && !isSpeaking && !isTyping && <span>Vantara is Ready · Say something or type below</span>}
+          {isListening && <span style={{ color: 'var(--accent)' }}>AI Voice Agent is Listening... Speak now</span>}
+          {isSpeaking && <span style={{ color: 'var(--accent-2)' }}>AI Voice Agent is Speaking</span>}
+          {isTyping && <span style={{ color: 'var(--text-muted)' }}>AI Voice Agent is thinking...</span>}
+          {!isListening && !isSpeaking && !isTyping && <span>AI Voice Agent is Ready · Say something or type below</span>}
         </div>
 
         <style>{`
@@ -386,7 +386,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
             onChange={e => setTextInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') { handleSend(textInput); } }}
             disabled={isListening}
-            placeholder={isListening ? 'Listening...' : 'Message Vantara AI...'}
+            placeholder={isListening ? 'Listening...' : 'Message AI Voice Agent...'}
             style={{
               flex: 1, border: 'none', background: 'transparent', outline: 'none',
               fontSize: 13, color: 'var(--text-primary)', padding: '0 4px'

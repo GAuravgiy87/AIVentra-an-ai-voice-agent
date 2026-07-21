@@ -617,7 +617,7 @@ function CompaniesPanel() {
   const [rangeEnd, setRangeEnd] = useState('199');
   const [aiModel, setAiModel] = useState('gemini');
   const [aiModelName, setAiModelName] = useState('gemini-3.1-flash-lite');
-  const [agentName, setAgentName] = useState('Ventra');
+  const [agentName, setAgentName] = useState('AI Assistant');
   const [adminName, setAdminName] = useState('');
   const [adminId, setAdminId] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
@@ -632,7 +632,7 @@ function CompaniesPanel() {
     setRangeEnd('199');
     setAiModel('gemini');
     setAiModelName('gemini-3.1-flash-lite');
-    setAgentName('Ventra');
+    setAgentName('AI Assistant');
     setAdminName('');
     setAdminId('');
     setAdminPassword('');
@@ -676,7 +676,7 @@ function CompaniesPanel() {
             range_end: Number(rangeEnd),
             ai_model: aiModel,
             ai_model_name: aiModelName.trim(),
-            agent_name: agentName.trim() || 'Ventra'
+            agent_name: agentName.trim() || 'AI Assistant'
           })
         });
         if (res.ok) {
@@ -712,7 +712,7 @@ function CompaniesPanel() {
           range_end: Number(rangeEnd),
           ai_model: aiModel,
           ai_model_name: aiModelName.trim(),
-          agent_name: agentName.trim() || 'Ventra',
+          agent_name: agentName.trim() || 'AI Assistant',
           admin_name: adminName.trim(),
           admin_id: adminId.trim(),
           admin_password: adminPassword
@@ -814,7 +814,7 @@ function CompaniesPanel() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Agent Name</label>
-              <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+              <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. AI Assistant" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
             </div>
           </div>
 
@@ -896,7 +896,7 @@ function CompaniesPanel() {
                 setRangeEnd(company.range_end ? company.range_end.toString() : '');
                 setAiModel(company.ai_model || 'gemini');
                 setAiModelName(company.ai_model_name || 'gemini-3.1-flash-lite');
-                setAgentName(company.agent_name || 'Ventra');
+                setAgentName(company.agent_name || 'AI Assistant');
                 setShowAddForm(true);
               }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', fontSize: 13, fontWeight: 700 }}>Edit</button>
               <button onClick={() => deleteCompany(company.id, company.name)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 13, fontWeight: 700 }}>Delete</button>
@@ -926,7 +926,7 @@ function CompanySettingsPanel({ companyId }) {
         const myComp = data.companies?.find(c => String(c.id) === String(companyId));
         if (myComp) {
           setCompany(myComp);
-          setAgentName(myComp.agent_name || 'Ventra');
+          setAgentName(myComp.agent_name || 'AI Assistant');
           setAgentVoice(myComp.agent_voice || 'en-US-AriaNeural');
           setAgentPrompt(myComp.agent_prompt || '');
           setCompanyName(myComp.name || '');
@@ -953,7 +953,7 @@ function CompanySettingsPanel({ companyId }) {
           range_end: company.range_end,
           ai_model: company.ai_model,
           ai_model_name: company.ai_model_name,
-          agent_name: agentName.trim() || 'Ventra',
+          agent_name: agentName.trim() || 'AI Assistant',
           agent_voice: agentVoice,
           agent_prompt: agentPrompt.trim()
         })
@@ -1002,8 +1002,8 @@ function CompanySettingsPanel({ companyId }) {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Agent Name</label>
-            <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '14px 18px', border: '2px solid rgba(0,0,0,0.05)', borderRadius: 14, fontSize: 15, transition: 'all 0.2s', background: '#f8fafc' }} required />
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>The persona name for your assistant. Example: "Hello, I am {agentName || 'Ventra'}..."</p>
+            <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. AI Assistant" style={{ padding: '14px 18px', border: '2px solid rgba(0,0,0,0.05)', borderRadius: 14, fontSize: 15, transition: 'all 0.2s', background: '#f8fafc' }} required />
+            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>The persona name for your assistant. Example: "Hello, I am {agentName || 'AI Assistant'}..."</p>
           </div>
 
           <div style={{ marginTop: 8 }}>
@@ -1320,7 +1320,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
           </div>
           <div>
             <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text-primary)', lineHeight: 1.1 }}>
-              {userRole === 'super_admin' ? 'Vantara Console' : `${localStorage.getItem('ventra_user_name') || 'Company'} Console`}
+              {userRole === 'super_admin' ? 'AI Voice Agent' : `${localStorage.getItem('ventra_user_name') || 'Company'} Console`}
             </div>
             <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 4, fontWeight: 700 }}>Management Hub</div>
           </div>
@@ -1697,7 +1697,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
                       ['Ear Speech Recognition', 'Webkit SpeechRecognition API'],
                       ['Instruction Tone', 'DEI Lab receptionist, fast and short replies'],
                       ['Asterisk Extensions', '100 to 110 configured'],
-                      ['SIP Direct Extensions', 'Ext 200 (Routes to Ventra Gemini Room)'],
+                      ['SIP Direct Extensions', 'Ext 200 (Routes to AI Voice Agent Gemini Room)'],
                     ].map(([k, v]) => (
                       <div key={k} style={{ display: 'flex', flexDirection: 'column', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
                         <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>{k}</span>
@@ -1896,7 +1896,7 @@ function getMockMetrics() {
         messages: [
           { role: 'system', content: 'SYSTEM_PROMPT' },
           { role: 'user', content: 'Hello, is anyone there?' },
-          { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 180 },
+          { role: 'assistant', content: 'Welcome! I am your AI Voice Agent. How can I help you today?', latency_ms: 180 },
           { role: 'user', content: 'I need to reach extension 105.' },
           { role: 'assistant', content: 'Certainly! Forwarding your call to extension 105. Please hold.', latency_ms: 240 }
         ]
@@ -1906,7 +1906,7 @@ function getMockMetrics() {
         messages: [
           { role: 'system', content: 'SYSTEM_PROMPT' },
           { role: 'user', content: 'Hello!' },
-          { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 110 },
+          { role: 'assistant', content: 'Welcome! I am your AI Voice Agent. How can I help you today?', latency_ms: 110 },
           { role: 'user', content: 'What are your working hours?' },
           { role: 'assistant', content: 'DEI Lab is open Monday through Friday from 9 AM to 6 PM.', latency_ms: 190 }
         ]
@@ -1915,7 +1915,7 @@ function getMockMetrics() {
         last_active: current_time - 3600,
         messages: [
           { role: 'user', content: 'Hi' },
-          { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 150 },
+          { role: 'assistant', content: 'Hello! I am your AI Voice Agent. How can I help you today?', latency_ms: 150 },
           { role: 'user', content: 'Thanks.' },
           { role: 'assistant', content: 'You are welcome! Have a wonderful day.', latency_ms: 120 }
         ]
@@ -1924,7 +1924,7 @@ function getMockMetrics() {
         last_active: current_time - 86400,
         messages: [
           { role: 'user', content: 'Hello' },
-          { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 280 },
+          { role: 'assistant', content: 'Hello! I am your AI Voice Agent. How can I help you today?', latency_ms: 280 },
           { role: 'user', content: 'Forward me to extension 108.' },
           { role: 'assistant', content: 'Okay, routing you to extension 108. Goodbye!', latency_ms: 450 }
         ]

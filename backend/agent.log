@@ -3896,3 +3896,54 @@ RuntimeError: AudioEmitter isn't started
 2026-07-21 15:31:42,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-21 15:32:00,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-21 15:32:00,686 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 19466
+2026-07-21 15:37:32,900 [INFO] livekit.agents: received job request
+2026-07-21 15:37:32,901 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:37:32,913 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:37:32,913 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:37:32,916 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:37:33,227 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:37:34,305 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:37:34,306 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:37:34,681 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_w8JCAFPaKbR6.
+2026-07-21 15:37:34,682 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:37:36,002 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:37:54,939 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:37:59,119 [INFO] livekit.agents: received job request
+2026-07-21 15:37:59,120 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:37:59,129 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:37:59,129 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:37:59,132 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:37:59,558 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:38:01,627 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:38:01,628 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:38:02,746 [WARNING] livekit.agents: job executor is unresponsive
+2026-07-21 15:38:02,747 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_wH8c9CZMjhgx.
+2026-07-21 15:38:02,748 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:38:03,546 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:38:05,778 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 15:38:05,780 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 15:38:07,453 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 15:38:07,456 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 15:38:14,687 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 20965
+2026-07-21 15:38:14,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:38:16,603 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:38:36,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:38:36,687 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 23620
+2026-07-21 15:40:16,327 [INFO] livekit.agents: starting worker
+2026-07-21 15:40:16,327 [INFO] livekit.agents: plugin registered
+2026-07-21 15:40:16,327 [INFO] livekit.agents: plugin registered
+2026-07-21 15:40:16,327 [INFO] livekit.agents: plugin registered
+2026-07-21 15:40:16,332 [INFO] livekit.agents: HTTP server listening on :65522
+2026-07-21 15:40:16,692 [INFO] livekit.agents: registered worker
+2026-07-21 15:52:49,087 [INFO] livekit.agents: starting worker
+2026-07-21 15:52:49,087 [INFO] livekit.agents: plugin registered
+2026-07-21 15:52:49,087 [INFO] livekit.agents: plugin registered
+2026-07-21 15:52:49,087 [INFO] livekit.agents: plugin registered
+2026-07-21 15:52:49,096 [INFO] livekit.agents: HTTP server listening on :59713
+2026-07-21 15:52:49,462 [INFO] livekit.agents: registered worker
+2026-07-21 15:55:37,774 [INFO] livekit.agents: starting worker
+2026-07-21 15:55:37,774 [INFO] livekit.agents: plugin registered
+2026-07-21 15:55:37,774 [INFO] livekit.agents: plugin registered
+2026-07-21 15:55:37,775 [INFO] livekit.agents: plugin registered
+2026-07-21 15:55:37,781 [INFO] livekit.agents: HTTP server listening on :56194
+2026-07-21 15:55:38,140 [INFO] livekit.agents: registered worker

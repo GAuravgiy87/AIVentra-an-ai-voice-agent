@@ -63,7 +63,7 @@ export default function Login({ onLoginSuccess, onBack }) {
             </div>
           </div>
           <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>
-            Vantara Sign In
+            AI Voice Agent Sign In
           </h2>
           <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
             Sign in with your credentials to manage your SIP extensions, monitor live calls, or access the admin panel.

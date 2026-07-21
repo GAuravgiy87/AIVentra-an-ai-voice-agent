@@ -61,6 +61,7 @@ class ReportMessageRequest(BaseModel):
     content: str
     latency_ms: Optional[int] = None
     extension: Optional[str] = None
+    company_id: Optional[int] = None
 
 @app.post("/api/admin/report_message")
 def report_message(request: ReportMessageRequest, _: str = Depends(verify_internal_agent)):
@@ -69,7 +70,8 @@ def report_message(request: ReportMessageRequest, _: str = Depends(verify_intern
         role=request.role,
         content=request.content,
         latency_ms=request.latency_ms,
-        extension=request.extension
+        extension=request.extension,
+        company_id=request.company_id
     )
     return {"status": "ok"}
 
@@ -228,7 +230,7 @@ class CreateCompanyRequest(BaseModel):
     range_end: int
     ai_model: Optional[str] = "gemini"
     ai_model_name: Optional[str] = "gemini-3.1-flash-lite"
-    agent_name: Optional[str] = "Ventra"
+    agent_name: Optional[str] = "AI Assistant"
     agent_prompt: Optional[str] = None
     agent_voice: Optional[str] = "en-US-AriaNeural"
     admin_id: Optional[str] = None
@@ -256,7 +258,7 @@ def api_create_company(request: CreateCompanyRequest, payload: dict = Depends(ve
         range_end=request.range_end,
         ai_model=request.ai_model,
         ai_model_name=request.ai_model_name,
-        agent_name=request.agent_name.strip() if request.agent_name else "Ventra",
+        agent_name=request.agent_name.strip() if request.agent_name else "AI Assistant",
         agent_prompt=request.agent_prompt,
         agent_voice=request.agent_voice,
         admin_id=request.admin_id.strip() if request.admin_id else None,
@@ -291,7 +293,7 @@ def api_update_company(company_id: int, request: UpdateCompanyRequest, payload: 
         range_end=request.range_end,
         ai_model=request.ai_model,
         ai_model_name=request.ai_model_name.strip(),
-        agent_name=request.agent_name.strip() if request.agent_name else "Ventra",
+        agent_name=request.agent_name.strip() if request.agent_name else "AI Assistant",
         agent_prompt=request.agent_prompt,
         agent_voice=request.agent_voice
     )

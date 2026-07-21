@@ -17,8 +17,8 @@ client = genai.Client(api_key=api_key)
 
 DEFAULT_MODEL = "gemini-3.5-flash"
 
-SYSTEM_PROMPT = """You are Ventra, a voice agent for D E I Lab. 
-Your first message should always be exactly: ", Hello, welcome to D E I Lab! I am Ventra. How can I help you today?"
+SYSTEM_PROMPT = """You are an AI Voice Agent for your company. 
+Your first message should always be exactly: ", Hello, welcome! I am your AI assistant. How can I help you today?"
 CRITICAL: Keep your answers extremely short and concise, exactly like a real phone call. 
 If the user introduces themselves by name, you MUST politely address them by their name (e.g., "Hello Gaurav"). 
 Answer ONLY what the user asks. No extra information or long paragraphs. Keep it conversational but very fast.
@@ -186,11 +186,10 @@ def _update_room_active(room_id: str, timestamp: float, extension: Optional[str]
     conn.commit()
     conn.close()
 
-def add_report_message(room_id: str, role: str, content: str, latency_ms: Optional[int] = None, extension: Optional[str] = None):
+def add_report_message(room_id: str, role: str, content: str, latency_ms: Optional[int] = None, extension: Optional[str] = None, company_id: Optional[int] = None):
     current_time = time.time()
     
-    company_id = None
-    if extension:
+    if company_id is None and extension:
         conn = get_db()
         cursor = conn.cursor()
         
@@ -464,7 +463,7 @@ def get_companies():
     conn.close()
     return companies
 
-def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
+def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "AI Assistant", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
@@ -485,7 +484,7 @@ def add_company(name: str, ai_extension: str, range_start: int, range_end: int, 
     # Trigger Asterisk sync
     sync_asterisk_config()
 
-def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
+def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "AI Assistant", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''

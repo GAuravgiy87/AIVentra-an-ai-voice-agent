@@ -47,7 +47,7 @@ stt_model = WhisperSTT(model_name="small")
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
 
-async def report_to_dashboard_async(room_id: str, role: str, content: str, latency_ms: int = None, extension: str = None):
+async def report_to_dashboard_async(room_id: str, role: str, content: str, latency_ms: int = None, extension: str = None, company_id: int = None):
     try:
         async with aiohttp.ClientSession() as session_http:
             payload = {
@@ -55,7 +55,8 @@ async def report_to_dashboard_async(room_id: str, role: str, content: str, laten
                 "role": role,
                 "content": content,
                 "latency_ms": latency_ms,
-                "extension": extension
+                "extension": extension,
+                "company_id": company_id
             }
             headers = {"X-Internal-Token": os.getenv("INTERNAL_API_KEY", "ventra_internal_secure_123")}
             async with session_http.post("http://localhost:8001/api/admin/report_message", json=payload, headers=headers) as response:
@@ -259,11 +260,12 @@ async def entrypoint(ctx: agents.JobContext):
             "user_model_name": "gemini-3.1-flash-lite",
             "user_name": "Vantara AI",
             "company_name": "D E I Lab",
-            "agent_name": "Ventra",
+            "agent_name": "AI Assistant",
             "agent_prompt": "",
             "agent_voice": "en-US-AriaNeural",
             "range_start": 100,
-            "range_end": 200
+            "range_end": 200,
+            "company_id": None
         }
         
         if not dialed_number:
@@ -279,6 +281,7 @@ async def entrypoint(ctx: agents.JobContext):
             
             if company_row:
                 company_id, company_name, range_start, range_end, user_model, user_model_name, agent_name_val, agent_prompt_val, agent_voice_val = company_row
+                res["company_id"] = company_id
                 res["user_name"] = company_name
                 res["company_name"] = company_name
                 res["range_start"] = range_start
@@ -314,6 +317,7 @@ async def entrypoint(ctx: agents.JobContext):
                 
                 if user_row:
                     user_id, user_name, user_model, user_model_name, user_company_id = user_row
+                    res["company_id"] = user_company_id
                     res["user_name"] = user_name
                     res["user_model"] = user_model
                     res["user_model_name"] = user_model_name
@@ -370,6 +374,7 @@ async def entrypoint(ctx: agents.JobContext):
     agent_voice = route_data["agent_voice"]
     range_start = route_data["range_start"]
     range_end = route_data["range_end"]
+    company_id = route_data["company_id"]
     
     # Initialize dynamic TTS based on database voice
     tts = EdgeTTSWrapper(voice=agent_voice)
@@ -527,7 +532,7 @@ async def entrypoint(ctx: agents.JobContext):
                     "caller": caller_extension or caller_number
                 })
 
-                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension))
+                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension, company_id))
 
     # Greet the user immediately when they connect to the room via SIP
     # Removed short sleep to prevent initial greeting clipping and delay.
@@ -597,7 +602,7 @@ if __name__ == "__main__":
     livekit.agents.cli.cli.setup_logging = custom_setup_logging
 
 
-    print("\n[OK] Ventra AI is successfully connected and ready to receive calls on extension 200!\n")
+    print("\n[OK] AI Voice Agent is successfully connected and ready to receive calls on extension 200!\n")
 
     # Run the LiveKit Agent Worker
     agents.cli.run_app(
