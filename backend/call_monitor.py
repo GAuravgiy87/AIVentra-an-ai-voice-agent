@@ -30,6 +30,14 @@ def main():
             elif event == 'call_rejected':
                 reason = data.get('reason', '')
                 print(f"[{timestamp}] ❌ REJECT : Call from {caller} rejected. Reason: {reason}")
+            elif event == 'transcript':
+                role = data.get('role', 'Unknown')
+                text = data.get('text', '')
+                if role == "Vantara":
+                    print(f"[{timestamp}] 🎙️  [AI]: {text}")
+                else:
+                    print(f"[{timestamp}] 👤 [{caller}]: {text}")
+                    
             elif event == 'call_ended':
                 print(f"[{timestamp}] 🔚 HANGUP : Call ended with extension {caller}")
             elif event == 'user_speaking':

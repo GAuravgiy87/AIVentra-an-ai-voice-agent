@@ -476,10 +476,14 @@ async def entrypoint(ctx: agents.JobContext):
                 # Extract caller extension (non-agent participant) to attribute calls to devices
                 caller_extension = None
                 for p in ctx.room.remote_participants.values():
-                    caller_extension = p.attributes.get("sip.from")
-                    if not caller_extension:
-                        caller_extension = p.identity
-                    break
+                    caller_extension = p.attributes.get("sip.phoneNumber") or p.attributes.get("sip.from")
+                    if caller_extension: break
+                
+                publish_event("transcript", {
+                    "role": role_label,
+                    "text": text.strip(),
+                    "caller": caller_extension or caller_number
+                })
 
                 asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension))
 
@@ -514,7 +518,7 @@ async def entrypoint(ctx: agents.JobContext):
                     has_warned = True
                     last_human_speech_time = now
                     logging.info("[Silence Warning]: Asking user if they are still there...")
-                    session.say("सुनिए, क्या आप अभी भी वहाँ हैं?", allow_interruptions=True)
+                    session.say("Hello, are you still there?", allow_interruptions=True)
             else:
                 if elapsed >= 60:  # 1 minute after warning
                     logging.info("[Silence Timeout]: Human silent for 3 minutes. Hanging up call.")

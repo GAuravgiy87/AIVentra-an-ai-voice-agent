@@ -3048,3 +3048,37 @@ TypeError: object str can't be used in 'await' expression
 2026-07-21 13:22:25,015 [INFO] root: [Vantara]: I apologize, but I am currently unable to transfer the call. Please hold while I attempt to reconnect you, or you may try again in a moment.
 2026-07-21 13:22:35,633 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-21 13:22:35,634 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:38:37,961 [INFO] livekit.agents: starting worker
+2026-07-21 13:38:37,961 [INFO] livekit.agents: plugin registered
+2026-07-21 13:38:37,961 [INFO] livekit.agents: plugin registered
+2026-07-21 13:38:37,973 [INFO] livekit.agents: HTTP server listening on :53476
+2026-07-21 13:38:38,353 [INFO] livekit.agents: registered worker
+2026-07-21 13:39:04,767 [INFO] livekit.agents: received job request
+2026-07-21 13:39:04,768 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 13:39:04,777 [INFO] livekit.agents: initializing job runner
+2026-07-21 13:39:04,778 [INFO] livekit.agents: job runner initialized
+2026-07-21 13:39:04,927 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 13:39:05,217 [WARNING] root: Failed to query routing DB: name 'get_db' is not defined
+2026-07-21 13:39:05,219 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 13:39:06,321 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 13:39:06,322 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 13:39:06,710 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_9ZTmwmYZvoYF.
+2026-07-21 13:39:06,711 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 13:39:08,109 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 13:39:12,137 [INFO] root: Participant disconnected: sip_100
+2026-07-21 13:39:32,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:39:32,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:39:34,882 [INFO] livekit.agents: received job request
+2026-07-21 13:39:34,883 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 13:39:34,893 [INFO] livekit.agents: initializing job runner
+2026-07-21 13:39:34,893 [INFO] livekit.agents: job runner initialized
+2026-07-21 13:39:34,896 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 13:39:35,168 [WARNING] root: Failed to query routing DB: name 'get_db' is not defined
+2026-07-21 13:39:35,169 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 13:39:36,207 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 13:39:36,208 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 13:39:36,589 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_DD7pURTmmpxm.
+2026-07-21 13:39:36,590 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 13:39:37,441 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 13:41:41,944 [INFO] root: [Silence Warning]: Asking user if they are still there...
+2026-07-21 13:42:41,980 [INFO] root: [Silence Timeout]: Human silent for 3 minutes. Hanging up call.
