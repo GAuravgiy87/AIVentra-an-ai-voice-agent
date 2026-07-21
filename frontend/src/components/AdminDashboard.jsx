@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Bot, Search, LogOut, RefreshCw, X, MessageSquare, Settings,
-  Activity, Clock, Phone, ShieldCheck, ChevronRight, Inbox, Download, AlertTriangle, Circle, Plus, Laptop, Smartphone, Copy, BarChart2, Globe
+  Activity, Clock, Phone, ShieldCheck, ChevronRight, Inbox, Download, AlertTriangle, Circle, Plus, Laptop, Smartphone, Copy, BarChart2, Globe,
+  Building2, Sparkles, Save
 } from 'lucide-react';
 import VoiceSelector from './VoiceSelector';
 
@@ -111,15 +112,15 @@ function SIPPanel({ companyId, userRole }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newExt, setNewExt] = useState('');
   const [newName, setNewName] = useState('');
-  const [newIp, setNewIp] = useState('192.168.1.');
   const [newType, setNewType] = useState('Softphone');
   const [selectedUser, setSelectedUser] = useState('');
+  const [showCredsModal, setShowCredsModal] = useState(null);
 
   const fetchDevices = useCallback(async () => {
     setLoading(true);
     try {
       const q = companyId ? `?company_id=${companyId}` : '';
-      const res = await fetch(`http://localhost:8001/api/admin/devices${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/devices${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       const data = await res.json();
       setPhones(data.devices || []);
     } catch (err) {
@@ -132,7 +133,7 @@ function SIPPanel({ companyId, userRole }) {
   const fetchUsers = useCallback(async () => {
     try {
       const q = companyId ? `?company_id=${companyId}` : '';
-      const res = await fetch(`http://localhost:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       const data = await res.json();
       setUsers(data.users || []);
       if (data.users && data.users.length > 0) {
@@ -151,7 +152,7 @@ function SIPPanel({ companyId, userRole }) {
       return;
     }
     try {
-      const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
       if (res.ok) {
         const data = await res.json();
         const active = (data.companies || []).find(c => c.id === Number(companyId));
@@ -194,13 +195,13 @@ function SIPPanel({ companyId, userRole }) {
     }
 
     try {
-      const res = await fetch('http://localhost:8001/api/user/devices', {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/user/devices`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
         body: JSON.stringify({
           user_id: selectedUser,
           name: newName.trim(),
-          ip_address: newIp.trim(),
+          ip_address: '',
           extension: newExt.trim(),
           type: newType,
           status: 'Online',
@@ -208,9 +209,14 @@ function SIPPanel({ companyId, userRole }) {
         })
       });
       if (res.ok) {
+        const host = window.location.hostname;
+        setShowCredsModal({ 
+          ext: newExt.trim(), 
+          password: 'secret', 
+          domain: (host === 'localhost' || host === '127.0.0.1') ? '<Server-LAN-IP>' : host 
+        });
         setNewExt('');
         setNewName('');
-        setNewIp('192.168.1.');
         setShowAddForm(false);
         fetchDevices();
       } else {
@@ -225,7 +231,7 @@ function SIPPanel({ companyId, userRole }) {
   const deletePhone = async (id, ext) => {
     if (window.confirm(`Are you sure you want to remove extension ${ext}?`)) {
       try {
-        const res = await fetch(`http://localhost:8001/api/user/devices/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        const res = await fetch(`http://${window.location.hostname}:8001/api/user/devices/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
         if (res.ok) {
           fetchDevices();
         }
@@ -279,10 +285,6 @@ function SIPPanel({ companyId, userRole }) {
               <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Gaurav IP Phone" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>IP Address</label>
-              <input type="text" value={newIp} onChange={e => setNewIp(e.target.value)} placeholder="192.168.1.x" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Device Type</label>
               <select value={newType} onChange={e => setNewType(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
                 <option value="Softphone">Softphone Client</option>
@@ -301,8 +303,8 @@ function SIPPanel({ companyId, userRole }) {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
         {[
-          { k: 'Asterisk SIP Host', v: 'localhost / 127.0.0.1' },
-          { k: 'Signaling Ports', v: '5060 (UDP) / 5061 (TCP)' },
+          { k: 'Asterisk SIP Host', v: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? '<Server-LAN-IP>' : window.location.hostname },
+          { k: 'Signaling Ports', v: '5061 (UDP/TCP)' },
           { k: 'AI Agent Trunk', v: 'Ext 200 (Trunk: livekit)' },
           { k: 'Audio Codec', v: 'G.711 µ-law (PCM)' },
         ].map(({ k, v }) => (
@@ -315,10 +317,10 @@ function SIPPanel({ companyId, userRole }) {
 
       <div className="glass" style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.7)', width: '100%' }}>
         <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
+          display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
           padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'rgba(236,72,153,0.03)'
         }}>
-          {['Ext', 'Device Profile', 'Owner ID', 'IP Bind Address', 'Device Type', ''].map(h => (
+          {['Ext', 'Device Profile', 'Owner ID', 'Device Type', ''].map(h => (
             <div key={h} style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{h}</div>
           ))}
         </div>
@@ -331,13 +333,12 @@ function SIPPanel({ companyId, userRole }) {
 
         {phones.map((phone) => (
           <div key={phone.id} style={{
-            display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
+            display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
             padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 14, alignItems: 'center'
           }} className="table-row">
             <span style={{ fontWeight: 700, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{phone.extension}</span>
             <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{phone.name}</span>
             <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{phone.user_id}</span>
-            <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{phone.ip_address || '—'}</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
               {phone.type === 'IP Deskphone' ? <Laptop size={14} color="var(--accent-2)" /> : <Smartphone size={14} color="var(--accent)" />}
               <span>{phone.type}</span>
@@ -348,6 +349,65 @@ function SIPPanel({ companyId, userRole }) {
           </div>
         ))}
       </div>
+
+      {showCredsModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 200,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(31, 26, 40, 0.4)', backdropFilter: 'blur(8px)',
+          padding: 16
+        }}>
+          <div className="glass-strong msg-in" style={{
+            width: '100%', maxWidth: 450, background: '#ffffff',
+            borderRadius: 20, display: 'flex', flexDirection: 'column',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              padding: '18px 24px', borderBottom: '1px solid rgba(139,92,246,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              background: 'rgba(139,92,246,0.05)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800, fontSize: 16, color: 'var(--text-primary)' }}>
+                <ShieldCheck size={20} color="var(--accent-2)" />
+                Device Credentials
+              </div>
+              <button className="btn-ghost" style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => setShowCredsModal(null)}><X size={16} /></button>
+            </div>
+            
+            <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                Device registered successfully! Use these credentials to configure your Softphone (e.g., Zoiper, MicroSIP) or IP Deskphone.
+              </p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, background: 'var(--bg-elevated)', padding: 16, borderRadius: 12, border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>SIP Server / Domain:</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent)', fontFamily: 'monospace' }}>{showCredsModal.domain}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>Username / Extension:</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{showCredsModal.ext}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>Password / Secret:</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'monospace' }}>{showCredsModal.password}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>Transport Protocol:</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'monospace' }}>UDP/TCP (Port 5061)</span>
+                </div>
+              </div>
+            </div>
+            
+            <div style={{
+              padding: '16px 24px', borderTop: '1px solid var(--border)',
+              display: 'flex', justifyContent: 'flex-end', background: '#f8fafc'
+            }}>
+              <button className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 14, fontWeight: 700 }} onClick={() => setShowCredsModal(null)}>Done</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -370,7 +430,7 @@ function UserManagementPanel({ companyId, userRole }) {
     setLoading(true);
     try {
       const q = companyId ? `?company_id=${companyId}` : '';
-      const res = await fetch(`http://localhost:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       const data = await res.json();
       setUsers(data.users || []);
     } catch (err) {
@@ -392,7 +452,7 @@ function UserManagementPanel({ companyId, userRole }) {
     }
     
     try {
-      const res = await fetch('http://localhost:8001/api/admin/users', {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
         body: JSON.stringify({ 
@@ -427,7 +487,7 @@ function UserManagementPanel({ companyId, userRole }) {
   const handleDeleteUser = async (id) => {
     if (!window.confirm(`Are you sure you want to delete user "${id}"? This will also remove all their registered devices.`)) return;
     try {
-      const res = await fetch(`http://localhost:8001/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
       if (res.ok) {
         fetchUsers();
       }
@@ -584,7 +644,7 @@ function CompaniesPanel() {
   const fetchCompanies = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
       const data = await res.json();
       setCompanies(data.companies || []);
     } catch (err) {
@@ -606,7 +666,7 @@ function CompaniesPanel() {
         return;
       }
       try {
-        const res = await fetch(`http://localhost:8001/api/admin/companies/${editCompanyId}`, {
+        const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies/${editCompanyId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
           body: JSON.stringify({
@@ -642,7 +702,7 @@ function CompaniesPanel() {
     }
 
     try {
-      const res = await fetch('http://localhost:8001/api/admin/companies', {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
         body: JSON.stringify({
@@ -673,7 +733,7 @@ function CompaniesPanel() {
   const deleteCompany = async (id, name) => {
     if (window.confirm(`Are you sure you want to remove company "${name}"? This will delete all associated users, devices, and call history.`)) {
       try {
-        const res = await fetch(`http://localhost:8001/api/admin/companies/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
         if (res.ok) {
           fetchCompanies();
         }
@@ -854,18 +914,22 @@ function CompanySettingsPanel({ companyId }) {
   const [company, setCompany] = useState(null);
   const [agentName, setAgentName] = useState('');
   const [agentVoice, setAgentVoice] = useState('en-US-AriaNeural');
+  const [agentPrompt, setAgentPrompt] = useState('');
+  const [companyName, setCompanyName] = useState('');
 
   useEffect(() => {
     if (!companyId) return;
     const fetchCompany = async () => {
       try {
-        const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
         const data = await res.json();
         const myComp = data.companies?.find(c => String(c.id) === String(companyId));
         if (myComp) {
           setCompany(myComp);
           setAgentName(myComp.agent_name || 'Ventra');
           setAgentVoice(myComp.agent_voice || 'en-US-AriaNeural');
+          setAgentPrompt(myComp.agent_prompt || '');
+          setCompanyName(myComp.name || '');
         }
       } catch (err) {
         console.error(err);
@@ -879,22 +943,23 @@ function CompanySettingsPanel({ companyId }) {
     if (!company) return;
     
     try {
-      const res = await fetch(`http://localhost:8001/api/admin/companies/${companyId}`, {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies/${companyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
         body: JSON.stringify({
-          name: company.name,
+          name: companyName.trim() || company.name,
           ai_extension: company.ai_extension,
           range_start: company.range_start,
           range_end: company.range_end,
           ai_model: company.ai_model,
           ai_model_name: company.ai_model_name,
           agent_name: agentName.trim() || 'Ventra',
-          agent_voice: agentVoice
+          agent_voice: agentVoice,
+          agent_prompt: agentPrompt.trim()
         })
       });
       if (res.ok) {
-        alert("Settings updated successfully. Your new agent voice and name are active immediately.");
+        alert("Settings updated successfully. Your new agent voice, prompt, and name are active immediately.");
       } else {
         alert("Failed to update settings.");
       }
@@ -903,37 +968,79 @@ function CompanySettingsPanel({ companyId }) {
     }
   };
 
-  if (!company) return <div>Loading...</div>;
+  if (!company) return (
+    <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
+      <div className="spinner" style={{ width: 30, height: 30, border: '3px solid rgba(139,92,246,0.3)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+    </div>
+  );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32, paddingBottom: 40 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Company Settings</h3>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Personalize your AI Agent profile.</p>
+          <h3 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.02em' }}>Company & Agent Settings</h3>
+          <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Personalize how your AI Voice Agent represents your brand and interacts with callers.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', border: '1px solid var(--accent)', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 600 }}>
-        <h4 style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>AI Agent Profile</h4>
+      <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: 24, alignItems: 'start' }}>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Company Name (Your Account)</label>
-          <input type="text" value={company.name} disabled style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: 'rgba(0,0,0,0.02)', color: 'var(--text-muted)' }} />
-          <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Contact platform support to change your registered company name.</p>
+        {/* Left Column: Core Identity */}
+        <div className="glass-strong" style={{ padding: 32, borderRadius: 24, display: 'flex', flexDirection: 'column', gap: 24, background: '#ffffff', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(139,92,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-2)' }}>
+              <Building2 size={20} />
+            </div>
+            <h4 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', m: 0 }}>Core Identity</h4>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Company Name</label>
+            <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Wayne Enterprises" style={{ padding: '14px 18px', border: '2px solid rgba(0,0,0,0.05)', borderRadius: 14, fontSize: 15, transition: 'all 0.2s', background: '#f8fafc' }} required />
+            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>This is the name of your organization. Your AI will mention this when introducing itself.</p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Agent Name</label>
+            <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '14px 18px', border: '2px solid rgba(0,0,0,0.05)', borderRadius: 14, fontSize: 15, transition: 'all 0.2s', background: '#f8fafc' }} required />
+            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>The persona name for your assistant. Example: "Hello, I am {agentName || 'Ventra'}..."</p>
+          </div>
+
+          <div style={{ marginTop: 8 }}>
+            <VoiceSelector selectedVoiceId={agentVoice} onSelectVoice={setAgentVoice} />
+          </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Agent Name *</label>
-          <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
-          <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>This is the name your AI uses to introduce itself (e.g. "Hello, I am {agentName || 'Ventra'}, agent of {company.name}").</p>
+        {/* Right Column: AI Behavior */}
+        <div className="glass-strong" style={{ padding: 32, borderRadius: 24, display: 'flex', flexDirection: 'column', gap: 24, background: 'linear-gradient(145deg, #ffffff 0%, #faf5ff 100%)', boxShadow: '0 4px 20px rgba(139,92,246,0.05)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+              <Sparkles size={20} />
+            </div>
+            <h4 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', m: 0 }}>Behavior & Greeting</h4>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Custom Agent Prompt / Knowledge</label>
+            <textarea 
+              value={agentPrompt} 
+              onChange={e => setAgentPrompt(e.target.value)} 
+              placeholder="e.g. You are a highly energetic sales agent. Your main goal is to book appointments. When answering, always start with 'Thank you for calling [Company], how can I assist you?'..." 
+              style={{ padding: '16px 18px', border: '2px solid rgba(139,92,246,0.15)', borderRadius: 16, fontSize: 14, minHeight: 180, resize: 'vertical', lineHeight: 1.6, background: 'rgba(255,255,255,0.8)' }} 
+            />
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: 4, marginTop: 4 }}>
+              <span>Write custom instructions for how your agent should behave, specific facts it should know, or exactly what it should say when it picks up the phone.</span>
+              <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Tip: The agent is instructed to dynamically adapt its greeting based on these instructions.</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+            <button type="submit" className="btn-primary" style={{ padding: '14px 32px', borderRadius: 14, fontSize: 15, fontWeight: 800, boxShadow: '0 8px 20px rgba(139,92,246,0.3)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Save size={18} /> Apply Changes
+            </button>
+          </div>
         </div>
 
-        <VoiceSelector selectedVoiceId={agentVoice} onSelectVoice={setAgentVoice} />
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
-          <button type="submit" className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 13 }}>Save Profile Settings</button>
-        </div>
       </form>
     </div>
   );
@@ -981,7 +1088,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
   const fetchCompanies = useCallback(async () => {
     if (userRole === 'super_admin') {
       try {
-        const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        const res = await fetch(`http://${window.location.hostname}:8001/api/admin/companies`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
         if (res.ok) {
           const data = await res.json();
           setCompanies(data.companies || []);
@@ -999,7 +1106,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
   const fetchData = useCallback(async () => {
     try {
       const q = selectedCompanyId ? `?company_id=${selectedCompanyId}` : '';
-      const res = await fetch(`http://localhost:8001/api/admin/rooms${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/admin/rooms${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       if (!res.ok) throw new Error();
       const data = await res.json();
       setMetrics(data);

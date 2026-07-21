@@ -578,8 +578,8 @@ def sync_asterisk_config():
         
     ext_lines = []
     for ai_ext in ai_extensions:
-        # Route AI extensions to livekit running on the Windows LAN IP
-        ext_lines.append(f"exten => {ai_ext},1,Dial(PJSIP/livekit/sip:{ai_ext}@{lan_ip}:5060)")
+        # Route AI extensions to livekit running on the internal docker network
+        ext_lines.append(f"exten => {ai_ext},1,Dial(PJSIP/livekit/sip:{ai_ext}@livekit-sip:5060)")
         ext_lines.append(f"exten => {ai_ext},n,Hangup()")
         ext_lines.append("")
         

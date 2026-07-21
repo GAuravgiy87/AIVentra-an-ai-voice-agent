@@ -14,6 +14,10 @@ from edge_tts_wrapper import EdgeTTSWrapper
 from livekit.agents.llm import ChatContext
 from google.genai import types
 import livekit.plugins.silero as silero
+try:
+    from livekit.plugins.openai import LLM as OpenAILLM
+except ImportError:
+    OpenAILLM = None
 import json
 import redis
 from agent import get_db
@@ -384,8 +388,9 @@ async def entrypoint(ctx: agents.JobContext):
             http_options=types.HttpOptions(timeout=20000)
         )
     elif user_model.lower() == "ollama":
-        from livekit.plugins.openai import LLM as OpenAILLM
         print(f"Routing call on line {dialed_number} to Ollama local model: {user_model_name}")
+        if OpenAILLM is None:
+            raise RuntimeError("livekit-plugins-openai is not installed")
         llm = OpenAILLM(
             model=user_model_name,
             base_url="http://10.7.32.220:11434/v1",

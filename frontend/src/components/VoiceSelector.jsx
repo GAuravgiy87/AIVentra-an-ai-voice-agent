@@ -9,7 +9,7 @@ export default function VoiceSelector({ selectedVoiceId, onSelectVoice }) {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:8001/api/voices')
+    fetch(`http://${window.location.hostname}:8001/api/voices`)
       .then(res => res.json())
       .then(data => {
         setVoices(data.voices || []);
@@ -26,7 +26,7 @@ export default function VoiceSelector({ selectedVoiceId, onSelectVoice }) {
       audioRef.current.pause();
     }
     setPlayingVoice(voiceId);
-    audioRef.current = new Audio(`http://localhost:8001/api/voices/preview/${voiceId}`);
+    audioRef.current = new Audio(`http://${window.location.hostname}:8001/api/voices/preview/${voiceId}`);
     audioRef.current.play();
     audioRef.current.onended = () => setPlayingVoice(null);
     audioRef.current.onerror = () => {

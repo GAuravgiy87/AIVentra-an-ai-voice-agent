@@ -3232,3 +3232,667 @@ Traceback (most recent call last):
     raise RuntimeError("AudioEmitter isn't started")
 RuntimeError: AudioEmitter isn't started
 2026-07-21 14:38:37,770 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 14:44:38,753 [INFO] livekit.agents: starting worker
+2026-07-21 14:44:38,753 [INFO] livekit.agents: plugin registered
+2026-07-21 14:44:38,753 [INFO] livekit.agents: plugin registered
+2026-07-21 14:44:38,762 [INFO] livekit.agents: HTTP server listening on :61414
+2026-07-21 14:44:39,120 [INFO] livekit.agents: registered worker
+2026-07-21 14:45:03,471 [INFO] livekit.agents: received job request
+2026-07-21 14:45:03,472 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 14:45:03,481 [INFO] livekit.agents: initializing job runner
+2026-07-21 14:45:03,481 [INFO] livekit.agents: job runner initialized
+2026-07-21 14:45:03,616 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 14:45:03,931 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 14:45:04,988 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 14:45:04,988 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 14:45:05,375 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_87FDFfDdAKdL.
+2026-07-21 14:45:05,375 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 14:45:06,958 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 14:45:19,689 [INFO] root: Participant disconnected: sip_100
+2026-07-21 14:45:37,526 [INFO] livekit.agents: received job request
+2026-07-21 14:45:37,527 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 14:45:37,535 [INFO] livekit.agents: initializing job runner
+2026-07-21 14:45:37,535 [INFO] livekit.agents: job runner initialized
+2026-07-21 14:45:37,539 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 14:45:37,845 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 14:45:38,888 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 14:45:38,889 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 14:45:39,266 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_M6dzcGUUAdEp.
+2026-07-21 14:45:39,267 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 14:45:39,688 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 14:45:40,078 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 14:45:52,048 [INFO] root: Participant disconnected: sip_101
+2026-07-21 14:46:12,691 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 14:46:12,691 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 14:59:54,987 [INFO] livekit.agents: received job request
+2026-07-21 14:59:54,987 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 14:59:54,997 [INFO] livekit.agents: initializing job runner
+2026-07-21 14:59:54,998 [INFO] livekit.agents: job runner initialized
+2026-07-21 14:59:55,003 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 14:59:55,305 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 14:59:56,391 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 14:59:56,391 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 14:59:56,763 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_GQEaPBrjoF6w.
+2026-07-21 14:59:56,764 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 14:59:58,606 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:00:05,860 [INFO] root: Participant disconnected: sip_101
+2026-07-21 15:00:25,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:00:35,610 [INFO] livekit.agents: received job request
+2026-07-21 15:00:35,611 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:00:35,620 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:00:35,620 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:00:35,624 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:00:35,931 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:00:36,999 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:00:37,000 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:00:37,371 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_wW9xEyMXiecd.
+2026-07-21 15:00:37,372 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 15:00:38,344 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:00:42,299 [INFO] root: Participant disconnected: sip_101
+2026-07-21 15:01:02,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:15:44,269 [INFO] livekit.agents: received job request
+2026-07-21 15:15:44,270 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:15:44,281 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:15:44,282 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:15:44,284 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:15:44,600 [ERROR] livekit.agents: unhandled exception while running the job task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py", line 334, in _traceable_entrypoint
+    await self._job_entrypoint_fnc(job_ctx)
+  File "D:\voiceagent\backend\livekit_agent.py", line 387, in entrypoint
+    from livekit.plugins.openai import LLM as OpenAILLM
+ModuleNotFoundError: No module named 'livekit.plugins.openai'
+2026-07-21 15:15:44,648 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-21 15:19:36,650 [INFO] livekit.agents: received job request
+2026-07-21 15:19:36,651 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:19:36,661 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:19:36,662 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:19:36,664 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:19:40,038 [ERROR] livekit.agents: unhandled exception while running the job task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py", line 334, in _traceable_entrypoint
+    await self._job_entrypoint_fnc(job_ctx)
+  File "D:\voiceagent\backend\livekit_agent.py", line 387, in entrypoint
+    from livekit.plugins.openai import LLM as OpenAILLM
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\plugins\openai\__init__.py", line 68, in <module>
+    Plugin.register_plugin(OpenAIPlugin())
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\plugin.py", line 33, in register_plugin
+    raise RuntimeError("Plugins must be registered on the main thread")
+RuntimeError: Plugins must be registered on the main thread
+2026-07-21 15:20:00,688 [INFO] livekit.agents: received job request
+2026-07-21 15:20:00,689 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:20:00,697 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:20:00,698 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:20:00,701 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:20:00,919 [ERROR] livekit.agents: unhandled exception while running the job task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py", line 334, in _traceable_entrypoint
+    await self._job_entrypoint_fnc(job_ctx)
+  File "D:\voiceagent\backend\livekit_agent.py", line 387, in entrypoint
+    from livekit.plugins.openai import LLM as OpenAILLM
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\plugins\openai\__init__.py", line 68, in <module>
+    Plugin.register_plugin(OpenAIPlugin())
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\plugin.py", line 33, in register_plugin
+    raise RuntimeError("Plugins must be registered on the main thread")
+RuntimeError: Plugins must be registered on the main thread
+2026-07-21 15:20:00,927 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-21 15:22:33,809 [INFO] livekit.agents: received job request
+2026-07-21 15:22:33,810 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:22:33,818 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:22:33,819 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:22:33,822 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:22:34,129 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:22:35,252 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:22:35,253 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:22:35,652 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1005_seRn2AYzkZbk.
+2026-07-21 15:22:35,652 [INFO] root: [Ventra Greeting]: Hello, welcome to phone! I am Ventra. How can I help you?
+2026-07-21 15:22:36,970 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:22:43,366 [INFO] root: Participant disconnected: sip_1005
+2026-07-21 15:23:03,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:24:59,591 [INFO] livekit.agents: received job request
+2026-07-21 15:24:59,593 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:24:59,600 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:24:59,601 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:24:59,604 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:24:59,908 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:25:00,998 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:25:00,999 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:25:01,390 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1005_ZrtFeur7nX2v.
+2026-07-21 15:25:01,391 [INFO] root: [REJECTING SIP CALL]: Extension 1005 is outside allowed range 501-510
+2026-07-21 15:25:02,453 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:25:12,208 [ERROR] livekit.agents: Error in _tts_inference_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:25:12,210 [ERROR] livekit.agents: Error in _tts_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2517, in _tts_task
+    hardcodes it to ``False``, so this currently always returns ``None``.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2661, in _tts_task_impl
+    tts_task: asyncio.Task[Any] | None = None
+                ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:25:12,213 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 7591
+2026-07-21 15:25:12,221 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-21 15:25:15,807 [INFO] livekit.agents: received job request
+2026-07-21 15:25:15,808 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:25:15,816 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:25:15,816 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:25:15,819 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:25:16,124 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:25:17,259 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:25:17,260 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:25:17,661 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_501_o85hti4iVJrC.
+2026-07-21 15:25:17,662 [INFO] root: [REJECTING SIP CALL]: Extension 501 is outside allowed range 1000-1009
+2026-07-21 15:25:18,484 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:25:18,750 [ERROR] livekit.agents: Error in _tts_inference_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:25:18,752 [ERROR] livekit.agents: Error in _tts_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2517, in _tts_task
+    hardcodes it to ``False``, so this currently always returns ``None``.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2661, in _tts_task_impl
+    tts_task: asyncio.Task[Any] | None = None
+                ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:25:31,588 [INFO] livekit.agents: received job request
+2026-07-21 15:25:31,590 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:25:31,598 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:25:31,599 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:25:31,601 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:25:31,895 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:25:32,958 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:25:32,959 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:25:33,329 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1005_gj6fnjhotiuT.
+2026-07-21 15:25:33,330 [INFO] root: [Ventra Greeting]: Hello, welcome to phone! I am Ventra. How can I help you?
+2026-07-21 15:25:34,212 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:25:37,390 [INFO] root: Participant disconnected: sip_1005
+2026-07-21 15:25:48,193 [INFO] livekit.agents: received job request
+2026-07-21 15:25:48,194 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:25:48,204 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:25:48,204 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:25:48,209 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:25:48,653 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:25:49,727 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:25:49,727 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:25:50,108 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1005_3jkjFKUdGhGd.
+2026-07-21 15:25:50,109 [INFO] root: [Ventra Greeting]: Hello, welcome to phone! I am Ventra. How can I help you?
+2026-07-21 15:25:50,924 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:25:52,833 [INFO] root: Participant disconnected: sip_1005
+2026-07-21 15:25:56,684 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:25:56,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:26:11,686 [WARNING] livekit.agents: entrypoint did not exit in time, cancelling
+2026-07-21 15:26:12,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:26:12,687 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8854
+2026-07-21 15:28:00,908 [INFO] livekit.agents: received job request
+2026-07-21 15:28:00,908 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:28:00,919 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:28:00,919 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:28:00,922 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:28:01,232 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:28:02,297 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:28:02,297 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:28:02,670 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_WcXQziaLyHC2.
+2026-07-21 15:28:02,672 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 15:28:04,109 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:28:12,404 [INFO] root: Participant disconnected: sip_101
+2026-07-21 15:28:32,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:28:32,686 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 9589
+2026-07-21 15:28:50,201 [INFO] livekit.agents: received job request
+2026-07-21 15:28:50,202 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:28:50,211 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:28:50,212 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:28:50,214 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:28:50,524 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:28:51,596 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:28:51,596 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:28:51,981 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_F54uChpfNZDu.
+2026-07-21 15:28:51,981 [INFO] root: [Ventra Greeting]: Hello, welcome to phone! I am Ventra. How can I help you?
+2026-07-21 15:28:52,786 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:29:24,275 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:29:35,872 [INFO] livekit.agents: received job request
+2026-07-21 15:29:35,874 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:29:35,882 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:29:35,883 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:29:35,885 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:29:36,251 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:29:37,345 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:29:37,346 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:29:37,728 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_cFRiZNV3wAR3.
+2026-07-21 15:29:37,729 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:29:44,581 [ERROR] asyncio: Task exception was never retrieved
+future: <Task finished name='AgentActivity.tts_say' coro=<AgentActivity._create_speech_task.<locals>._context_aware_coro() done, defined at C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py:587> exception=RuntimeError("AudioEmitter isn't started")>
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 591, in _context_aware_coro
+    if isinstance(old_stt, stt.STT):
+               ^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2517, in _tts_task
+    hardcodes it to ``False``, so this currently always returns ``None``.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2661, in _tts_task_impl
+    tts_task: asyncio.Task[Any] | None = None
+                ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:29:44,585 [ERROR] asyncio: Task exception was never retrieved
+future: <Task finished name='AgentActivity.tts_say' coro=<AgentActivity._create_speech_task.<locals>._context_aware_coro() done, defined at C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py:587> exception=RuntimeError("AudioEmitter isn't started")>
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 591, in _context_aware_coro
+    if isinstance(old_stt, stt.STT):
+               ^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2517, in _tts_task
+    hardcodes it to ``False``, so this currently always returns ``None``.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2661, in _tts_task_impl
+    tts_task: asyncio.Task[Any] | None = None
+                ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:29:44,588 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-1330' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:549> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-21 15:29:44,588 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-1516' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:549> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-21 15:29:44,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:29:44,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:29:44,688 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 11096
+2026-07-21 15:29:47,293 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:29:47,728 [WARNING] livekit.agents: cloud turn detector failed (turn detector connection timed out); falling back to local mini model
+2026-07-21 15:30:07,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:30:07,686 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 15083
+2026-07-21 15:30:39,865 [INFO] livekit.agents: received job request
+2026-07-21 15:30:39,866 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:30:39,874 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:30:39,875 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:30:39,878 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:30:40,200 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:30:41,259 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:30:41,259 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:30:41,646 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_wbhSNpmqmPnW.
+2026-07-21 15:30:41,647 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:30:41,817 [ERROR] livekit.agents: Error in _tts_inference_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:30:41,818 [ERROR] livekit.agents: Error in _tts_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 836, in __anext__
+    val = await self._event_aiter.__anext__()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+StopAsyncIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2517, in _tts_task
+    hardcodes it to ``False``, so this currently always returns ``None``.
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent_activity.py", line 2661, in _tts_task_impl
+    tts_task: asyncio.Task[Any] | None = None
+                ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 359, in _tts_inference_task
+    input_tee = itertools.tee(input, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\agent.py", line 552, in tts_node
+    ) -> AsyncGenerator[rtc.AudioFrame, None]:
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 839, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 579, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 625, in _main_task
+    await self._run(output_emitter)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 145, in _run
+    await asyncio.gather(*tasks)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\stream_adapter.py", line 135, in _synthesize
+    async for audio in tts_stream:
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 500, in __anext__
+    raise exc  # noqa: B904
+    ^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 331, in _traceable_main_task
+    await self._main_task()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 429, in _main_task
+    output_emitter.end_input()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\tts\tts.py", line 1039, in end_input
+    raise RuntimeError("AudioEmitter isn't started")
+RuntimeError: AudioEmitter isn't started
+2026-07-21 15:30:51,642 [WARNING] livekit.agents: cloud turn detector failed (turn detector connection timed out); falling back to local mini model
+2026-07-21 15:31:03,366 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:31:07,947 [INFO] livekit.agents: received job request
+2026-07-21 15:31:07,948 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:31:07,956 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:31:07,956 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:31:07,960 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:31:08,290 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:31:09,451 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:31:09,452 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:31:09,832 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_2sYRmcMLKmN3.
+2026-07-21 15:31:09,833 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:31:10,658 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:31:22,747 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:31:23,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:31:23,686 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 16614
+2026-07-21 15:31:30,279 [INFO] livekit.agents: received job request
+2026-07-21 15:31:30,280 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 15:31:30,288 [INFO] livekit.agents: initializing job runner
+2026-07-21 15:31:30,290 [INFO] livekit.agents: job runner initialized
+2026-07-21 15:31:30,292 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 15:31:30,625 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 15:31:31,723 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 15:31:31,724 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 15:31:32,096 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_DGKvwT7UyHm8.
+2026-07-21 15:31:32,097 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-21 15:31:33,020 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 15:31:40,899 [INFO] root: Participant disconnected: sip_1006
+2026-07-21 15:31:42,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:32:00,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 15:32:00,686 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 19466

@@ -32,7 +32,7 @@ function LandingPage({ showRoomId = null }) {
   const startRoom = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8001/api/rooms', { method: 'POST' });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/rooms`, { method: 'POST' });
       const data = await res.json();
       navigate(`/room/${data.room_id}`);
     } catch {

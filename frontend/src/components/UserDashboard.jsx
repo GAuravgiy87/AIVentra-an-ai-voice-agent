@@ -133,13 +133,13 @@ export default function UserDashboard({ onBack }) {
     if (!userId) return;
     try {
       // 1. Fetch user devices
-      const devRes = await fetch(`http://localhost:8001/api/user/devices?user_id=${userId}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const devRes = await fetch(`http://${window.location.hostname}:8001/api/user/devices?user_id=${userId}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       if (!devRes.ok) throw new Error();
       const devData = await devRes.json();
       setDevices(devData.devices || []);
 
       // 2. Fetch call metrics and logs
-      const metRes = await fetch(`http://localhost:8001/api/user/dashboard?user_id=${userId}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const metRes = await fetch(`http://${window.location.hostname}:8001/api/user/dashboard?user_id=${userId}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       if (!metRes.ok) throw new Error();
       const metData = await metRes.json();
       setMetrics(metData);
@@ -172,7 +172,7 @@ export default function UserDashboard({ onBack }) {
     }
 
     try {
-      const res = await fetch('http://localhost:8001/api/user/devices', {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/user/devices`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
         body: JSON.stringify({
@@ -202,7 +202,7 @@ export default function UserDashboard({ onBack }) {
   const handleDeleteDevice = async (id, ext) => {
     if (!window.confirm(`Are you sure you want to remove device extension ${ext}?`)) return;
     try {
-      const res = await fetch(`http://localhost:8001/api/user/devices/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      const res = await fetch(`http://${window.location.hostname}:8001/api/user/devices/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
       if (res.ok) {
         fetchDashboardData();
       }

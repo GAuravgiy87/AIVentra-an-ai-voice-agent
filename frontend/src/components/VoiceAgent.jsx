@@ -40,7 +40,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
     if (isConnecting) return;
     (async () => {
       try {
-        const res = await fetch(`http://localhost:8001/api/rooms/${roomId}/history`);
+        const res = await fetch(`http://${window.location.hostname}:8001/api/rooms/${roomId}/history`);
         const data = await res.json();
         const hist = (data.history || []);
         setMessages(hist);
@@ -82,7 +82,7 @@ export default function VoiceAgent({ roomId, onLeave }) {
     if (!hidden) setMessages(p => [...p, { role: 'user', content: text }]);
     setIsTyping(true);
     try {
-      const res = await fetch('http://localhost:8001/api/chat', {
+      const res = await fetch(`http://${window.location.hostname}:8001/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ room_id: roomId, message: text }),
