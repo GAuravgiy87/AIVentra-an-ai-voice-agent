@@ -34,7 +34,8 @@ def forward(port):
             if addr[0] != ASTERISK_IP:
                 # Packet from Windows Proxy
                 last_windows_addr = addr
-                sock.sendto(data, (ASTERISK_IP, port))
+                dest_port = 5060 if port == 5061 else port
+                sock.sendto(data, (ASTERISK_IP, dest_port))
             else:
                 # Return packet from Asterisk
                 if last_windows_addr:
@@ -42,8 +43,11 @@ def forward(port):
     except Exception as e:
         print(f"Failed to bind port {port}: {e}")
 
-for p in range(20000, 20006):
+for p in range(20000, 20021):
     threading.Thread(target=forward, args=(p,), daemon=True).start()
+
+# Forward UDP port 5061 for SIP signaling
+threading.Thread(target=forward, args=(5061,), daemon=True).start()
 
 try:
     while True:

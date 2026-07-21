@@ -76,7 +76,7 @@
 
 | Parameter       | Value              |
 |-----------------|--------------------|
-| Admin Passcode  | `admin123`         |
+| Admin Passcode  | `admin`         |
 | Backend API URL | `http://localhost:8001` |
 
 ---

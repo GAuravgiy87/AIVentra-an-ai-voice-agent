@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Bot, Search, LogOut, RefreshCw, X, MessageSquare,
-  Activity, Clock, Phone, ShieldCheck, ChevronRight, Inbox, Download, AlertTriangle, Circle, Plus, Laptop, Smartphone, Copy, BarChart2
+  Bot, Search, LogOut, RefreshCw, X, MessageSquare, Settings,
+  Activity, Clock, Phone, ShieldCheck, ChevronRight, Inbox, Download, AlertTriangle, Circle, Plus, Laptop, Smartphone, Copy, BarChart2, Globe
 } from 'lucide-react';
 
 const fmt = ms => (ms > 999 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`);
@@ -99,36 +99,73 @@ function TranscriptModal({ roomId, history, onClose }) {
 }
 
 /* ═══ SIP Panel Component ═══ */
-const INITIAL_EXTS = Array.from({ length: 11 }, (_, i) => ({
-  ext: String(100 + i),
-  name: `Lab Phone Extension ${100 + i}`,
-  pass: 'secret',
-  ip: `172.24.0.${20 + i}`,
-  type: 'IP Deskphone',
-  status: 'Online'
-}));
-
-function SIPPanel() {
+function SIPPanel({ companyId, userRole }) {
   const [copied, setCopied] = useState('');
   const [phones, setPhones] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [companyInfo, setCompanyInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Form States
   const [showAddForm, setShowAddForm] = useState(false);
   const [newExt, setNewExt] = useState('');
   const [newName, setNewName] = useState('');
-  const [newPass, setNewPass] = useState('secret');
   const [newIp, setNewIp] = useState('192.168.1.');
   const [newType, setNewType] = useState('Softphone');
+  const [selectedUser, setSelectedUser] = useState('');
+
+  const fetchDevices = useCallback(async () => {
+    setLoading(true);
+    try {
+      const q = companyId ? `?company_id=${companyId}` : '';
+      const res = await fetch(`http://localhost:8001/api/admin/devices${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const data = await res.json();
+      setPhones(data.devices || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [companyId]);
+
+  const fetchUsers = useCallback(async () => {
+    try {
+      const q = companyId ? `?company_id=${companyId}` : '';
+      const res = await fetch(`http://localhost:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const data = await res.json();
+      setUsers(data.users || []);
+      if (data.users && data.users.length > 0) {
+        setSelectedUser(data.users[0].id);
+      } else {
+        setSelectedUser('');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [companyId]);
+
+  const fetchCompanyInfo = useCallback(async () => {
+    if (!companyId) {
+      setCompanyInfo(null);
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      if (res.ok) {
+        const data = await res.json();
+        const active = (data.companies || []).find(c => c.id === Number(companyId));
+        setCompanyInfo(active || null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [companyId]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ventra_sip_phones');
-    if (saved) {
-      setPhones(JSON.parse(saved));
-    } else {
-      localStorage.setItem('ventra_sip_phones', JSON.stringify(INITIAL_EXTS));
-      setPhones(INITIAL_EXTS);
-    }
-  }, []);
+    fetchDevices();
+    fetchUsers();
+    fetchCompanyInfo();
+  }, [fetchDevices, fetchUsers, fetchCompanyInfo]);
 
   const copy = (val, key) => {
     navigator.clipboard.writeText(val).then(() => {
@@ -137,60 +174,80 @@ function SIPPanel() {
     });
   };
 
-  const handleAddPhone = (e) => {
+  const handleAddPhone = async (e) => {
     e.preventDefault();
-    if (!newExt.trim() || !newName.trim()) {
-      alert("Please fill in the extension and name.");
+    if (!newExt.trim() || !newName.trim() || !selectedUser) {
+      alert("Please fill in all required fields and select an owner.");
       return;
     }
-    if (phones.some(p => p.ext === newExt)) {
+    if (companyInfo && companyInfo.range_start !== null) {
+      const extNum = Number(newExt.trim());
+      if (isNaN(extNum) || extNum < companyInfo.range_start || extNum > companyInfo.range_end) {
+        alert(`Extension must be a number between ${companyInfo.range_start} and ${companyInfo.range_end} for this company.`);
+        return;
+      }
+    }
+    if (phones.some(p => p.extension === newExt.trim())) {
       alert("This extension is already configured.");
       return;
     }
 
-    const added = {
-      ext: newExt.trim(),
-      name: newName.trim(),
-      pass: newPass || 'secret',
-      ip: newIp.trim() || '127.0.0.1',
-      type: newType,
-      status: 'Online'
-    };
-
-    const updated = [...phones, added];
-    setPhones(updated);
-    localStorage.setItem('ventra_sip_phones', JSON.stringify(updated));
-
-    // Reset Form
-    setNewExt('');
-    setNewName('');
-    setNewPass('secret');
-    setNewIp('192.168.1.');
-    setShowAddForm(false);
+    try {
+      const res = await fetch('http://localhost:8001/api/user/devices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
+        body: JSON.stringify({
+          user_id: selectedUser,
+          name: newName.trim(),
+          ip_address: newIp.trim(),
+          extension: newExt.trim(),
+          type: newType,
+          status: 'Online',
+          company_id: companyId ? Number(companyId) : null
+        })
+      });
+      if (res.ok) {
+        setNewExt('');
+        setNewName('');
+        setNewIp('192.168.1.');
+        setShowAddForm(false);
+        fetchDevices();
+      } else {
+        const data = await res.json();
+        alert(data.detail || 'Failed to add device');
+      }
+    } catch {
+      alert('Error connecting to server');
+    }
   };
 
-  const deletePhone = (ext) => {
+  const deletePhone = async (id, ext) => {
     if (window.confirm(`Are you sure you want to remove extension ${ext}?`)) {
-      const updated = phones.filter(p => p.ext !== ext);
-      setPhones(updated);
-      localStorage.setItem('ventra_sip_phones', JSON.stringify(updated));
+      try {
+        const res = await fetch(`http://localhost:8001/api/user/devices/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        if (res.ok) {
+          fetchDevices();
+        }
+      } catch {
+        alert('Error deleting device');
+      }
     }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Top Header & Add btn */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Registered SIP Devices ({phones.length})</h3>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Configured hardware terminals and virtual softphone endpoints.</p>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Consolidated view of all hardware deskphones and softphones across all user accounts.</p>
         </div>
-        <button className="btn-primary" style={{ padding: '10px 20px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }} onClick={() => setShowAddForm(!showAddForm)}>
-          <Plus size={16} /> Add SIP Phone
-        </button>
+        {users.length > 0 && (
+          <button className="btn-primary" style={{ padding: '10px 20px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }} onClick={() => setShowAddForm(!showAddForm)}>
+            <Plus size={16} /> Add SIP Phone
+          </button>
+        )}
       </div>
 
-      {/* Add SIP form modal / panel */}
       {showAddForm && (
         <form onSubmit={handleAddPhone} className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', border: '1px solid var(--accent)', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -200,19 +257,28 @@ function SIPPanel() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Extension *</label>
-              <input type="text" value={newExt} onChange={e => setNewExt(e.target.value)} placeholder="e.g. 111" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Assign to User *</label>
+              <select value={selectedUser} onChange={e => setSelectedUser(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
+                {users.map(u => (
+                  <option key={u.id} value={u.id}>{u.name} ({u.id})</option>
+                ))}
+              </select>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Device Name / Owner *</label>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Extension *</label>
+              <input type="text" value={newExt} onChange={e => setNewExt(e.target.value)} placeholder="e.g. 111" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+              {companyInfo && companyInfo.range_start !== null && (
+                <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 700, marginTop: 2 }}>
+                  Allowed Range: {companyInfo.range_start} - {companyInfo.range_end}
+                </span>
+              )}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Device Name *</label>
               <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Gaurav IP Phone" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Authentication Passcode</label>
-              <input type="text" value={newPass} onChange={e => setNewPass(e.target.value)} placeholder="secret" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>IP Address / Gateway</label>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>IP Address</label>
               <input type="text" value={newIp} onChange={e => setNewIp(e.target.value)} placeholder="192.168.1.x" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -232,7 +298,6 @@ function SIPPanel() {
         </form>
       )}
 
-      {/* Connection Info */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
         {[
           { k: 'Asterisk SIP Host', v: 'localhost / 127.0.0.1' },
@@ -247,55 +312,623 @@ function SIPPanel() {
         ))}
       </div>
 
-      {/* Extensions list */}
       <div className="glass" style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.7)', width: '100%' }}>
         <div style={{
-          display: 'grid', gridTemplateColumns: '1fr 2fr 1.5fr 2fr 1.5fr 1fr', gap: 12,
+          display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
           padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'rgba(236,72,153,0.03)'
         }}>
-          {['Ext', 'Device Profile', 'Passcode', 'IP Bind Address', 'Device Type', ''].map(h => (
+          {['Ext', 'Device Profile', 'Owner ID', 'IP Bind Address', 'Device Type', ''].map(h => (
             <div key={h} style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{h}</div>
           ))}
         </div>
 
-        {phones.map((phone) => {
-          const isDefault = parseInt(phone.ext) <= 110;
-          return (
-            <div key={phone.ext} style={{
-              display: 'grid', gridTemplateColumns: '1fr 2fr 1.5fr 2fr 1.5fr 1fr', gap: 12,
-              padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 14, alignItems: 'center'
-            }} className="table-row">
-              <span style={{ fontWeight: 700, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{phone.ext}</span>
-              <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{phone.name}</span>
+        {phones.length === 0 && (
+          <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
+            No registered devices. {users.length === 0 && 'Create a user account first to register devices.'}
+          </div>
+        )}
 
-              <button onClick={() => copy(phone.pass, `pass-${phone.ext}`)}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'monospace',
-                  fontSize: 14, color: copied === `pass-${phone.ext}` ? 'var(--green)' : 'var(--text-secondary)', textAlign: 'left', padding: 0
-                }}
-                title="Click to copy passcode"
-              >
-                {copied === `pass-${phone.ext}` ? '✓ copied' : phone.pass}
-              </button>
-
-              <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{phone.ip}</span>
-
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                {phone.type === 'IP Deskphone' ? <Laptop size={14} color="var(--accent-2)" /> : <Smartphone size={14} color="var(--accent)" />}
-                <span>{phone.type}</span>
-              </span>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {isDefault ? (
-                  <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>System</span>
-                ) : (
-                  <button onClick={() => deletePhone(phone.ext)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 13, fontWeight: 700 }}>Delete</button>
-                )}
-              </div>
+        {phones.map((phone) => (
+          <div key={phone.id} style={{
+            display: 'grid', gridTemplateColumns: '1fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr', gap: 12,
+            padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 14, alignItems: 'center'
+          }} className="table-row">
+            <span style={{ fontWeight: 700, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{phone.extension}</span>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{phone.name}</span>
+            <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{phone.user_id}</span>
+            <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{phone.ip_address || '—'}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              {phone.type === 'IP Deskphone' ? <Laptop size={14} color="var(--accent-2)" /> : <Smartphone size={14} color="var(--accent)" />}
+              <span>{phone.type}</span>
+            </span>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={() => deletePhone(phone.id, phone.extension)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 13, fontWeight: 700 }}>Delete</button>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
+    </div>
+  );
+}
+
+/* ═══ User Management Panel Component ═══ */
+function UserManagementPanel({ companyId, userRole }) {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  
+  // Form states
+  const [newName, setNewName] = useState('');
+  const [newId, setNewId] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [aiExtension, setAiExtension] = useState('');
+  const [aiModel, setAiModel] = useState('gemini');
+  const [aiModelName, setAiModelName] = useState('gemini-3.1-flash-lite');
+
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const q = companyId ? `?company_id=${companyId}` : '';
+      const res = await fetch(`http://localhost:8001/api/admin/users${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
+      const data = await res.json();
+      setUsers(data.users || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [companyId]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    if (!newId.trim() || !newName.trim() || !newPassword.trim() || !aiExtension.trim()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    
+    try {
+      const res = await fetch('http://localhost:8001/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
+        body: JSON.stringify({ 
+          id: newId.trim(), 
+          name: newName.trim(), 
+          password: newPassword.trim(),
+          ai_extension: aiExtension.trim(),
+          ai_model: aiModel,
+          ai_model_name: aiModelName.trim(),
+          role: 'agent',
+          company_id: companyId ? Number(companyId) : null
+        }),
+      });
+      if (res.ok) {
+        setNewId('');
+        setNewName('');
+        setNewPassword('');
+        setAiExtension('');
+        setAiModel('gemini');
+        setAiModelName('gemini-3.1-flash-lite');
+        setShowAddForm(false);
+        fetchUsers();
+      } else {
+        const data = await res.json();
+        alert(data.detail || 'Failed to add user');
+      }
+    } catch {
+      alert('Error connecting to backend');
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm(`Are you sure you want to delete user "${id}"? This will also remove all their registered devices.`)) return;
+    try {
+      const res = await fetch(`http://localhost:8001/api/admin/users/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      if (res.ok) {
+        fetchUsers();
+      }
+    } catch {
+      alert('Error deleting user');
+    }
+  };
+
+  const handleModelChange = (val) => {
+    setAiModel(val);
+    if (val === 'gemini') {
+      setAiModelName('gemini-3.1-flash-lite');
+    } else {
+      setAiModelName('llama3.1:latest');
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>User Accounts ({users.length})</h3>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Manage user profiles, set up dedicated AI extensions, and configure active LLMs.</p>
+        </div>
+        <button className="btn-primary" style={{ padding: '10px 20px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }} onClick={() => setShowAddForm(!showAddForm)}>
+          <Plus size={16} /> Add New User
+        </button>
+      </div>
+
+      {showAddForm && (
+        <form onSubmit={handleAddUser} className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', border: '1px solid var(--accent)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h4 style={{ fontSize: 16, fontWeight: 800 }}>Create User Profile & Setup AI Line</h4>
+            <button type="button" style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => setShowAddForm(false)}><X size={18} /></button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Full Name *</label>
+              <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Gaurav Chauhan" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Login ID / Username *</label>
+              <input type="text" value={newId} onChange={e => setNewId(e.target.value)} placeholder="e.g. gaurav" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Login Password *</label>
+              <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="e.g. secret123" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Dedicated AI Extension *</label>
+              <input type="text" value={aiExtension} onChange={e => setAiExtension(e.target.value)} placeholder="e.g. 201" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Model Engine</label>
+              <select value={aiModel} onChange={e => handleModelChange(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
+                <option value="gemini">Google Gemini AI</option>
+                <option value="ollama">Ollama (Local LLM)</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Model Identifier Name</label>
+              {aiModel === 'gemini' ? (
+                <input type="text" value={aiModelName} onChange={e => setAiModelName(e.target.value)} placeholder="e.g. gemini-3.1-flash-lite" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+              ) : (
+                <select value={aiModelName} onChange={e => setAiModelName(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
+                  <option value="llama3.1:latest">llama3.1:latest</option>
+                  <option value="qwen2.5:7b">qwen2.5:7b</option>
+                </select>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 6 }}>
+            <button type="button" className="btn-ghost" style={{ padding: '10px 20px', borderRadius: 10, fontSize: 13 }} onClick={() => setShowAddForm(false)}>Cancel</button>
+            <button type="submit" className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 13 }}>Create Account</button>
+          </div>
+        </form>
+      )}
+
+      <div className="glass" style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.7)', width: '100%' }}>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1.5fr 1.2fr 1fr 2fr 1.5fr 1fr', gap: 12,
+          padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'rgba(236,72,153,0.03)'
+        }}>
+          {['Full Name', 'Login ID', 'AI Dial Line', 'AI Model Engine', 'Date Created', ''].map(h => (
+            <div key={h} style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{h}</div>
+          ))}
+        </div>
+
+        {users.length === 0 && (
+          <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
+            No user accounts created yet.
+          </div>
+        )}
+
+        {users.map((user) => (
+          <div key={user.id} style={{
+            display: 'grid', gridTemplateColumns: '1.5fr 1.2fr 1fr 2fr 1.5fr 1fr', gap: 12,
+            padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 14, alignItems: 'center'
+          }} className="table-row">
+            <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{user.name}</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'monospace' }}>{user.id}</span>
+            <span style={{ fontWeight: 800, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{user.ai_extension || 'Not set'}</span>
+            <span style={{ display: 'inline-flex', flexDirection: 'column' }}>
+              <span style={{ fontWeight: 700, color: 'var(--text-primary)', textTransform: 'capitalize' }}>{user.ai_model || 'Gemini'}</span>
+              <span style={{ fontSize: 10, color: 'var(--text-muted)', fontFamily: 'monospace' }}>({user.ai_model_name || 'gemini-3.1-flash-lite'})</span>
+            </span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{new Date(user.created_at * 1000).toLocaleString()}</span>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={() => handleDeleteUser(user.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 13, fontWeight: 700 }}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Companies Panel Component ═══ */
+function CompaniesPanel() {
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [aiExtension, setAiExtension] = useState('');
+  const [rangeStart, setRangeStart] = useState('100');
+  const [rangeEnd, setRangeEnd] = useState('199');
+  const [aiModel, setAiModel] = useState('gemini');
+  const [aiModelName, setAiModelName] = useState('gemini-3.1-flash-lite');
+  const [agentName, setAgentName] = useState('Ventra');
+  const [adminName, setAdminName] = useState('');
+  const [adminId, setAdminId] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [termsChecked, setTermsChecked] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editCompanyId, setEditCompanyId] = useState(null);
+
+  const resetForm = () => {
+    setNewName('');
+    setAiExtension('');
+    setRangeStart('100');
+    setRangeEnd('199');
+    setAiModel('gemini');
+    setAiModelName('gemini-3.1-flash-lite');
+    setAgentName('Ventra');
+    setAdminName('');
+    setAdminId('');
+    setAdminPassword('');
+    setTermsChecked(false);
+    setShowAddForm(false);
+    setEditCompanyId(null);
+  };
+
+  const fetchCompanies = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+      const data = await res.json();
+      setCompanies(data.companies || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
+  const handleAddCompany = async (e) => {
+    e.preventDefault();
+    if (editCompanyId) {
+      if (!newName.trim() || !aiExtension.trim() || !rangeStart.toString().trim() || !rangeEnd.toString().trim()) {
+        alert("Company fields are required.");
+        return;
+      }
+      try {
+        const res = await fetch(`http://localhost:8001/api/admin/companies/${editCompanyId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
+          body: JSON.stringify({
+            name: newName.trim(),
+            ai_extension: aiExtension.trim(),
+            range_start: Number(rangeStart),
+            range_end: Number(rangeEnd),
+            ai_model: aiModel,
+            ai_model_name: aiModelName.trim(),
+            agent_name: agentName.trim() || 'Ventra'
+          })
+        });
+        if (res.ok) {
+          resetForm();
+          fetchCompanies();
+        } else {
+          const data = await res.json();
+          alert(data.detail || 'Failed to update company');
+        }
+      } catch {
+        alert('Error connecting to server');
+      }
+      return;
+    }
+
+    if (!newName.trim() || !aiExtension.trim() || !rangeStart.trim() || !rangeEnd.trim() || !adminId.trim() || !adminPassword.trim()) {
+      alert("All fields are required, including the Initial Admin Account Details.");
+      return;
+    }
+    if (!termsChecked) {
+      alert("You must agree to the Terms & Conditions before creating a company.");
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:8001/api/admin/companies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
+        body: JSON.stringify({
+          name: newName.trim(),
+          ai_extension: aiExtension.trim(),
+          range_start: Number(rangeStart),
+          range_end: Number(rangeEnd),
+          ai_model: aiModel,
+          ai_model_name: aiModelName.trim(),
+          agent_name: agentName.trim() || 'Ventra',
+          admin_name: adminName.trim(),
+          admin_id: adminId.trim(),
+          admin_password: adminPassword
+        })
+      });
+      if (res.ok) {
+        resetForm();
+        fetchCompanies();
+      } else {
+        const data = await res.json();
+        alert(data.detail || 'Failed to add company');
+      }
+    } catch {
+      alert('Error connecting to server');
+    }
+  };
+
+  const deleteCompany = async (id, name) => {
+    if (window.confirm(`Are you sure you want to remove company "${name}"? This will delete all associated users, devices, and call history.`)) {
+      try {
+        const res = await fetch(`http://localhost:8001/api/admin/companies/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        if (res.ok) {
+          fetchCompanies();
+        }
+      } catch {
+        alert('Error deleting company');
+      }
+    }
+  };
+
+  const handleModelChange = (val) => {
+    setAiModel(val);
+    if (val === 'gemini') {
+      setAiModelName('gemini-3.1-flash-lite');
+    } else {
+      setAiModelName('llama3.1:latest');
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Companies / Tenants ({companies.length})</h3>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Manage SaaS customer accounts (companies) on this platform.</p>
+        </div>
+        <button className="btn-primary" style={{ padding: '10px 20px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }} onClick={() => setShowAddForm(!showAddForm)}>
+          <Plus size={16} /> Add Company
+        </button>
+      </div>
+
+      {showAddForm && (
+        <form onSubmit={handleAddCompany} className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', border: '1px solid var(--accent)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h4 style={{ fontSize: 16, fontWeight: 800 }}>{editCompanyId ? "Edit Company Resources" : "Add New Company Profile"}</h4>
+            <button type="button" style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={resetForm}><X size={18} /></button>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Company Name *</label>
+              <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Wayne Enterprises" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Receptionist Extension *</label>
+              <input type="text" value={aiExtension} onChange={e => setAiExtension(e.target.value)} placeholder="e.g. 511" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Extension Range Start *</label>
+              <input type="number" value={rangeStart} onChange={e => setRangeStart(e.target.value)} placeholder="500" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Extension Range End *</label>
+              <input type="number" value={rangeEnd} onChange={e => setRangeEnd(e.target.value)} placeholder="600" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Cognitive Engine Provider</label>
+              <select value={aiModel} onChange={e => handleModelChange(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
+                <option value="gemini">Google Gemini Cloud (Recommended)</option>
+                <option value="ollama">Local Llama3 (Ollama Host)</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Model Name</label>
+              {aiModel === 'gemini' ? (
+                <input type="text" value={aiModelName} onChange={e => setAiModelName(e.target.value)} placeholder="e.g. gemini-3.1-flash-lite" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+              ) : (
+                <select value={aiModelName} onChange={e => setAiModelName(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: '#fff' }}>
+                  <option value="llama3.1:latest">llama3.1:latest</option>
+                  <option value="qwen2.5:7b">qwen2.5:7b</option>
+                </select>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Agent Name</label>
+              <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+            </div>
+          </div>
+
+          {!editCompanyId && (
+            <>
+              <div style={{ marginTop: 16, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+                <h4 style={{ fontSize: 14, fontWeight: 800, marginBottom: 12 }}>Initial Admin Account Details</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Admin Full Name *</label>
+                    <input type="text" value={adminName} onChange={e => setAdminName(e.target.value)} placeholder="e.g. Bruce Wayne" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required={!editCompanyId} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Admin Login ID / Username *</label>
+                    <input type="text" value={adminId} onChange={e => setAdminId(e.target.value)} placeholder="e.g. bruce_admin" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required={!editCompanyId} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Admin Login Password *</label>
+                    <input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} placeholder="••••••••" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required={!editCompanyId} />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <input type="checkbox" id="terms_agree" checked={termsChecked} onChange={e => setTermsChecked(e.target.checked)} style={{ cursor: 'pointer', width: 16, height: 16 }} />
+                <label htmlFor="terms_agree" style={{ fontSize: 12, color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                  I have read and agree to the Terms & Conditions for providing AI Voice Services for this client.
+                </label>
+              </div>
+            </>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+            <button type="button" className="btn-ghost" style={{ padding: '10px 20px', borderRadius: 10, fontSize: 13 }} onClick={resetForm}>Cancel</button>
+            <button type="submit" className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 13 }}>
+              {editCompanyId ? "Save Changes" : "Create Company & Admin Account"}
+            </button>
+          </div>
+        </form>
+      )}
+
+      <div className="glass" style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.7)', width: '100%' }}>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '0.6fr 2fr 1.5fr 2fr 1.5fr 2fr 0.8fr', gap: 12,
+          padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'rgba(236,72,153,0.03)'
+        }}>
+          {['ID', 'Company Name', 'AI Ext', 'Allowed Range', 'LLM Provider', 'Date Registered', ''].map(h => (
+            <div key={h} style={{ fontSize: 11, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{h}</div>
+          ))}
+        </div>
+
+        {companies.length === 0 && (
+          <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
+            No companies registered yet.
+          </div>
+        )}
+
+        {companies.map((company) => (
+          <div key={company.id} style={{
+            display: 'grid', gridTemplateColumns: '0.6fr 2fr 1.5fr 2fr 1.5fr 2fr 0.8fr', gap: 12,
+            padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 14, alignItems: 'center'
+          }} className="table-row">
+            <span style={{ fontWeight: 700, color: 'var(--accent-2)', fontFamily: 'monospace' }}>{company.id}</span>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{company.name}</span>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 700, color: 'var(--accent)' }}>{company.ai_extension || '—'}</span>
+            <span style={{ color: 'var(--text-secondary)', fontFamily: 'monospace', fontWeight: 600 }}>
+              {company.range_start !== null ? `${company.range_start} - ${company.range_end}` : 'Unlimited'}
+            </span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
+              {company.ai_model || 'gemini'} ({company.ai_model_name || 'gemini-3.1-flash-lite'})
+            </span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{new Date(company.created_at * 1000).toLocaleString()}</span>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+              <button onClick={() => {
+                setEditCompanyId(company.id);
+                setNewName(company.name);
+                setAiExtension(company.ai_extension || '');
+                setRangeStart(company.range_start ? company.range_start.toString() : '');
+                setRangeEnd(company.range_end ? company.range_end.toString() : '');
+                setAiModel(company.ai_model || 'gemini');
+                setAiModelName(company.ai_model_name || 'gemini-3.1-flash-lite');
+                setAgentName(company.agent_name || 'Ventra');
+                setShowAddForm(true);
+              }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', fontSize: 13, fontWeight: 700 }}>Edit</button>
+              <button onClick={() => deleteCompany(company.id, company.name)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', fontSize: 13, fontWeight: 700 }}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Company Settings Panel ═══ */
+function CompanySettingsPanel({ companyId }) {
+  const [loading, setLoading] = useState(false);
+  const [company, setCompany] = useState(null);
+  const [agentName, setAgentName] = useState('');
+
+  useEffect(() => {
+    if (!companyId) return;
+    const fetchCompany = async () => {
+      try {
+        const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        const data = await res.json();
+        const myComp = data.companies?.find(c => String(c.id) === String(companyId));
+        if (myComp) {
+          setCompany(myComp);
+          setAgentName(myComp.agent_name || 'Ventra');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCompany();
+  }, [companyId]);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!company) return;
+    
+    try {
+      const res = await fetch(`http://localhost:8001/api/admin/companies/${companyId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` },
+        body: JSON.stringify({
+          name: company.name,
+          ai_extension: company.ai_extension,
+          range_start: company.range_start,
+          range_end: company.range_end,
+          ai_model: company.ai_model,
+          ai_model_name: company.ai_model_name,
+          agent_name: agentName.trim() || 'Ventra'
+        })
+      });
+      if (res.ok) {
+        alert("Settings updated successfully. Your new agent name is active immediately.");
+      } else {
+        alert("Failed to update settings.");
+      }
+    } catch {
+      alert("Error connecting to server.");
+    }
+  };
+
+  if (!company) return <div>Loading...</div>;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Company Settings</h3>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Personalize your AI Agent profile.</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSave} className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', border: '1px solid var(--accent)', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 600 }}>
+        <h4 style={{ fontSize: 16, fontWeight: 800, marginBottom: 8 }}>AI Agent Profile</h4>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Company Name (Your Account)</label>
+          <input type="text" value={company.name} disabled style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14, background: 'rgba(0,0,0,0.02)', color: 'var(--text-muted)' }} />
+          <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Contact platform support to change your registered company name.</p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>AI Agent Name *</label>
+          <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
+          <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>This is the name your AI uses to introduce itself (e.g. "Hello, I am {agentName || 'Ventra'}, agent of {company.name}").</p>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+          <button type="submit" className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 13 }}>Save Profile Settings</button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -306,10 +939,18 @@ export default function AdminDashboard({ onBack, onStartCall }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+  const [durationFilter, setDurationFilter] = useState('all');
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [tab, setTab] = useState('overview');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [copiedId, setCopiedId] = useState('');
+
+  // SaaS User roles
+  const userRole = localStorage.getItem('ventra_user_role') || 'super_admin';
+  const myCompanyId = localStorage.getItem('ventra_company_id');
+  const [selectedCompanyId, setSelectedCompanyId] = useState(myCompanyId || '');
+  const [companies, setCompanies] = useState([]);
 
   // Health Status checking state
   const [serviceStatus, setServiceStatus] = useState({
@@ -331,9 +972,28 @@ export default function AdminDashboard({ onBack, onStartCall }) {
     });
   };
 
+  const fetchCompanies = useCallback(async () => {
+    if (userRole === 'super_admin') {
+      try {
+        const res = await fetch('http://localhost:8001/api/admin/companies', { headers: { 'Authorization': `Bearer ${localStorage.getItem('ventra_token')}` } });
+        if (res.ok) {
+          const data = await res.json();
+          setCompanies(data.companies || []);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [userRole]);
+
+  useEffect(() => {
+    fetchCompanies();
+  }, [fetchCompanies]);
+
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:8001/api/admin/rooms');
+      const q = selectedCompanyId ? `?company_id=${selectedCompanyId}` : '';
+      const res = await fetch(`http://localhost:8001/api/admin/rooms${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
       if (!res.ok) throw new Error();
       const data = await res.json();
       setMetrics(data);
@@ -346,13 +1006,14 @@ export default function AdminDashboard({ onBack, onStartCall }) {
       const points = [];
       const callsVolume = [];
       if (data && data.rooms) {
-        Object.entries(data.rooms).forEach(([roomId, hist]) => {
-          const assistantMsgs = (hist || []).filter(m => m.role === 'assistant' && m.latency_ms > 0);
+        Object.entries(data.rooms).forEach(([roomId, roomData]) => {
+          const hist = Array.isArray(roomData) ? roomData : roomData.messages || [];
+          const assistantMsgs = hist.filter(m => m.role === 'assistant' && m.latency_ms > 0);
 
           // Add call volumes data: room ID vs messages count
           callsVolume.push({
             roomId: roomId.substring(0, 8),
-            msgsCount: (hist || []).filter(m => m.role !== 'system').length
+            msgsCount: hist.filter(m => m.role !== 'system').length
           });
 
           assistantMsgs.forEach(msg => {
@@ -378,11 +1039,12 @@ export default function AdminDashboard({ onBack, onStartCall }) {
           // Parse simulated graphs
           const points = [];
           const callsVolume = [];
-          Object.entries(mock.rooms).forEach(([roomId, hist]) => {
-            const assistantMsgs = (hist || []).filter(m => m.role === 'assistant' && m.latency_ms > 0);
+          Object.entries(mock.rooms).forEach(([roomId, roomData]) => {
+            const hist = Array.isArray(roomData) ? roomData : roomData.messages || [];
+            const assistantMsgs = hist.filter(m => m.role === 'assistant' && m.latency_ms > 0);
             callsVolume.push({
               roomId: roomId.substring(0, 8),
-              msgsCount: (hist || []).filter(m => m.role !== 'system').length
+              msgsCount: hist.filter(m => m.role !== 'system').length
             });
             assistantMsgs.forEach(msg => {
               points.push({ roomId: roomId.substring(0, 8), latency: msg.latency_ms });
@@ -397,7 +1059,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedCompanyId]);
 
   useEffect(() => {
     fetchData();
@@ -409,7 +1071,6 @@ export default function AdminDashboard({ onBack, onStartCall }) {
 
 
   const rooms = metrics?.rooms ? Object.entries(metrics.rooms) : [];
-  const filtered = rooms.filter(([id]) => id.toLowerCase().includes(search.toLowerCase()));
 
   // Helper: Get room duration
   const getCallDuration = (hist) => {
@@ -421,6 +1082,38 @@ export default function AdminDashboard({ onBack, onStartCall }) {
     const s = seconds % 60;
     return m > 0 ? `${m}m ${s}s` : `${s}s`;
   };
+
+  const getCallDurationSecs = (hist) => {
+    if (!hist || hist.length === 0) return 0;
+    const msgCount = hist.filter(m => m.role !== 'system').length;
+    if (msgCount <= 1) return 8;
+    return msgCount * 12 + (msgCount % 3 === 0 ? 5 : -4);
+  };
+
+  const filtered = rooms.filter(([id, roomData]) => {
+    const hist = Array.isArray(roomData) ? roomData : roomData.messages || [];
+    const lastActive = !Array.isArray(roomData) ? roomData.last_active : null;
+    
+    // Search by ID
+    if (search && !id.toLowerCase().includes(search.toLowerCase())) return false;
+    
+    // Filter by Date
+    if (dateFilter && lastActive) {
+      const roomDate = new Date(lastActive * 1000).toISOString().split('T')[0];
+      if (roomDate !== dateFilter) return false;
+    }
+
+    // Filter by Duration
+    if (durationFilter !== 'all') {
+      const secs = getCallDurationSecs(hist);
+      if (durationFilter === '<1m' && secs >= 60) return false;
+      if (durationFilter === '1-5m' && (secs < 60 || secs > 300)) return false;
+      if (durationFilter === '>5m' && secs <= 300) return false;
+    }
+
+    return true;
+  });
+
 
   // Helper: Get Call Source Device / Destination details
   const getCallRouting = (roomId) => {
@@ -457,6 +1150,11 @@ export default function AdminDashboard({ onBack, onStartCall }) {
     { id: 'overview', label: 'Overview Metrics', icon: BarChart2 },
     { id: 'sip', label: 'SIP Configurations', icon: ShieldCheck },
   ];
+  if (userRole === 'super_admin') {
+    TABS.push({ id: 'companies', label: 'Companies / Tenants', icon: Globe });
+  } else {
+    TABS.push({ id: 'settings', label: 'Company Settings', icon: Settings });
+  }
 
   // SVG Math Helpers for real-time latency curve
   const renderLatencyPath = () => {
@@ -597,6 +1295,25 @@ export default function AdminDashboard({ onBack, onStartCall }) {
             )}
           </div>
 
+          {userRole === 'super_admin' && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 16 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)' }}>Company:</span>
+              <select
+                value={selectedCompanyId}
+                onChange={e => setSelectedCompanyId(e.target.value)}
+                style={{
+                  padding: '8px 12px', border: '1px solid var(--border)', borderRadius: 10,
+                  fontSize: 13, fontWeight: 600, background: '#fff', outline: 'none'
+                }}
+              >
+                <option value="">All Companies</option>
+                {companies.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <button className="btn-ghost" onClick={() => { setLoading(true); fetchData(); }}
             style={{ width: 38, height: 38, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <RefreshCw size={16} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
@@ -671,22 +1388,59 @@ export default function AdminDashboard({ onBack, onStartCall }) {
                 </div>
               </div>
 
+              {/* Filters */}
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Filter by Date:</span>
+                  <input 
+                    type="date" 
+                    value={dateFilter} 
+                    onChange={e => setDateFilter(e.target.value)} 
+                    style={{ padding: '8px 12px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>Filter by Duration:</span>
+                  <select 
+                    value={durationFilter} 
+                    onChange={e => setDurationFilter(e.target.value)}
+                    style={{ padding: '8px 12px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 13, background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
+                  >
+                    <option value="all">All Durations</option>
+                    <option value="<1m">&lt; 1 minute</option>
+                    <option value="1-5m">1 - 5 minutes</option>
+                    <option value=">5m">&gt; 5 minutes</option>
+                  </select>
+                </div>
+                {(dateFilter || durationFilter !== 'all') && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignSelf: 'flex-end' }}>
+                    <button 
+                      className="btn-ghost"
+                      onClick={() => { setDateFilter(''); setDurationFilter('all'); }}
+                      style={{ padding: '8px 12px', fontSize: 12, borderRadius: 10 }}
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Call table logs (Full Width Responsive layout) */}
               <div className="glass" style={{ borderRadius: 18, overflow: 'hidden', background: 'rgba(255,255,255,0.7)', width: '100%' }}>
                 {/* Header Grid */}
                 <div style={{
-                  display: 'grid', gridTemplateColumns: '1.8fr 1fr 2fr 1.6fr 0.8fr 1.5fr 1fr', gap: 16,
+                  display: 'grid', gridTemplateColumns: '1.4fr 1.2fr 0.8fr 1.6fr 1.2fr 0.7fr 1.2fr 0.8fr', gap: 12,
                   padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'rgba(236,72,153,0.03)'
                 }}>
-                  {['Room ID', 'Call Duration', 'Call From (Device)', 'Forwarded To', 'Msgs', 'Latency Bounds (Min/Max)', ''].map(h => (
+                  {['Room ID', 'Date & Time', 'Duration', 'Call From (Device)', 'Forwarded To', 'Msgs', 'Latency Bounds (Min/Max)', ''].map(h => (
                     <div key={h} style={{ fontSize: 12, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{h}</div>
                   ))}
                 </div>
 
                 {/* Shimmer loading state */}
                 {loading && Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 2fr 1.6fr 0.8fr 1.5fr 1fr', gap: 16, padding: '18px 20px', borderBottom: '1px solid var(--border)' }}>
-                    {Array.from({ length: 7 }).map((_, j) => (
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.4fr 1.2fr 0.8fr 1.6fr 1.2fr 0.7fr 1.2fr 0.8fr', gap: 16, padding: '18px 20px', borderBottom: '1px solid var(--border)' }}>
+                    {Array.from({ length: 8 }).map((_, j) => (
                       <div key={j} style={{ height: 14, borderRadius: 6 }} className="shimmer" />
                     ))}
                   </div>
@@ -701,28 +1455,36 @@ export default function AdminDashboard({ onBack, onStartCall }) {
                 )}
 
                 {/* Logs rows */}
-                {!loading && filtered.map(([roomId, hist]) => {
-                  const msgs = (hist || []).filter(m => m.role !== 'system');
+                {!loading && filtered.map(([roomId, roomData]) => {
+                  const hist = Array.isArray(roomData) ? roomData : roomData.messages || [];
+                  const lastActive = !Array.isArray(roomData) ? roomData.last_active : null;
+                  const msgs = hist.filter(m => m.role !== 'system');
                   const duration = getCallDuration(hist);
                   const routing = getCallRouting(roomId);
                   const latencyRange = getLatencyRanges(hist);
 
                   // Truncate Room ID: show first 12 characters, hover/click copies or shows details
                   const truncatedRoomId = roomId.length > 15 ? `${roomId.substring(0, 12)}...` : roomId;
+                  const formattedDate = lastActive ? new Date(lastActive * 1000).toLocaleString(undefined, {
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                  }) : 'Unknown Time';
 
                   return (
                     <div key={roomId} style={{
-                      display: 'grid', gridTemplateColumns: '1.8fr 1fr 2fr 1.6fr 0.8fr 1.5fr 1fr', gap: 16,
-                      padding: '14px 20px', borderBottom: '1px solid var(--border)', alignItems: 'center', fontSize: 14
+                      display: 'grid', gridTemplateColumns: '1.4fr 1.2fr 0.8fr 1.6fr 1.2fr 0.7fr 1.2fr 0.8fr', gap: 12,
+                      padding: '14px 20px', borderBottom: '1px solid var(--border)', alignItems: 'center', fontSize: 13
                     }} className="table-row">
 
                       {/* Room ID */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 700, color: 'var(--accent-2)' }}>{truncatedRoomId}</span>
+                        <span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--accent-2)' }}>{truncatedRoomId}</span>
                         <button onClick={() => copyId(roomId)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', padding: 2, color: copiedId === roomId ? 'var(--green)' : 'var(--text-muted)' }} title="Copy full ID">
                           <Copy size={12} />
                         </button>
                       </div>
+
+                      {/* Date & Time */}
+                      <span style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{formattedDate}</span>
 
                       {/* Duration */}
                       <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{duration}</span>
@@ -970,7 +1732,21 @@ export default function AdminDashboard({ onBack, onStartCall }) {
           {/* TAB 3: SIP PHONE CONFIGURATION */}
           {tab === 'sip' && (
             <div className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', width: '100%' }}>
-              <SIPPanel />
+              <SIPPanel companyId={selectedCompanyId} userRole={userRole} />
+            </div>
+          )}
+
+          {/* TAB 4: COMPANIES (CLIENT ONBOARDING) */}
+          {tab === 'companies' && userRole === 'super_admin' && (
+            <div className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', width: '100%' }}>
+              <CompaniesPanel />
+            </div>
+          )}
+
+          {/* TAB 5: COMPANY SETTINGS */}
+          {tab === 'settings' && userRole === 'company_admin' && (
+            <div className="glass" style={{ padding: 24, borderRadius: 16, background: '#ffffff', width: '100%' }}>
+              <CompanySettingsPanel companyId={selectedCompanyId} />
             </div>
           )}
         </div>
@@ -1000,32 +1776,44 @@ function getMockMetrics() {
       'web-room-bc8d91f2': current_time - 25
     },
     rooms: {
-      'sip-room-102-aefd8': [
-        { role: 'system', content: 'SYSTEM_PROMPT' },
-        { role: 'user', content: 'Hello, is anyone there?' },
-        { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 180 },
-        { role: 'user', content: 'I need to reach extension 105.' },
-        { role: 'assistant', content: 'Certainly! Forwarding your call to extension 105. Please hold.', latency_ms: 240 }
-      ],
-      'web-room-bc8d91f2': [
-        { role: 'system', content: 'SYSTEM_PROMPT' },
-        { role: 'user', content: 'Hello!' },
-        { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 110 },
-        { role: 'user', content: 'What are your working hours?' },
-        { role: 'assistant', content: 'DEI Lab is open Monday through Friday from 9 AM to 6 PM.', latency_ms: 190 }
-      ],
-      'old-room-bf87ad8e': [
-        { role: 'user', content: 'Hi' },
-        { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 150 },
-        { role: 'user', content: 'Thanks.' },
-        { role: 'assistant', content: 'You are welcome! Have a wonderful day.', latency_ms: 120 }
-      ],
-      'sip-room-104-fc98': [
-        { role: 'user', content: 'Hello' },
-        { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 280 },
-        { role: 'user', content: 'Forward me to extension 108.' },
-        { role: 'assistant', content: 'Okay, routing you to extension 108. Goodbye!', latency_ms: 450 }
-      ]
+      'sip-room-102-aefd8': {
+        last_active: current_time - 10,
+        messages: [
+          { role: 'system', content: 'SYSTEM_PROMPT' },
+          { role: 'user', content: 'Hello, is anyone there?' },
+          { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 180 },
+          { role: 'user', content: 'I need to reach extension 105.' },
+          { role: 'assistant', content: 'Certainly! Forwarding your call to extension 105. Please hold.', latency_ms: 240 }
+        ]
+      },
+      'web-room-bc8d91f2': {
+        last_active: current_time - 25,
+        messages: [
+          { role: 'system', content: 'SYSTEM_PROMPT' },
+          { role: 'user', content: 'Hello!' },
+          { role: 'assistant', content: 'Welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 110 },
+          { role: 'user', content: 'What are your working hours?' },
+          { role: 'assistant', content: 'DEI Lab is open Monday through Friday from 9 AM to 6 PM.', latency_ms: 190 }
+        ]
+      },
+      'old-room-bf87ad8e': {
+        last_active: current_time - 3600,
+        messages: [
+          { role: 'user', content: 'Hi' },
+          { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 150 },
+          { role: 'user', content: 'Thanks.' },
+          { role: 'assistant', content: 'You are welcome! Have a wonderful day.', latency_ms: 120 }
+        ]
+      },
+      'sip-room-104-fc98': {
+        last_active: current_time - 86400,
+        messages: [
+          { role: 'user', content: 'Hello' },
+          { role: 'assistant', content: 'Hello, welcome to DEI Lab! I am Ventra. How can I help you today?', latency_ms: 280 },
+          { role: 'user', content: 'Forward me to extension 108.' },
+          { role: 'assistant', content: 'Okay, routing you to extension 108. Goodbye!', latency_ms: 450 }
+        ]
+      }
     }
   };
 }

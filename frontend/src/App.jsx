@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
-import AdminLogin from './components/AdminLogin';
+import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
+import UserDashboard from './components/UserDashboard';
 import VoiceAgent from './components/VoiceAgent';
 import { Bot, ShieldCheck, Mic, Zap, Phone, ArrowRight, Sparkles, Globe, Cpu } from 'lucide-react';
 
@@ -102,11 +103,31 @@ function LandingPage({ showRoomId = null }) {
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 30 }}>
-            <button className="btn-ghost" style={{ padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => navigate('/admin/login')}>
-              <ShieldCheck size={16} />
-              <span>Admin Portal</span>
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+            {localStorage.getItem('ventra_user_role') ? (
+              <>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>
+                  Hello, {localStorage.getItem('ventra_user_name')}
+                </span>
+                <button className="btn-ghost" style={{ padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600 }} onClick={() => {
+                  const role = localStorage.getItem('ventra_user_role');
+                  navigate(role === 'super_admin' || role === 'company_admin' ? '/admin' : '/dashboard');
+                }}>
+                  Dashboard
+                </button>
+                <button className="btn-ghost" style={{ padding: '8px 16px', borderRadius: 10, fontSize: 13, fontWeight: 600 }} onClick={() => {
+                  localStorage.clear();
+                  navigate('/');
+                }}>
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button className="btn-ghost" style={{ padding: '8px 18px', borderRadius: 10, fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => navigate('/login')}>
+                <ShieldCheck size={16} />
+                <span>Login / Sign In</span>
+              </button>
+            )}
           </div>
         </div>
       </nav>
@@ -214,8 +235,30 @@ function LandingPage({ showRoomId = null }) {
 }
 
 /* ─── Wrappers ─── */
-function AdminLoginWrapper() { const n = useNavigate(); return <PageBackground><AdminLogin onLoginSuccess={() => n('/admin')} onBack={() => n('/')} /></PageBackground>; }
+function LoginWrapper() { 
+  const n = useNavigate(); 
+  return (
+    <PageBackground>
+      <Login 
+        onLoginSuccess={(user) => {
+          localStorage.setItem('ventra_token', user.token || '');
+          localStorage.setItem('ventra_user_role', user.role);
+          localStorage.setItem('ventra_user_id', user.id);
+          localStorage.setItem('ventra_user_name', user.name);
+          localStorage.setItem('ventra_company_id', user.company_id !== null && user.company_id !== undefined ? String(user.company_id) : '');
+          if (user.role === 'super_admin' || user.role === 'company_admin') {
+            n('/admin');
+          } else {
+            n('/dashboard');
+          }
+        }} 
+        onBack={() => n('/')} 
+      />
+    </PageBackground>
+  ); 
+}
 function AdminDashboardWrapper() { const n = useNavigate(); return <PageBackground><AdminDashboard onBack={() => n('/')} /></PageBackground>; }
+function UserDashboardWrapper() { const n = useNavigate(); return <PageBackground><UserDashboard onBack={() => n('/')} /></PageBackground>; }
 function VoiceAgentOverlay() { const { roomId } = useParams(); return <LandingPage showRoomId={roomId} />; }
 
 export default function App() {
@@ -223,8 +266,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PageBackground><LandingPage /></PageBackground>} />
-        <Route path="/admin/login" element={<AdminLoginWrapper />} />
+        <Route path="/login" element={<LoginWrapper />} />
         <Route path="/admin" element={<AdminDashboardWrapper />} />
+        <Route path="/dashboard" element={<UserDashboardWrapper />} />
         <Route path="/room/:roomId" element={<PageBackground><VoiceAgentOverlay /></PageBackground>} />
       </Routes>
     </BrowserRouter>

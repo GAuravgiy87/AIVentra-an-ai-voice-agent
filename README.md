@@ -21,7 +21,17 @@
 - ⚡ **Ultra-Fast Responses**: Powered by Google's `gemini-3.5-flash` model for near-instant AI replies.
 - 🗣️ **Native Web Audio**: Utilizes browser-native STT (Speech-to-Text) and TTS (Text-to-Speech) engines with a specialized Windows cut-off fix for perfect pronunciation.
 - 🎨 **Dynamic Waveform UI**: The user interface features zero text. Instead, Ventra's avatar pulses and transforms into an animated CSS waveform when she is listening, thinking, or speaking.
-- 🔒 **Secure Admin Dashboard**: A password-protected monitoring portal (`admin123`) that tracks live KPIs including Total Conversations, Live Chats (active in the last 5 minutes), and exact millisecond system Latency.
+- 🔒 **Secure Admin Dashboard**: A password-protected monitoring portal (`admin`) that tracks live KPIs including Total Conversations, Live Chats (active in the last 5 minutes), and exact millisecond system Latency.
+
+## ⚡ Quick Start (One-Click Run)
+
+You can launch all 6 components of the Ventra AI voice suite (Docker containers, SIP registrations, UDP port-forwarder, Agent worker, FastAPI backend, and React frontend) with a single command!
+
+Open a PowerShell terminal in the project root and run:
+```powershell
+.\start_all.ps1
+```
+*(Alternatively, you can just double-click **`start_all.bat`** from Windows Explorer!)*
 
 ## 🚀 Getting Started (Step-by-Step Setup)
 
@@ -89,7 +99,7 @@ Start the React/Vite web server to view the monitoring dashboard. Open a new Pow
 cd frontend
 npm run dev
 ```
-*Runs on `localhost:5173`. Click the Admin button and login using passcode `admin123` to view live call metrics and transcripts.*
+*Runs on `localhost:5173`. Click the Admin button and login using passcode `admin` to view live call metrics and transcripts.*
 
 ---
 

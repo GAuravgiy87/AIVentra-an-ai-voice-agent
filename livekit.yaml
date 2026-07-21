@@ -6,7 +6,7 @@ rtc:
     port_range_start: 50000
     port_range_end: 50050
     use_external_ip: false
-    node_ip: "10.7.11.141"
+    node_ip: "127.0.0.1"
     enable_loopback_candidate: true
 keys:
     devkey: secret

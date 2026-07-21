@@ -3,8 +3,7 @@ from google.genai import types
 from typing import Dict, List, Optional
 import time
 import os
-import psycopg2
-from psycopg2.extras import DictCursor
+import sqlite3
 
 # Configure Gemini with the provided API Key from environment variables
 from dotenv import load_dotenv
@@ -28,31 +27,31 @@ Do not use markdown formatting like asterisks or bold text, just plain text that
 # { room_id: ChatSession }
 rooms_sessions: Dict[str, object] = {}
 
-DB_URL = "postgresql://postgres:postgres@localhost:5433/ventra"
-
-def get_db():
-    return psycopg2.connect(DB_URL)
+DB_PATH = "calls.db"
 
 def init_db():
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # 1. Create companies table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS companies (
-            id SERIAL PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             ai_extension TEXT,
             range_start INTEGER,
             range_end INTEGER,
             ai_model TEXT,
             ai_model_name TEXT,
-            created_at DOUBLE PRECISION
+            created_at REAL
         )
     ''')
     # Alter companies table to add columns if missing
-    for col, col_type in [("ai_extension", "TEXT"), ("range_start", "INTEGER"), ("range_end", "INTEGER"), ("ai_model", "TEXT"), ("ai_model_name", "TEXT"), ("agent_name", "TEXT"), ("agent_prompt", "TEXT"), ("agent_voice", "TEXT")]:
-        cursor.execute(f"ALTER TABLE companies ADD COLUMN IF NOT EXISTS {col} {col_type}")
+    for col, col_type in [("ai_extension", "TEXT"), ("range_start", "INTEGER"), ("range_end", "INTEGER"), ("ai_model", "TEXT"), ("ai_model_name", "TEXT"), ("agent_name", "TEXT")]:
+        try:
+            cursor.execute(f"ALTER TABLE companies ADD COLUMN {col} {col_type}")
+        except sqlite3.OperationalError:
+            pass
     
     # 2. Create rooms table
     cursor.execute('''
@@ -60,23 +59,26 @@ def init_db():
             room_id TEXT PRIMARY KEY,
             extension TEXT,
             company_id INTEGER,
-            last_active DOUBLE PRECISION,
-            created_at DOUBLE PRECISION
+            last_active REAL,
+            created_at REAL
         )
     ''')
     # Alter rooms to add company_id and extension if missing
     for col, col_type in [("extension", "TEXT"), ("company_id", "INTEGER")]:
-        cursor.execute(f"ALTER TABLE rooms ADD COLUMN IF NOT EXISTS {col} {col_type}")
+        try:
+            cursor.execute(f"ALTER TABLE rooms ADD COLUMN {col} {col_type}")
+        except sqlite3.OperationalError:
+            pass
 
     # 3. Create messages table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS messages (
-            id SERIAL PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             room_id TEXT,
             role TEXT,
             content TEXT,
             latency_ms INTEGER,
-            timestamp DOUBLE PRECISION,
+            timestamp REAL,
             FOREIGN KEY(room_id) REFERENCES rooms(room_id)
         )
     ''')
@@ -92,18 +94,21 @@ def init_db():
             ai_model_name TEXT,
             role TEXT,
             company_id INTEGER,
-            created_at DOUBLE PRECISION,
+            created_at REAL,
             FOREIGN KEY(company_id) REFERENCES companies(id)
         )
     ''')
     # Alter users to add new columns if missing
     for col, col_type in [("ai_extension", "TEXT"), ("ai_model", "TEXT"), ("ai_model_name", "TEXT"), ("role", "TEXT"), ("company_id", "INTEGER")]:
-        cursor.execute(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} {col_type}")
+        try:
+            cursor.execute(f"ALTER TABLE users ADD COLUMN {col} {col_type}")
+        except sqlite3.OperationalError:
+            pass
 
     # 5. Create devices table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS devices (
-            id SERIAL PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id TEXT,
             name TEXT,
             ip_address TEXT,
@@ -111,19 +116,22 @@ def init_db():
             type TEXT,
             status TEXT,
             company_id INTEGER,
-            created_at DOUBLE PRECISION,
+            created_at REAL,
             FOREIGN KEY(user_id) REFERENCES users(id),
             FOREIGN KEY(company_id) REFERENCES companies(id)
         )
     ''')
     for col, col_type in [("company_id", "INTEGER")]:
-        cursor.execute(f"ALTER TABLE devices ADD COLUMN IF NOT EXISTS {col} {col_type}")
+        try:
+            cursor.execute(f"ALTER TABLE devices ADD COLUMN {col} {col_type}")
+        except sqlite3.OperationalError:
+            pass
 
     # Seed default companies if empty
     cursor.execute("SELECT COUNT(*) FROM companies")
     if cursor.fetchone()[0] == 0:
-        cursor.execute("INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at) VALUES ('Acme Corp', '201', 100, 150, 'gemini', 'gemini-3.1-flash-lite', %s)", (time.time(),))
-        cursor.execute("INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at) VALUES ('Globex Corporation', '202', 151, 200, 'gemini', 'gemini-3.1-flash-lite', %s)", (time.time(),))
+        cursor.execute("INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at) VALUES ('Acme Corp', '201', 100, 150, 'gemini', 'gemini-3.1-flash-lite', ?)", (time.time(),))
+        cursor.execute("INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at) VALUES ('Globex Corporation', '202', 151, 200, 'gemini', 'gemini-3.1-flash-lite', ?)", (time.time(),))
         
     # Seed default users
     # Super Admin
@@ -131,7 +139,7 @@ def init_db():
     if cursor.fetchone()[0] == 0:
         cursor.execute('''
             INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at)
-            VALUES ('admin', 'admin', 'Super Administrator', '200', 'gemini', 'gemini-3.1-flash-lite', 'super_admin', NULL, %s)
+            VALUES ('admin', 'admin', 'Super Administrator', '200', 'gemini', 'gemini-3.1-flash-lite', 'super_admin', NULL, ?)
         ''', (time.time(),))
     else:
         cursor.execute("UPDATE users SET role = 'super_admin' WHERE id = 'admin'")
@@ -141,7 +149,7 @@ def init_db():
     if cursor.fetchone()[0] == 0:
         cursor.execute('''
             INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at)
-            VALUES ('acme_admin', 'acme123', 'Acme Admin', '201', 'gemini', 'gemini-3.1-flash-lite', 'company_admin', 1, %s)
+            VALUES ('acme_admin', 'acme123', 'Acme Admin', '201', 'gemini', 'gemini-3.1-flash-lite', 'company_admin', 1, ?)
         ''', (time.time(),))
 
     # Globex Admin
@@ -149,17 +157,17 @@ def init_db():
     if cursor.fetchone()[0] == 0:
         cursor.execute('''
             INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at)
-            VALUES ('globex_admin', 'globex123', 'Globex Admin', '202', 'gemini', 'gemini-3.1-flash-lite', 'company_admin', 2, %s)
+            VALUES ('globex_admin', 'globex123', 'Globex Admin', '202', 'gemini', 'gemini-3.1-flash-lite', 'company_admin', 2, ?)
         ''', (time.time(),))
 
     # Seed default admin devices (100 to 110)
     for ext in range(100, 111):
         ext_str = str(ext)
-        cursor.execute("SELECT COUNT(*) FROM devices WHERE extension = %s", (ext_str,))
+        cursor.execute("SELECT COUNT(*) FROM devices WHERE extension = ?", (ext_str,))
         if cursor.fetchone()[0] == 0:
             cursor.execute('''
                 INSERT INTO devices (user_id, name, ip_address, extension, type, status, company_id, created_at)
-                VALUES ('admin', %s, '127.0.0.1', %s, 'Softphone', 'Offline', NULL, %s)
+                VALUES ('admin', ?, '127.0.0.1', ?, 'Softphone', 'Offline', NULL, ?)
             ''', (f"Admin Softphone {ext_str}", ext_str, time.time()))
 
     conn.commit()
@@ -169,22 +177,22 @@ def init_db():
 init_db()
 
 def _update_room_active(room_id: str, timestamp: float, extension: Optional[str] = None, company_id: Optional[int] = None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO rooms (room_id, created_at, last_active, extension, company_id) VALUES (%s, %s, %s, %s, %s) ON CONFLICT (room_id) DO NOTHING', 
+    cursor.execute('INSERT OR IGNORE INTO rooms (room_id, created_at, last_active, extension, company_id) VALUES (?, ?, ?, ?, ?)', 
                   (room_id, timestamp, timestamp, extension, company_id))
     
-    updates = ['last_active = %s']
+    updates = ['last_active = ?']
     params = [timestamp]
     if extension:
-        updates.append('extension = %s')
+        updates.append('extension = ?')
         params.append(extension)
     if company_id:
-        updates.append('company_id = %s')
+        updates.append('company_id = ?')
         params.append(company_id)
     params.append(room_id)
     
-    cursor.execute(f'UPDATE rooms SET {", ".join(updates)} WHERE room_id = %s', params)
+    cursor.execute(f'UPDATE rooms SET {", ".join(updates)} WHERE room_id = ?', params)
     conn.commit()
     conn.close()
 
@@ -193,17 +201,17 @@ def add_report_message(room_id: str, role: str, content: str, latency_ms: Option
     
     company_id = None
     if extension:
-        conn = get_db()
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         # 1. Check if the extension belongs to a company's main line
-        cursor.execute("SELECT id FROM companies WHERE ai_extension = %s", (extension,))
+        cursor.execute("SELECT id FROM companies WHERE ai_extension = ?", (extension,))
         row = cursor.fetchone()
         if row:
             company_id = row[0]
         else:
             # 2. Check if the extension belongs to an individual user's line
-            cursor.execute("SELECT company_id FROM users WHERE ai_extension = %s", (extension,))
+            cursor.execute("SELECT company_id FROM users WHERE ai_extension = ?", (extension,))
             row = cursor.fetchone()
             if row:
                 company_id = row[0]
@@ -212,24 +220,24 @@ def add_report_message(room_id: str, role: str, content: str, latency_ms: Option
         
     _update_room_active(room_id, current_time, extension, company_id)
     
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         INSERT INTO messages (room_id, role, content, latency_ms, timestamp)
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (?, ?, ?, ?, ?)
     ''', (room_id, role, content, latency_ms, current_time))
     conn.commit()
     conn.close()
 
 def get_admin_metrics(company_id: Optional[int] = None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Filters
     where_clause = ""
     params = []
     if company_id is not None:
-        where_clause = "WHERE company_id = %s"
+        where_clause = "WHERE company_id = ?"
         params = [company_id]
         
     # Total chats
@@ -240,9 +248,9 @@ def get_admin_metrics(company_id: Optional[int] = None):
     current_time = time.time()
     five_mins_ago = current_time - 300
     if company_id is not None:
-        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= %s AND company_id = %s', (five_mins_ago, company_id))
+        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= ? AND company_id = ?', (five_mins_ago, company_id))
     else:
-        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= %s', (five_mins_ago,))
+        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= ?', (five_mins_ago,))
     live_chats = cursor.fetchone()[0]
     
     # Average latency
@@ -251,7 +259,7 @@ def get_admin_metrics(company_id: Optional[int] = None):
             SELECT AVG(m.latency_ms) 
             FROM messages m 
             JOIN rooms r ON m.room_id = r.room_id 
-            WHERE m.latency_ms IS NOT NULL AND r.company_id = %s
+            WHERE m.latency_ms IS NOT NULL AND r.company_id = ?
         ''', (company_id,))
     else:
         cursor.execute('SELECT AVG(latency_ms) FROM messages WHERE latency_ms IS NOT NULL')
@@ -264,7 +272,7 @@ def get_admin_metrics(company_id: Optional[int] = None):
     
     rooms_history = {}
     for r_id, last_active in rows:
-        cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = %s ORDER BY timestamp ASC', (r_id,))
+        cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = ? ORDER BY timestamp ASC', (r_id,))
         messages = [{"role": row[0], "content": row[1], "latency_ms": row[2]} for row in cursor.fetchall()]
         rooms_history[r_id] = {
             "messages": messages,
@@ -290,9 +298,9 @@ def create_room(room_id: str, extension: Optional[str] = None):
         rooms_sessions[room_id] = chat
         
         # Check if the room already has history in DB before adding system prompt
-        conn = get_db()
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM messages WHERE room_id = %s', (room_id,))
+        cursor.execute('SELECT COUNT(*) FROM messages WHERE room_id = ?', (room_id,))
         count = cursor.fetchone()[0]
         conn.close()
         
@@ -300,9 +308,9 @@ def create_room(room_id: str, extension: Optional[str] = None):
             add_report_message(room_id, "system", SYSTEM_PROMPT, None, extension)
 
 def get_room_history(room_id: str) -> List[Dict[str, str]]:
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = %s ORDER BY timestamp ASC', (room_id,))
+    cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = ? ORDER BY timestamp ASC', (room_id,))
     messages = [{"role": row[0], "content": row[1], "latency_ms": row[2]} for row in cursor.fetchall()]
     conn.close()
     return messages
@@ -333,18 +341,18 @@ def chat_with_agent(room_id: str, user_message: str, model: str = DEFAULT_MODEL)
         return error_msg
 
 def add_user(user_id, password, name, ai_extension=None, ai_model="gemini", ai_model_name="gemini-3.1-flash-lite", role="agent", company_id=None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
+    cursor.execute('INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
                    (user_id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, time.time()))
     conn.commit()
     conn.close()
 
 def get_users(company_id=None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     if company_id is not None:
-        cursor.execute('SELECT id, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at FROM users WHERE company_id = %s', (company_id,))
+        cursor.execute('SELECT id, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at FROM users WHERE company_id = ?', (company_id,))
     else:
         cursor.execute('SELECT id, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at FROM users')
     users = [{"id": row[0], "name": row[1], "ai_extension": row[2], "ai_model": row[3], "ai_model_name": row[4], "role": row[5], "company_id": row[6], "created_at": row[7]} for row in cursor.fetchall()]
@@ -352,17 +360,17 @@ def get_users(company_id=None):
     return users
 
 def delete_user(user_id):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM users WHERE id = %s', (user_id,))
-    cursor.execute('DELETE FROM devices WHERE user_id = %s', (user_id,))
+    cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
+    cursor.execute('DELETE FROM devices WHERE user_id = ?', (user_id,))
     conn.commit()
     conn.close()
 
 def check_user_login(user_id, password):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('SELECT name, role, company_id FROM users WHERE id = %s AND password = %s', (user_id, password))
+    cursor.execute('SELECT name, role, company_id FROM users WHERE id = ? AND password = ?', (user_id, password))
     row = cursor.fetchone()
     conn.close()
     if row:
@@ -370,18 +378,18 @@ def check_user_login(user_id, password):
     return None
 
 def add_device(user_id, name, ip_address, extension, device_type, status, company_id=None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     # Lookup the owner's company_id if not explicitly provided
     if company_id is None:
-        cursor.execute("SELECT company_id FROM users WHERE id = %s", (user_id,))
+        cursor.execute("SELECT company_id FROM users WHERE id = ?", (user_id,))
         row = cursor.fetchone()
         if row:
             company_id = row[0]
             
     # Perform range check validation
     if company_id is not None:
-        cursor.execute("SELECT range_start, range_end FROM companies WHERE id = %s", (company_id,))
+        cursor.execute("SELECT range_start, range_end FROM companies WHERE id = ?", (company_id,))
         comp_row = cursor.fetchone()
         if comp_row and comp_row[0] is not None:
             r_start, r_end = comp_row[0], comp_row[1]
@@ -396,7 +404,7 @@ def add_device(user_id, name, ip_address, extension, device_type, status, compan
 
     cursor.execute('''
         INSERT INTO devices (user_id, name, ip_address, extension, type, status, company_id, created_at) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', (user_id, name, ip_address, extension, device_type, status, company_id, time.time()))
     conn.commit()
     conn.close()
@@ -404,18 +412,18 @@ def add_device(user_id, name, ip_address, extension, device_type, status, compan
     sync_asterisk_config()
 
 def get_user_devices(user_id):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('SELECT id, name, ip_address, extension, type, status, created_at, company_id FROM devices WHERE user_id = %s', (user_id,))
+    cursor.execute('SELECT id, name, ip_address, extension, type, status, created_at, company_id FROM devices WHERE user_id = ?', (user_id,))
     devices = [{"id": row[0], "name": row[1], "ip_address": row[2], "extension": row[3], "type": row[4], "status": row[5], "created_at": row[6], "company_id": row[7]} for row in cursor.fetchall()]
     conn.close()
     return devices
 
 def get_all_devices(company_id=None):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     if company_id is not None:
-        cursor.execute('SELECT id, user_id, name, ip_address, extension, type, status, company_id, created_at FROM devices WHERE company_id = %s', (company_id,))
+        cursor.execute('SELECT id, user_id, name, ip_address, extension, type, status, company_id, created_at FROM devices WHERE company_id = ?', (company_id,))
     else:
         cursor.execute('SELECT id, user_id, name, ip_address, extension, type, status, company_id, created_at FROM devices')
     devices = [{"id": row[0], "user_id": row[1], "name": row[2], "ip_address": row[3], "extension": row[4], "type": row[5], "status": row[6], "company_id": row[7], "created_at": row[8]} for row in cursor.fetchall()]
@@ -423,18 +431,18 @@ def get_all_devices(company_id=None):
     return devices
 
 def delete_device(device_id):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM devices WHERE id = %s', (device_id,))
+    cursor.execute('DELETE FROM devices WHERE id = ?', (device_id,))
     conn.commit()
     conn.close()
     # Trigger Asterisk sync
     sync_asterisk_config()
 
 def get_companies():
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('SELECT id, name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at, agent_name, agent_prompt, agent_voice FROM companies')
+    cursor.execute('SELECT id, name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at, agent_name FROM companies')
     companies = [{
         "id": row[0],
         "name": row[1],
@@ -444,26 +452,24 @@ def get_companies():
         "ai_model": row[5],
         "ai_model_name": row[6],
         "created_at": row[7],
-        "agent_name": row[8],
-        "agent_prompt": row[9],
-        "agent_voice": row[10]
+        "agent_name": row[8]
     } for row in cursor.fetchall()]
     conn.close()
     return companies
 
-def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "alloy"):
-    conn = get_db()
+def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "Ventra"):
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, created_at) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
-    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, time.time()))
-    company_id = cursor.fetchone()[0]
+        INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, created_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, time.time()))
+    company_id = cursor.lastrowid
 
     if admin_id and admin_password:
         cursor.execute('''
             INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (admin_id, admin_password, admin_name or "Admin", ai_extension, ai_model, ai_model_name, 'company_admin', company_id, time.time()))
 
     conn.commit()
@@ -471,20 +477,20 @@ def add_company(name: str, ai_extension: str, range_start: int, range_end: int, 
     # Trigger Asterisk sync
     sync_asterisk_config()
 
-def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "alloy"):
-    conn = get_db()
+def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "Ventra"):
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         UPDATE companies 
-        SET name = %s, ai_extension = %s, range_start = %s, range_end = %s, ai_model = %s, ai_model_name = %s, agent_name = %s, agent_prompt = %s, agent_voice = %s
-        WHERE id = %s
-    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, company_id))
+        SET name = ?, ai_extension = ?, range_start = ?, range_end = ?, ai_model = ?, ai_model_name = ?, agent_name = ?
+        WHERE id = ?
+    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, company_id))
     
     # Also update the associated company_admin user if their model needs updating
     cursor.execute('''
         UPDATE users
-        SET ai_extension = %s, ai_model = %s, ai_model_name = %s
-        WHERE company_id = %s AND role = 'company_admin'
+        SET ai_extension = ?, ai_model = ?, ai_model_name = ?
+        WHERE company_id = ? AND role = 'company_admin'
     ''', (ai_extension, ai_model, ai_model_name, company_id))
     
     conn.commit()
@@ -492,39 +498,43 @@ def update_company(company_id: int, name: str, ai_extension: str, range_start: i
     sync_asterisk_config()
 
 def delete_company(company_id: int):
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM companies WHERE id = %s', (company_id,))
-    cursor.execute('UPDATE users SET company_id = NULL WHERE company_id = %s', (company_id,))
-    cursor.execute('DELETE FROM devices WHERE company_id = %s', (company_id,))
-    cursor.execute('DELETE FROM rooms WHERE company_id = %s', (company_id,))
+    cursor.execute('DELETE FROM companies WHERE id = ?', (company_id,))
+    cursor.execute('UPDATE users SET company_id = NULL WHERE company_id = ?', (company_id,))
+    cursor.execute('DELETE FROM devices WHERE company_id = ?', (company_id,))
+    cursor.execute('DELETE FROM rooms WHERE company_id = ?', (company_id,))
     conn.commit()
     conn.close()
     # Trigger Asterisk sync
     sync_asterisk_config()
 
 def sync_asterisk_config():
+    # 1. Fetch all devices
     import logging
     import socket
-    import paramiko
-    
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT extension FROM devices WHERE extension IS NOT NULL")
     extensions = [row[0] for row in cursor.fetchall() if row[0]]
     
+    # 2. Fetch all companies' AI extensions
     cursor.execute("SELECT ai_extension FROM companies WHERE ai_extension IS NOT NULL")
     ai_extensions = [row[0] for row in cursor.fetchall() if row[0]]
     conn.close()
     
+    # Resolve Host LAN IP
     def get_lan_ip():
         try:
             hostname = socket.gethostname()
             ips = socket.gethostbyname_ex(hostname)[2]
             for ip in ips:
-                if ip.startswith("10.7.11."): return ip
+                if ip.startswith("10.7.11."):
+                    return ip
             for ip in ips:
-                if ip.startswith("10.7."): return ip
+                if ip.startswith("10.7."):
+                    return ip
+            # Fallback
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(('8.8.8.8', 80))
             ip = s.getsockname()[0]
@@ -534,6 +544,7 @@ def sync_asterisk_config():
             return '127.0.0.1'
     lan_ip = get_lan_ip()
     
+    # Generate pjsip_custom.conf
     pjsip_lines = [
         "; Dynamic Transports from Host LAN IP",
         "[transport-udp]",
@@ -562,39 +573,39 @@ def sync_asterisk_config():
         pjsip_lines.append(f"[{ext}](aor-template)")
         pjsip_lines.append("")
         
+    import os
+    asterisk_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "asterisk"))
+    
+    pjsip_path = os.path.join(asterisk_dir, "pjsip_custom.conf")
+    with open(pjsip_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(pjsip_lines))
+        
+    # Generate extensions_custom.conf
     ext_lines = []
+    # Route AI extensions to livekit
     for ai_ext in ai_extensions:
-        # Route AI extensions to livekit running on the Windows LAN IP
-        ext_lines.append(f"exten => {ai_ext},1,Dial(PJSIP/livekit/sip:{ai_ext}@{lan_ip}:5060)")
+        ext_lines.append(f"exten => {ai_ext},1,Dial(PJSIP/livekit/sip:{ai_ext}@livekit-sip:5060)")
         ext_lines.append(f"exten => {ai_ext},n,Hangup()")
         ext_lines.append("")
         
+    # Route individual softphone extensions
     for ext in extensions:
         ext_lines.append(f"exten => {ext},1,Dial(PJSIP/{ext})")
         ext_lines.append(f"exten => {ext},n,Hangup()")
         ext_lines.append("")
         
-    # Write to local Asterisk folder
+    ext_path = os.path.join(asterisk_dir, "extensions_custom.conf")
+    with open(ext_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(ext_lines))
+        
+    # Reload Asterisk configuration
     try:
-        import os
         import subprocess
-        
-        # Determine paths relative to backend directory
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        pjsip_path = os.path.join(base_dir, "asterisk", "pjsip_custom.conf")
-        ext_path = os.path.join(base_dir, "asterisk", "extensions_custom.conf")
-        
-        with open(pjsip_path, 'w') as f:
-            f.write("\n".join(pjsip_lines))
-        with open(ext_path, 'w') as f:
-            f.write("\n".join(ext_lines))
-        
-        # Reload local Asterisk container
-        cmd = ["wsl", "docker", "exec", "voiceagent-asterisk-1", "asterisk", "-rx", "core reload"]
-        subprocess.run(cmd, check=True)
-        logging.info(f"[Asterisk Sync]: Successfully synced to local Docker and reloaded configuration.")
+        # Run pjsip reload and dialplan reload inside WSL Asterisk container
+        subprocess.run(["wsl", "docker", "exec", "voiceagent-asterisk-1", "asterisk", "-rx", "pjsip reload; dialplan reload"], capture_output=True, text=True)
+        logging.info("[Asterisk Sync]: Successfully synced custom endpoints and reloaded configuration.")
     except Exception as e:
-        logging.error(f"[Asterisk Sync Error]: Failed to sync to local Docker: {e}")
+        logging.error(f"[Asterisk Sync Error]: Failed to reload Asterisk: {e}")
 
 def get_user_metrics(user_id):
     devices = get_user_devices(user_id)
@@ -608,11 +619,11 @@ def get_user_metrics(user_id):
             "rooms": {}
         }
         
-    conn = get_db()
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Format placeholders for SQLite IN clause
-    placeholders = ",".join("%s" for _ in extensions)
+    placeholders = ",".join("?" for _ in extensions)
     
     # Total chats matching user device extensions
     cursor.execute(f'SELECT COUNT(*) FROM rooms WHERE extension IN ({placeholders})', extensions)
@@ -621,7 +632,7 @@ def get_user_metrics(user_id):
     # Live chats (active in last 5 minutes) matching extensions
     current_time = time.time()
     five_mins_ago = current_time - 300
-    cursor.execute(f'SELECT COUNT(*) FROM rooms WHERE last_active >= %s AND extension IN ({placeholders})', [five_mins_ago] + extensions)
+    cursor.execute(f'SELECT COUNT(*) FROM rooms WHERE last_active >= ? AND extension IN ({placeholders})', [five_mins_ago] + extensions)
     live_chats = cursor.fetchone()[0]
     
     # Average latency matching extensions
@@ -640,7 +651,7 @@ def get_user_metrics(user_id):
     
     rooms_history = {}
     for r_id, last_active in rows:
-        cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = %s ORDER BY timestamp ASC', (r_id,))
+        cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = ? ORDER BY timestamp ASC', (r_id,))
         messages = [{"role": row[0], "content": row[1], "latency_ms": row[2]} for row in cursor.fetchall()]
         rooms_history[r_id] = {
             "messages": messages,

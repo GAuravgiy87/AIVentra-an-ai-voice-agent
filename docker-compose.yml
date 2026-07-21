@@ -1,4 +1,16 @@
 services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ventra
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   livekit:
     image: livekit/livekit-server:latest
     restart: always
@@ -36,15 +48,15 @@ services:
     image: andrius/asterisk:latest
     restart: always
     ports:
-      - "0.0.0.0:5061:5060/udp"
-      - "0.0.0.0:5061:5060/tcp" # Map to 5061 on host for TCP connection
-      - "0.0.0.0:20000:20000/udp"
-      - "0.0.0.0:20001:20001/udp"
-      - "0.0.0.0:20002:20002/udp"
-      - "0.0.0.0:20003:20003/udp"
-      - "0.0.0.0:20004:20004/udp"
-      - "0.0.0.0:20005:20005/udp"
+      - "5061:5060/tcp"
+      - "5061:5060/udp"
+      - "20000-20020:20000-20020/udp"
     volumes:
       - ./asterisk/pjsip.conf:/etc/asterisk/pjsip.conf
+      - ./asterisk/pjsip_custom.conf:/etc/asterisk/pjsip_custom.conf
       - ./asterisk/extensions.conf:/etc/asterisk/extensions.conf
+      - ./asterisk/extensions_custom.conf:/etc/asterisk/extensions_custom.conf
       - ./asterisk/rtp.conf:/etc/asterisk/rtp.conf
+
+volumes:
+  pgdata:

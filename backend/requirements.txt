@@ -11,3 +11,7 @@ piper-tts
 librosa
 numpy
 vosk
+
+psycopg2-binary
+PyJWT
+paramiko

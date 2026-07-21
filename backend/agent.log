@@ -2695,3 +2695,356 @@ RuntimeError: expected m1 and m2 to have the same dtype, but got: float != doubl
 2026-07-18 11:38:28,340 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-18 11:40:28,771 [INFO] livekit.agents: shutting down worker
 2026-07-18 11:40:28,784 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 8
+2026-07-18 11:51:12,350 [INFO] livekit.agents: starting worker
+2026-07-18 11:51:12,350 [INFO] livekit.agents: plugin registered
+2026-07-18 11:51:12,350 [INFO] livekit.agents: plugin registered
+2026-07-18 11:51:12,369 [INFO] livekit.agents: HTTP server listening on :56961
+2026-07-18 11:51:12,763 [INFO] livekit.agents: registered worker
+2026-07-18 11:51:22,046 [INFO] livekit.agents: received job request
+2026-07-18 11:51:22,048 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:51:22,058 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:51:22,059 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:51:22,207 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:51:32,070 [WARNING] livekit.agents: The room connection was not established within 10 seconds after calling job_entry. This might mean that job_ctx.connect() was never invoked, or that no AgentSession with an active RoomIO has been started.
+2026-07-18 11:51:37,231 [WARNING] livekit: livekit::rtc_engine:516:livekit::rtc_engine - failed to connect: Connection("wait_pc_connection timed out"), retrying... (1/3)
+2026-07-18 11:51:37,232 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:51:37,523 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:51:38,648 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:51:38,648 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:51:39,035 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_GcRkt95LTTiF.
+2026-07-18 11:51:39,035 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 11:51:39,616 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:51:44,682 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-18 11:52:24,877 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 11:52:24,885 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 11:52:28,941 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 11:52:35,019 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 11:52:43,077 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 11:52:52,715 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 11:53:02,722 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 11:53:12,746 [INFO] livekit.agents: registered worker
+2026-07-18 11:53:40,839 [INFO] livekit.agents: received job request
+2026-07-18 11:53:40,840 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 11:53:40,849 [INFO] livekit.agents: initializing job runner
+2026-07-18 11:53:40,850 [INFO] livekit.agents: job runner initialized
+2026-07-18 11:53:40,853 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 11:53:41,135 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 11:53:42,214 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 11:53:42,214 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 11:53:42,592 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_E8QtwzLYVa9B.
+2026-07-18 11:53:42,592 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 11:53:42,836 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 11:54:07,846 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 12:50:43,412 [INFO] livekit.agents: starting worker
+2026-07-18 12:50:43,412 [INFO] livekit.agents: plugin registered
+2026-07-18 12:50:43,413 [INFO] livekit.agents: plugin registered
+2026-07-18 12:50:43,423 [INFO] livekit.agents: HTTP server listening on :63514
+2026-07-18 12:50:43,861 [INFO] livekit.agents: registered worker
+2026-07-18 12:50:43,945 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 12:50:43,954 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 12:50:48,003 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 12:50:54,039 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 12:51:02,051 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 12:51:12,092 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:51:24,130 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:51:36,178 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:51:48,214 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:52:04,356 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:52:19,596 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:52:31,621 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:52:42,132 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:52:54,178 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:53:06,226 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:53:18,252 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 12:53:28,271 [ERROR] livekit.agents: Error in _connection_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 1158, in _connection_task
+    raise RuntimeError(
+RuntimeError: failed to connect to livekit after 16 attempts
+2026-07-18 12:53:28,291 [ERROR] livekit.agents: worker failed
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\cli\cli.py", line 318, in _worker_run
+    await server.run(devmode=devmode, unregistered=False)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 855, in run
+    await self._close_future
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 1158, in _connection_task
+    raise RuntimeError(
+RuntimeError: failed to connect to livekit after 16 attempts
+2026-07-18 12:53:28,303 [INFO] livekit.agents: shutting down worker
+2026-07-18 13:03:26,838 [INFO] livekit.agents: starting worker
+2026-07-18 13:03:26,838 [INFO] livekit.agents: plugin registered
+2026-07-18 13:03:26,838 [INFO] livekit.agents: plugin registered
+2026-07-18 13:03:26,854 [INFO] livekit.agents: HTTP server listening on :51418
+2026-07-18 13:03:27,213 [INFO] livekit.agents: registered worker
+2026-07-18 13:03:29,211 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 13:03:29,221 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 13:03:33,248 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 13:03:39,282 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 13:03:47,332 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 13:03:57,354 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:04:09,368 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:04:21,407 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:04:33,436 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:04:45,455 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:04:57,480 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:05:09,509 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:05:21,543 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:05:33,532 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:05:45,576 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:05:57,606 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:06:09,622 [ERROR] livekit.agents: Error in _connection_task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 1158, in _connection_task
+    raise RuntimeError(
+RuntimeError: failed to connect to livekit after 16 attempts
+2026-07-18 13:06:09,627 [ERROR] livekit.agents: worker failed
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\cli\cli.py", line 318, in _worker_run
+    await server.run(devmode=devmode, unregistered=False)
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 855, in run
+    await self._close_future
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\utils\log.py", line 17, in async_fn_logs
+    return await fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\worker.py", line 1158, in _connection_task
+    raise RuntimeError(
+RuntimeError: failed to connect to livekit after 16 attempts
+2026-07-18 13:06:09,629 [INFO] livekit.agents: shutting down worker
+2026-07-18 13:13:32,465 [INFO] livekit.agents: starting worker
+2026-07-18 13:13:32,479 [INFO] livekit.agents: plugin registered
+2026-07-18 13:13:32,479 [INFO] livekit.agents: plugin registered
+2026-07-18 13:13:32,492 [INFO] livekit.agents: HTTP server listening on :63091
+2026-07-18 13:13:34,851 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 13:13:36,868 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 13:13:40,891 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 13:13:46,961 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 13:13:54,983 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 13:18:39,027 [INFO] livekit.agents: starting worker
+2026-07-18 13:18:39,027 [INFO] livekit.agents: plugin registered
+2026-07-18 13:18:39,027 [INFO] livekit.agents: plugin registered
+2026-07-18 13:18:39,041 [INFO] livekit.agents: HTTP server listening on :57949
+2026-07-18 13:18:41,407 [WARNING] livekit.agents: failed to connect to livekit, retrying in 0s
+2026-07-18 13:18:43,418 [WARNING] livekit.agents: failed to connect to livekit, retrying in 2s
+2026-07-18 13:18:47,435 [WARNING] livekit.agents: failed to connect to livekit, retrying in 4s
+2026-07-18 13:18:53,471 [WARNING] livekit.agents: failed to connect to livekit, retrying in 6s
+2026-07-18 13:19:01,520 [WARNING] livekit.agents: failed to connect to livekit, retrying in 8s
+2026-07-18 13:19:11,535 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:19:23,592 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:19:41,749 [WARNING] livekit.agents: failed to connect to livekit, retrying in 10s
+2026-07-18 13:21:32,131 [INFO] livekit.agents: starting worker
+2026-07-18 13:21:32,131 [INFO] livekit.agents: plugin registered
+2026-07-18 13:21:32,132 [INFO] livekit.agents: plugin registered
+2026-07-18 13:21:32,149 [INFO] livekit.agents: HTTP server listening on :60663
+2026-07-18 13:21:32,517 [INFO] livekit.agents: registered worker
+2026-07-18 13:25:02,491 [INFO] livekit.agents: shutting down worker
+2026-07-18 13:31:18,452 [INFO] livekit.agents: starting worker
+2026-07-18 13:31:18,452 [INFO] livekit.agents: plugin registered
+2026-07-18 13:31:18,452 [INFO] livekit.agents: plugin registered
+2026-07-18 13:31:18,468 [INFO] livekit.agents: HTTP server listening on :49510
+2026-07-18 13:31:18,838 [INFO] livekit.agents: registered worker
+2026-07-18 13:32:07,268 [INFO] livekit.agents: received job request
+2026-07-18 13:32:07,270 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 13:32:07,281 [INFO] livekit.agents: initializing job runner
+2026-07-18 13:32:07,281 [INFO] livekit.agents: job runner initialized
+2026-07-18 13:32:08,203 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 13:32:08,505 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 13:32:09,662 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 13:32:10,997 [ERROR] livekit.agents: unhandled exception while running the job task
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\opentelemetry\util\_decorator.py", line 71, in async_wrapper
+    return await func(*args, **kwargs)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\ipc\job_proc_lazy_main.py", line 334, in _traceable_entrypoint
+    await self._job_entrypoint_fnc(job_ctx)
+  File "D:\voiceagent\backend\livekit_agent.py", line 310, in entrypoint
+    fcontext = CallTransferTool(caller_number or "100", range_start=range_start, range_end=range_end)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\voiceagent\backend\livekit_agent.py", line 112, in __init__
+    super().__init__()
+TypeError: ToolContext.__init__() missing 1 required positional argument: 'tools'
+2026-07-18 13:40:56,008 [INFO] livekit.agents: starting worker
+2026-07-18 13:40:56,008 [INFO] livekit.agents: plugin registered
+2026-07-18 13:40:56,008 [INFO] livekit.agents: plugin registered
+2026-07-18 13:40:56,018 [INFO] livekit.agents: HTTP server listening on :58309
+2026-07-18 13:40:56,376 [INFO] livekit.agents: registered worker
+2026-07-18 13:44:12,003 [INFO] livekit.agents: received job request
+2026-07-18 13:44:12,005 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 13:44:12,014 [INFO] livekit.agents: initializing job runner
+2026-07-18 13:44:12,014 [INFO] livekit.agents: job runner initialized
+2026-07-18 13:44:12,182 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 13:44:12,487 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 13:44:13,598 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 13:44:13,599 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 13:44:14,016 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_sGBtaQmHGrop.
+2026-07-18 13:44:14,016 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 13:44:15,617 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 13:44:17,311 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 13:44:40,373 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 13:44:40,376 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 13:53:47,623 [INFO] livekit.agents: starting worker
+2026-07-18 13:53:47,623 [INFO] livekit.agents: plugin registered
+2026-07-18 13:53:47,623 [INFO] livekit.agents: plugin registered
+2026-07-18 13:53:47,638 [INFO] livekit.agents: HTTP server listening on :54662
+2026-07-18 13:53:48,007 [INFO] livekit.agents: registered worker
+2026-07-18 13:56:44,030 [INFO] livekit.agents: received job request
+2026-07-18 13:56:44,031 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 13:56:44,039 [INFO] livekit.agents: initializing job runner
+2026-07-18 13:56:44,040 [INFO] livekit.agents: job runner initialized
+2026-07-18 13:56:44,939 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 13:56:45,236 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 13:56:46,343 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 13:56:46,343 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 13:56:46,770 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_k5KUVmTeCiSL.
+2026-07-18 13:56:46,770 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 13:57:00,087 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-18 13:57:00,106 [WARNING] livekit.agents: cloud turn detector failed (turn detector connection timed out); falling back to local mini model
+2026-07-18 13:57:00,332 [ERROR] livekit: livekit_ffi::server::room:1041:livekit_ffi::server::room - signal_event taking too much time: ConnectionQualityChanged { quality: Excellent, participant: Local(LocalParticipant { sid: ParticipantSid("PA_QFW9CNdGwbaE"), identity: ParticipantIdentity("agent-AJ_H9UpLvsraqwq"), name: "", state: Active }) }
+2026-07-18 13:59:11,266 [INFO] livekit.agents: starting worker
+2026-07-18 13:59:11,266 [INFO] livekit.agents: plugin registered
+2026-07-18 13:59:11,267 [INFO] livekit.agents: plugin registered
+2026-07-18 13:59:11,278 [INFO] livekit.agents: HTTP server listening on :56398
+2026-07-18 13:59:11,639 [INFO] livekit.agents: registered worker
+2026-07-18 13:59:28,974 [INFO] livekit.agents: received job request
+2026-07-18 13:59:28,975 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 13:59:28,984 [INFO] livekit.agents: initializing job runner
+2026-07-18 13:59:28,985 [INFO] livekit.agents: job runner initialized
+2026-07-18 13:59:29,164 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 13:59:29,465 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 13:59:30,609 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 13:59:30,610 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 13:59:31,013 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_eiYowMegKuUQ.
+2026-07-18 13:59:31,013 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 13:59:31,417 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 13:59:57,363 [ERROR] livekit: livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_reliable' closed unexpectedly
+2026-07-18 13:59:57,370 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 13:59:57,371 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-18 14:07:06,566 [INFO] livekit.agents: starting worker
+2026-07-18 14:07:06,567 [INFO] livekit.agents: plugin registered
+2026-07-18 14:07:06,567 [INFO] livekit.agents: plugin registered
+2026-07-18 14:07:06,576 [INFO] livekit.agents: HTTP server listening on :51438
+2026-07-18 14:07:06,934 [INFO] livekit.agents: registered worker
+2026-07-18 14:07:45,421 [INFO] livekit.agents: received job request
+2026-07-18 14:07:45,422 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-18 14:07:45,431 [INFO] livekit.agents: initializing job runner
+2026-07-18 14:07:45,431 [INFO] livekit.agents: job runner initialized
+2026-07-18 14:07:45,592 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-18 14:07:45,889 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-18 14:07:47,006 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-18 14:07:47,007 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-18 14:07:47,420 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_GYdNjBUp7PoZ.
+2026-07-18 14:07:47,421 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-18 14:07:49,115 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-18 14:08:10,369 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 11:14:53,787 [INFO] livekit.agents: starting worker
+2026-07-21 11:14:53,788 [INFO] livekit.agents: plugin registered
+2026-07-21 11:14:53,788 [INFO] livekit.agents: plugin registered
+2026-07-21 11:14:53,803 [INFO] livekit.agents: HTTP server listening on :50376
+2026-07-21 11:14:54,176 [INFO] livekit.agents: registered worker
+2026-07-21 11:16:22,630 [INFO] livekit.agents: received job request
+2026-07-21 11:16:22,632 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 11:16:22,642 [INFO] livekit.agents: initializing job runner
+2026-07-21 11:16:22,643 [INFO] livekit.agents: job runner initialized
+2026-07-21 11:16:24,077 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 11:16:24,445 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 11:16:25,611 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 11:16:25,612 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 11:16:37,873 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_r6fDcw4EcoUt.
+2026-07-21 11:16:37,873 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 11:16:56,303 [INFO] livekit.agents: received job request
+2026-07-21 11:16:56,307 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 11:16:56,322 [INFO] livekit.agents: initializing job runner
+2026-07-21 11:16:56,323 [INFO] livekit.agents: job runner initialized
+2026-07-21 11:16:56,327 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 11:16:56,339 [WARNING] livekit.agents: cloud turn detector failed (turn detector connection timed out); falling back to local mini model
+2026-07-21 11:17:31,103 [WARNING] livekit.agents: The room connection was not established within 10 seconds after calling job_entry. This might mean that job_ctx.connect() was never invoked, or that no AgentSession with an active RoomIO has been started.
+2026-07-21 11:17:34,216 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 11:17:34,300 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 11:17:34,304 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 11:17:34,322 [ERROR] livekit: livekit_ffi::server::room:1041:livekit_ffi::server::room - signal_event taking too much time: ConnectionStateChanged(Disconnected)
+2026-07-21 11:17:36,511 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 11:17:36,512 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 11:17:37,410 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_eHFNFLDGqgX5.
+2026-07-21 11:17:37,410 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 11:17:43,684 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 11:17:45,619 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 11:17:45,620 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 11:17:46,114 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 11:17:46,116 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 11:17:49,212 [WARNING] livekit.agents: entrypoint did not exit in time, cancelling
+2026-07-21 11:18:09,346 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 11:18:09,347 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:17:26,880 [INFO] livekit.agents: starting worker
+2026-07-21 13:17:26,881 [INFO] livekit.agents: plugin registered
+2026-07-21 13:17:26,881 [INFO] livekit.agents: plugin registered
+2026-07-21 13:17:26,899 [INFO] livekit.agents: HTTP server listening on :64530
+2026-07-21 13:17:27,260 [INFO] livekit.agents: registered worker
+2026-07-21 13:20:00,933 [INFO] livekit.agents: starting worker
+2026-07-21 13:20:00,933 [INFO] livekit.agents: plugin registered
+2026-07-21 13:20:00,933 [INFO] livekit.agents: plugin registered
+2026-07-21 13:20:00,948 [INFO] livekit.agents: HTTP server listening on :62041
+2026-07-21 13:20:01,303 [INFO] livekit.agents: registered worker
+2026-07-21 13:20:24,657 [INFO] livekit.agents: received job request
+2026-07-21 13:20:24,658 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 13:20:24,670 [INFO] livekit.agents: initializing job runner
+2026-07-21 13:20:24,671 [INFO] livekit.agents: job runner initialized
+2026-07-21 13:20:30,020 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 13:20:31,763 [WARNING] root: Failed to query routing DB: name 'get_db' is not defined
+2026-07-21 13:20:33,329 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 13:20:34,487 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 13:20:34,488 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 13:20:37,512 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_wjrp6V2Jjqia.
+2026-07-21 13:20:37,513 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 13:20:51,180 [INFO] root: Participant disconnected: sip_100
+2026-07-21 13:20:51,184 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:20:51,226 [WARNING] livekit.agents: cloud turn detector failed (turn detector connection timed out); falling back to local mini model
+2026-07-21 13:21:08,597 [INFO] livekit.agents: received job request
+2026-07-21 13:21:08,598 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-21 13:21:08,610 [INFO] livekit.agents: initializing job runner
+2026-07-21 13:21:08,612 [INFO] livekit.agents: job runner initialized
+2026-07-21 13:21:08,614 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-21 13:21:09,112 [WARNING] root: Failed to query routing DB: name 'get_db' is not defined
+2026-07-21 13:21:09,113 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-21 13:21:09,628 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:21:09,630 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:21:10,225 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-21 13:21:10,226 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-21 13:21:15,691 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_gxWJujTLgo8C.
+2026-07-21 13:21:15,696 [INFO] root: [Ventra Greeting]: Hello, welcome to D E I Lab! I am Ventra. How can I help you?
+2026-07-21 13:21:15,976 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-21 13:21:46,126 [INFO] root: [User]: I think
+2026-07-21 13:21:47,900 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:21:47,901 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:21:48,520 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:21:48,521 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:21:48,562 [INFO] root: [User]: Tell me about 5D.
+2026-07-21 13:22:05,729 [INFO] root: [Vantara]: 5D refers to fifth-dimensional technology, often used in spatial computing and advanced data visualization to create immersive experiences. Would you like more information or to speak with someone regarding this?
+2026-07-21 13:22:13,745 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:22:13,745 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-21 13:22:13,775 [INFO] root: [User]: forward called to extends and 1 0 0.
+2026-07-21 13:22:14,535 [INFO] root: [Call Transfer]: Requested transfer of caller 101 to extension 100
+2026-07-21 13:22:14,790 [INFO] root: [Call Transfer]: Found channel PJSIP/101-00000002. Redirecting to 100...
+2026-07-21 13:22:15,026 [ERROR] livekit.agents: exception occurred while executing tool
+Traceback (most recent call last):
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\generation.py", line 808, in _traceable_fnc_tool
+    val = await function_callable()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\tool_executor.py", line 419, in execute
+    return await first_update_fut
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\livekit\agents\voice\tool_executor.py", line 304, in _execute_tool
+    output = await tool(*fnc_args, **fnc_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object str can't be used in 'await' expression
+2026-07-21 13:22:15,058 [INFO] root: Participant disconnected: sip_101
+2026-07-21 13:22:25,015 [INFO] root: [Vantara]: I apologize, but I am currently unable to transfer the call. Please hold while I attempt to reconnect you, or you may try again in a moment.
+2026-07-21 13:22:35,633 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-21 13:22:35,634 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed

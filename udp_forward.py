@@ -18,71 +18,89 @@ def get_wsl_ip():
 WSL_IP = get_wsl_ip()
 print(f"Resolved WSL IP: {WSL_IP}", flush=True)
 
+def get_lan_ip():
+    try:
+        hostname = socket.gethostname()
+        ips = socket.gethostbyname_ex(hostname)[2]
+        for ip in ips:
+            if ip.startswith("10.7.11."):
+                return ip
+        for ip in ips:
+            if ip.startswith("10.7."):
+                return ip
+        # Fallback
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return '0.0.0.0'
+
+LAN_IP = get_lan_ip()
+print(f"Resolved Windows LAN IP: {LAN_IP}", flush=True)
+
 def forward(port):
     try:
+        # Main socket bound to port for receiving external phone traffic
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.bind(('0.0.0.0', port))
+        
+        # Track client sockets to support multiple concurrent devices (e.g. MicroSIP and Mobile Phone)
+        client_sockets = {}
+        client_sockets_lock = threading.Lock()
+        
         print(f"Forwarding 0.0.0.0:{port} <-> {WSL_IP}:{port}", flush=True)
         
-        last_external_addr = None
-        
         while True:
-            data, addr = sock.recvfrom(4096)
-            if addr[0] != WSL_IP:
-                # Packet from mobile phone/external device
-                last_external_addr = addr
-                sock.sendto(data, (WSL_IP, port))
-                print(f"[{port}] {addr} -> WSL", flush=True)
-            else:
-                # Return packet from WSL/Asterisk
-                if last_external_addr:
-                    sock.sendto(data, last_external_addr)
-                    print(f"[{port}] WSL -> {last_external_addr}", flush=True)
+            try:
+                data, addr = sock.recvfrom(4096)
+                if port == 5061:
+                    print(f"[UDP 5061] Received {len(data)} bytes from {addr}", flush=True)
+                is_wsl = (
+                    addr[0] == WSL_IP or 
+                    addr[0].startswith('172.')
+                )
+                if not is_wsl:
+                    with client_sockets_lock:
+                        if addr not in client_sockets:
+                            client_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                            client_sock.bind(('0.0.0.0', 0))
+                            
+                            def receive_from_asterisk(c_sock, c_addr):
+                                while True:
+                                    try:
+                                        resp_data, resp_addr = c_sock.recvfrom(4096)
+                                        sock.sendto(resp_data, c_addr)
+                                    except Exception:
+                                        break
+                                        
+                            threading.Thread(target=receive_from_asterisk, args=(client_sock, addr), daemon=True).start()
+                            client_sockets[addr] = client_sock
+                        
+                        target_sock = client_sockets[addr]
+                    
+                    target_sock.sendto(data, (WSL_IP, port))
+            except ConnectionResetError:
+                # Windows throws WinError 10054 on UDP socket if previous send failed. Ignore it.
+                continue
+            except Exception as e:
+                print(f"[Port {port}] Error in receive loop: {e}", flush=True)
+                continue
     except Exception as e:
         print(f"Failed to bind port {port}: {e}")
 
-def forward_tcp(port):
-    def handle_client(client_sock):
-        try:
-            remote_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            remote_sock.connect(('127.0.0.1', port))
-            
-            def pipe(src, dst):
-                try:
-                    while True:
-                        data = src.recv(4096)
-                        if not data:
-                            break
-                        dst.sendall(data)
-                except Exception:
-                    pass
-                finally:
-                    src.close()
-                    dst.close()
-            
-            threading.Thread(target=pipe, args=(client_sock, remote_sock), daemon=True).start()
-            threading.Thread(target=pipe, args=(remote_sock, client_sock), daemon=True).start()
-        except Exception as e:
-            print(f"[TCP {port}] Forwarding error: {e}")
-            client_sock.close()
+print(f"Forwarding TCP is now handled natively by Docker", flush=True)
 
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    try:
-        server.bind(('0.0.0.0', port))
-        server.listen(100)
-        print(f"Forwarding TCP 0.0.0.0:{port} <-> 127.0.0.1:{port}", flush=True)
-        while True:
-            client, addr = server.accept()
-            threading.Thread(target=handle_client, args=(client,), daemon=True).start()
-    except Exception as e:
-        print(f"Failed to bind TCP port {port}: {e}")
-
-for p in range(20000, 20006):
+for p in range(20000, 20021):
     threading.Thread(target=forward, args=(p,), daemon=True).start()
 
-# Forward TCP port 5061 for SIP signaling
-threading.Thread(target=forward_tcp, args=(5061,), daemon=True).start()
+for p in range(50000, 50051):
+    threading.Thread(target=forward, args=(p,), daemon=True).start()
+
+# Forward UDP port 5061 for SIP signaling
+threading.Thread(target=forward, args=(5061,), daemon=True).start()
+
 
 try:
     while True:

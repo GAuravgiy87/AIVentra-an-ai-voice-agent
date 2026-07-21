@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Lock, Mail, ShieldCheck, Eye, EyeOff, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, User, ShieldCheck, Eye, EyeOff, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
 
-export default function AdminLogin({ onLoginSuccess, onBack }) {
-  const [email, setEmail]       = useState('admin@vantara.ai');
+export default function Login({ onLoginSuccess, onBack }) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [error, setError]       = useState('');
@@ -10,35 +10,28 @@ export default function AdminLogin({ onLoginSuccess, onBack }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
+    if (!username.trim() || !password.trim()) return;
     setLoading(true);
     setError('');
 
-    // Professional validation rule
-    if (email.trim().toLowerCase() !== 'admin@vantara.ai') {
-      setError('Access Denied. Invalid administrator account.');
-      setLoading(false);
-      return;
-    }
-
     try {
-      const res = await fetch('http://localhost:8001/api/admin/login', {
+      const res = await fetch('http://localhost:8001/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username: username.trim(), password }),
       });
-      if (res.ok) {
-        onLoginSuccess();
+      const data = await res.json();
+      if (res.ok && data.success) {
+        onLoginSuccess(data);
       } else {
-        setError('Authentication failed. Invalid passcode.');
-        setPassword('');
+        setError(data.detail || 'Authentication failed. Please check your credentials.');
       }
-    } catch {
-      // Offline fallback login for demonstration/development
-      if (password === 'admin123') {
-        onLoginSuccess();
+    } catch (err) {
+      // Local offline fallback login for developers
+      if (username.trim().toLowerCase() === 'admin' && password === 'admin') {
+        onLoginSuccess({ role: 'super_admin', id: 'admin', name: 'Vantara Director', company_id: null });
       } else {
-        setError('Cannot contact credential vault. Confirm backend is online.');
+        setError('Cannot contact server. Confirm the backend API is running.');
       }
     } finally {
       setLoading(false);
@@ -75,30 +68,30 @@ export default function AdminLogin({ onLoginSuccess, onBack }) {
             </div>
           </div>
           <h2 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 6 }}>
-            Vantara Administration Console
+            Vantara Sign In
           </h2>
           <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-            Sign in with your enterprise credentials to access live SIP extensions, performance charts, and call transcription records.
+            Sign in with your credentials to manage your SIP extensions, monitor live calls, or access the admin panel.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
           
-          {/* Email input */}
+          {/* User ID input */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Administrator Email
+              User ID
             </label>
             <div style={{ position: 'relative' }}>
               <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', display: 'flex', pointerEvents: 'none' }}>
-                <Mail size={15} color="var(--text-muted)" />
+                <User size={15} color="var(--text-muted)" />
               </span>
               <input
-                type="email"
-                placeholder="admin@ventra.ai"
-                value={email}
-                onChange={e => { setEmail(e.target.value); setError(''); }}
+                type="text"
+                placeholder="Enter User ID"
+                value={username}
+                onChange={e => { setUsername(e.target.value); setError(''); }}
                 style={{
                   width: '100%', boxSizing: 'border-box', border: '1px solid var(--border)',
                   background: '#ffffff', color: 'var(--text-primary)', borderRadius: 12,
@@ -113,7 +106,7 @@ export default function AdminLogin({ onLoginSuccess, onBack }) {
           {/* Password input */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Secret Password
+              Password
             </label>
             <div style={{ position: 'relative' }}>
               <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', display: 'flex', pointerEvents: 'none' }}>
@@ -160,7 +153,7 @@ export default function AdminLogin({ onLoginSuccess, onBack }) {
 
           <button
             type="submit"
-            disabled={loading || !password.trim()}
+            disabled={loading || !username.trim() || !password.trim()}
             className="btn-primary"
             style={{
               width: '100%', padding: '14px', borderRadius: 12,
@@ -171,7 +164,7 @@ export default function AdminLogin({ onLoginSuccess, onBack }) {
             {loading ? (
               <>Signing in...</>
             ) : (
-              <>Sign In to Admin Portal <ArrowRight size={15} /></>
+              <>Sign In <ArrowRight size={15} /></>
             )}
           </button>
         </form>
