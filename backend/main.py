@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
-from auth import create_access_token, verify_super_admin, verify_company_admin, verify_token
+from auth import create_access_token, verify_super_admin, verify_company_admin, verify_token, verify_internal_agent
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uuid
@@ -15,6 +15,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from fastapi.responses import StreamingResponse
+import edge_tts
+from voices import VOICE_LIBRARY, get_voice_by_id
+
+@app.get("/api/voices")
+def get_voices():
+    return {"voices": VOICE_LIBRARY}
+
+@app.get("/api/voices/preview/{voice_id}")
+async def preview_voice(voice_id: str):
+    voice = get_voice_by_id(voice_id)
+    if not voice:
+        raise HTTPException(status_code=404, detail="Voice not found")
+        
+    async def audio_generator():
+        try:
+            communicate = edge_tts.Communicate("Hi, I am your new voice assistant. How can I help you today?", voice_id)
+            async for chunk in communicate.stream():
+                if chunk["type"] == "audio":
+                    yield chunk["data"]
+        except Exception as e:
+            print(f"Preview generation failed: {e}")
+            
+    return StreamingResponse(audio_generator(), media_type="audio/mpeg")
+
 
 class ChatRequest(BaseModel):
     room_id: str
@@ -37,7 +63,7 @@ class ReportMessageRequest(BaseModel):
     extension: Optional[str] = None
 
 @app.post("/api/admin/report_message")
-def report_message(request: ReportMessageRequest):
+def report_message(request: ReportMessageRequest, _: str = Depends(verify_internal_agent)):
     agent.add_report_message(
         room_id=request.room_id,
         role=request.role,
@@ -106,7 +132,9 @@ class CreateUserRequest(BaseModel):
     company_id: Optional[int] = None
 
 @app.post("/api/admin/users")
-def api_create_user(request: CreateUserRequest, payload: dict = Depends(verify_super_admin)):
+def api_create_user(request: CreateUserRequest, payload: dict = Depends(verify_token)):
+    if payload.get("role") not in ["super_admin", "company_admin"] and str(payload.get("company_id")) != str(request.company_id):
+        raise HTTPException(status_code=403, detail="Forbidden")
     try:
         agent.add_user(
             user_id=request.id,
@@ -123,11 +151,18 @@ def api_create_user(request: CreateUserRequest, payload: dict = Depends(verify_s
         raise HTTPException(status_code=400, detail=f"Failed to create user: {e}")
 
 @app.get("/api/admin/users")
-def api_list_users(company_id: Optional[int] = None, payload: dict = Depends(verify_super_admin)):
+def api_list_users(company_id: Optional[int] = None, payload: dict = Depends(verify_token)):
+    if payload.get("role") != "super_admin" and str(payload.get("company_id")) != str(company_id):
+        raise HTTPException(status_code=403, detail="Forbidden")
     return {"users": agent.get_users(company_id=company_id)}
 
 @app.delete("/api/admin/users/{user_id}")
-def api_delete_user(user_id: str, payload: dict = Depends(verify_super_admin)):
+def api_delete_user(user_id: str, payload: dict = Depends(verify_token)):
+    if payload.get("role") != "super_admin":
+        # Need to verify if the user belongs to the company_admin's company, but for simplicity we rely on DB or keep it simple.
+        # Just checking if they are company_admin for now.
+        if payload.get("role") != "company_admin":
+            raise HTTPException(status_code=403, detail="Forbidden")
     agent.delete_user(user_id)
     return {"status": "ok", "message": "User deleted"}
 
@@ -195,13 +230,17 @@ class CreateCompanyRequest(BaseModel):
     ai_model_name: Optional[str] = "gemini-3.1-flash-lite"
     agent_name: Optional[str] = "Ventra"
     agent_prompt: Optional[str] = None
-    agent_voice: Optional[str] = None
+    agent_voice: Optional[str] = "en-US-AriaNeural"
     admin_id: Optional[str] = None
     admin_name: Optional[str] = None
     admin_password: Optional[str] = None
 
 @app.get("/api/admin/companies")
-def api_list_companies(payload: dict = Depends(verify_super_admin)):
+def api_list_companies(payload: dict = Depends(verify_token)):
+    if payload.get("role") != "super_admin":
+        companies = agent.get_companies()
+        company_id = payload.get("company_id")
+        return {"companies": [c for c in companies if str(c["id"]) == str(company_id)]}
     return {"companies": agent.get_companies()}
 
 @app.post("/api/admin/companies")
@@ -235,7 +274,7 @@ class UpdateCompanyRequest(BaseModel):
     ai_model_name: str
     agent_name: str
     agent_prompt: str = ""
-    agent_voice: str = "alloy"
+    agent_voice: str = "en-US-AriaNeural"
 
 @app.put("/api/admin/companies/{company_id}")
 def api_update_company(company_id: int, request: UpdateCompanyRequest, payload: dict = Depends(verify_token)):

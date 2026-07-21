@@ -27,12 +27,7 @@ export default function Login({ onLoginSuccess, onBack }) {
         setError(data.detail || 'Authentication failed. Please check your credentials.');
       }
     } catch (err) {
-      // Local offline fallback login for developers
-      if (username.trim().toLowerCase() === 'admin' && password === 'admin') {
-        onLoginSuccess({ role: 'super_admin', id: 'admin', name: 'Vantara Director', company_id: null });
-      } else {
-        setError('Cannot contact server. Confirm the backend API is running.');
-      }
+      setError('Cannot contact server. Confirm the backend API is running.');
     } finally {
       setLoading(false);
     }

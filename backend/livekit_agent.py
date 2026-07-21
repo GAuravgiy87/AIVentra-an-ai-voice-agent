@@ -10,12 +10,13 @@ import asyncio
 from livekit import agents, rtc
 from livekit.plugins import google
 from whisper_stt import WhisperSTT
-from piper_tts import PiperTTSWrapper, BilingualPiperTTS
+from edge_tts_wrapper import EdgeTTSWrapper
 from livekit.agents.llm import ChatContext
 from google.genai import types
 import livekit.plugins.silero as silero
 import json
 import redis
+from agent import get_db
 
 # Global Redis client
 try:
@@ -38,11 +39,7 @@ load_dotenv()
 import aiohttp
 
 print("Loading AI Models into memory (this will take a few seconds)...")
-stt_model = WhisperSTT(model_name="tiny")
-tts_model = BilingualPiperTTS(
-    en_model_path="D:/voiceagent/backend/piper/en_US-amy-medium.onnx",
-    hi_model_path="D:/voiceagent/backend/piper/hi_IN-pratham-medium.onnx"
-)
+stt_model = WhisperSTT(model_name="small")
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
 
@@ -56,7 +53,8 @@ async def report_to_dashboard_async(room_id: str, role: str, content: str, laten
                 "latency_ms": latency_ms,
                 "extension": extension
             }
-            async with session_http.post("http://localhost:8001/api/admin/report_message", json=payload) as response:
+            headers = {"X-Internal-Token": os.getenv("INTERNAL_API_KEY", "ventra_internal_secure_123")}
+            async with session_http.post("http://localhost:8001/api/admin/report_message", json=payload, headers=headers) as response:
                 await response.read()
     except Exception as e:
         logging.warning(f"Failed to report message to dashboard: {e}")
@@ -147,9 +145,11 @@ class CallTransferTool:
             
             import subprocess
             import asyncio
+            import os
             
             def run_local_asterisk():
-                cmd = ["wsl", "docker", "exec", "voiceagent-asterisk-1", "asterisk", "-rx", "core show channels concise"]
+                docker_cmd = ["wsl", "docker"] if os.name == 'nt' else ["docker"]
+                cmd = docker_cmd + ["exec", "voiceagent-asterisk-1", "asterisk", "-rx", "core show channels concise"]
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 channels = result.stdout.strip().split("\n")
                 
@@ -174,7 +174,7 @@ class CallTransferTool:
                 
                 if target_channel:
                     logging.info(f"[Call Transfer]: Found channel {target_channel}. Redirecting to {extension}...")
-                    redirect_cmd = ["wsl", "docker", "exec", "voiceagent-asterisk-1", "asterisk", "-rx", f"channel redirect {target_channel} default,{extension},1"]
+                    redirect_cmd = docker_cmd + ["exec", "voiceagent-asterisk-1", "asterisk", "-rx", f"channel redirect {target_channel} default,{extension},1"]
                     subprocess.run(redirect_cmd, check=True)
                     return f"Successfully transferring your call to extension {extension}. Please hold."
                 else:
@@ -190,7 +190,6 @@ async def entrypoint(ctx: agents.JobContext):
     
     # Use global pre-loaded models for instant pickup!
     stt = stt_model
-    tts = tts_model
     vad = vad_model
 
     # Initialize basic call metadata
@@ -247,19 +246,25 @@ async def entrypoint(ctx: agents.JobContext):
 
     import psycopg2
     from psycopg2.extras import DictCursor
-    authorized = True
-    reject_reason = ""
-    user_model = "gemini"
-    user_model_name = "gemini-3.1-flash-lite"
-    user_name = "Vantara AI"
-    company_name = "D E I Lab"
-    agent_name = "Ventra"
-    agent_prompt = ""
-    agent_voice = "alloy"
-    range_start = 100
-    range_end = 200
 
-    if dialed_number:
+    def _fetch_routing_sync():
+        res = {
+            "authorized": True,
+            "reject_reason": "",
+            "user_model": "gemini",
+            "user_model_name": "gemini-3.1-flash-lite",
+            "user_name": "Vantara AI",
+            "company_name": "D E I Lab",
+            "agent_name": "Ventra",
+            "agent_prompt": "",
+            "agent_voice": "en-US-AriaNeural",
+            "range_start": 100,
+            "range_end": 200
+        }
+        
+        if not dialed_number:
+            return res
+            
         try:
             conn = get_db()
             cursor = conn.cursor()
@@ -270,30 +275,34 @@ async def entrypoint(ctx: agents.JobContext):
             
             if company_row:
                 company_id, company_name, range_start, range_end, user_model, user_model_name, agent_name_val, agent_prompt_val, agent_voice_val = company_row
-                user_name = company_name
+                res["user_name"] = company_name
+                res["company_name"] = company_name
+                res["range_start"] = range_start
+                res["range_end"] = range_end
+                res["user_model"] = user_model
+                res["user_model_name"] = user_model_name
                 if agent_name_val:
-                    agent_name = agent_name_val
+                    res["agent_name"] = agent_name_val
                 if agent_prompt_val:
-                    agent_prompt = agent_prompt_val
+                    res["agent_prompt"] = agent_prompt_val
                 if agent_voice_val:
-                    agent_voice = agent_voice_val
+                    res["agent_voice"] = agent_voice_val
                 
                 # Verify caller extension falls in range
                 if caller_number and caller_number.isdigit():
                     caller_int = int(caller_number)
                     if range_start is not None and range_end is not None:
                         if not (range_start <= caller_int <= range_end):
-                            authorized = False
-                            reject_reason = f"Extension {caller_int} is outside allowed range {range_start}-{range_end}"
+                            res["authorized"] = False
+                            res["reject_reason"] = f"Extension {caller_int} is outside allowed range {range_start}-{range_end}"
                     else:
-                        # Check specific assignments
                         cursor.execute("SELECT id FROM devices WHERE extension = %s AND company_id = %s", (caller_number, company_id))
                         if not cursor.fetchone():
-                            authorized = False
-                            reject_reason = f"Extension {caller_number} is not configured."
+                            res["authorized"] = False
+                            res["reject_reason"] = f"Extension {caller_number} is not configured."
                 else:
-                    authorized = False
-                    reject_reason = f"Invalid caller extension: {caller_number}"
+                    res["authorized"] = False
+                    res["reject_reason"] = f"Invalid caller extension: {caller_number}"
             else:
                 # 2. Check if dialed_number matches a user's AI extension
                 cursor.execute("SELECT id, name, ai_model, ai_model_name, company_id FROM users WHERE ai_extension = %s", (dialed_number,))
@@ -301,38 +310,65 @@ async def entrypoint(ctx: agents.JobContext):
                 
                 if user_row:
                     user_id, user_name, user_model, user_model_name, user_company_id = user_row
+                    res["user_name"] = user_name
+                    res["user_model"] = user_model
+                    res["user_model_name"] = user_model_name
+                    
                     if user_company_id:
                         cursor.execute("SELECT name, range_start, range_end, agent_name, agent_prompt, agent_voice FROM companies WHERE id = %s", (user_company_id,))
                         comp_data = cursor.fetchone()
                         if comp_data:
                             company_name, range_start, range_end, agent_name_val, agent_prompt_val, agent_voice_val = comp_data
+                            res["company_name"] = company_name
+                            res["range_start"] = range_start
+                            res["range_end"] = range_end
                             if agent_name_val:
-                                agent_name = agent_name_val
+                                res["agent_name"] = agent_name_val
                             if agent_prompt_val:
-                                agent_prompt = agent_prompt_val
+                                res["agent_prompt"] = agent_prompt_val
                             if agent_voice_val:
-                                agent_voice = agent_voice_val
+                                res["agent_voice"] = agent_voice_val
                     
                     cursor.execute("SELECT COUNT(*) FROM devices WHERE user_id = %s AND extension = %s", (user_id, caller_number))
                     device_count = cursor.fetchone()[0]
                     if device_count == 0 and dialed_number.strip('+') != "200":
-                        authorized = False
-                        reject_reason = f"Access denied. Device {caller_number} is not authorized for AI Line {dialed_number}."
+                        res["authorized"] = False
+                        res["reject_reason"] = f"Access denied. Device {caller_number} is not authorized for AI Line {dialed_number}."
                 else:
                     if dialed_number.strip('+') == "200":
-                        authorized = True
-                        user_name = "Vantara AI"
+                        res["authorized"] = True
+                        res["user_name"] = "Vantara AI"
                         cursor.execute("SELECT MIN(CAST(extension AS INTEGER)), MAX(CAST(extension AS INTEGER)) FROM devices")
                         min_max = cursor.fetchone()
                         if min_max and min_max[0] is not None:
-                            range_start = min_max[0]
-                            range_end = min_max[1]
+                            res["range_start"] = min_max[0]
+                            res["range_end"] = min_max[1]
                     else:
-                        authorized = False
-                        reject_reason = f"Extension {dialed_number} is not configured."
+                        res["authorized"] = False
+                        res["reject_reason"] = f"Extension {dialed_number} is not configured."
             conn.close()
         except Exception as e:
             logging.warning(f"Failed to query routing DB: {e}")
+            
+        return res
+
+    # Run the synchronous DB block in a separate thread so it doesn't freeze the async event loop!
+    route_data = await asyncio.to_thread(_fetch_routing_sync)
+    
+    authorized = route_data["authorized"]
+    reject_reason = route_data["reject_reason"]
+    user_model = route_data["user_model"]
+    user_model_name = route_data["user_model_name"]
+    user_name = route_data["user_name"]
+    company_name = route_data["company_name"]
+    agent_name = route_data["agent_name"]
+    agent_prompt = route_data["agent_prompt"]
+    agent_voice = route_data["agent_voice"]
+    range_start = route_data["range_start"]
+    range_end = route_data["range_end"]
+    
+    # Initialize dynamic TTS based on database voice
+    tts = EdgeTTSWrapper(voice=agent_voice)
 
     publish_event("incoming_call", {
         "caller": caller_number,
@@ -374,13 +410,14 @@ async def entrypoint(ctx: agents.JobContext):
     fcontext = CallTransferTool(caller_number or "100", range_start=range_start, range_end=range_end)
     tools = agents.llm.find_function_tools(fcontext)
     
-    base_instructions = f"You are {agent_name}, a conversational voice agent for {company_name}. "
+    base_instructions = f"You are {agent_name}, a highly capable multi-lingual conversational voice agent for {company_name}. "
     if agent_prompt:
         base_instructions += f"\nCRITICAL COMPANY DIRECTIVE: {agent_prompt}\n\n"
         
     agent = agents.voice.Agent(
         instructions=(
             base_instructions +
+            "CRITICAL LANGUAGE RULE: You MUST speak in the exact language the user is speaking to you in. If the user speaks Hindi, reply entirely in Hindi. If the user asks you to speak in Hindi, reply entirely in Hindi. DO NOT use English words when speaking Hindi. "
             "Answer phone calls concisely, professionally, and extremely briefly. "
             "CRITICAL: Keep your answers extremely short and concise, exactly like a real phone call (e.g. 1-2 sentences maximum). "
             "Answer ONLY what the user asks. No extra information, long paragraphs, or formatting. "

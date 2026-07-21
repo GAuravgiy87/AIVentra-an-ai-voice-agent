@@ -3,6 +3,7 @@ import {
   Bot, Search, LogOut, RefreshCw, X, MessageSquare, Settings,
   Activity, Clock, Phone, ShieldCheck, ChevronRight, Inbox, Download, AlertTriangle, Circle, Plus, Laptop, Smartphone, Copy, BarChart2, Globe
 } from 'lucide-react';
+import VoiceSelector from './VoiceSelector';
 
 const fmt = ms => (ms > 999 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`);
 
@@ -852,6 +853,7 @@ function CompanySettingsPanel({ companyId }) {
   const [loading, setLoading] = useState(false);
   const [company, setCompany] = useState(null);
   const [agentName, setAgentName] = useState('');
+  const [agentVoice, setAgentVoice] = useState('en-US-AriaNeural');
 
   useEffect(() => {
     if (!companyId) return;
@@ -863,6 +865,7 @@ function CompanySettingsPanel({ companyId }) {
         if (myComp) {
           setCompany(myComp);
           setAgentName(myComp.agent_name || 'Ventra');
+          setAgentVoice(myComp.agent_voice || 'en-US-AriaNeural');
         }
       } catch (err) {
         console.error(err);
@@ -886,11 +889,12 @@ function CompanySettingsPanel({ companyId }) {
           range_end: company.range_end,
           ai_model: company.ai_model,
           ai_model_name: company.ai_model_name,
-          agent_name: agentName.trim() || 'Ventra'
+          agent_name: agentName.trim() || 'Ventra',
+          agent_voice: agentVoice
         })
       });
       if (res.ok) {
-        alert("Settings updated successfully. Your new agent name is active immediately.");
+        alert("Settings updated successfully. Your new agent voice and name are active immediately.");
       } else {
         alert("Failed to update settings.");
       }
@@ -924,6 +928,8 @@ function CompanySettingsPanel({ companyId }) {
           <input type="text" value={agentName} onChange={e => setAgentName(e.target.value)} placeholder="e.g. Ventra" style={{ padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 10, fontSize: 14 }} required />
           <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>This is the name your AI uses to introduce itself (e.g. "Hello, I am {agentName || 'Ventra'}, agent of {company.name}").</p>
         </div>
+
+        <VoiceSelector selectedVoiceId={agentVoice} onSelectVoice={setAgentVoice} />
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
           <button type="submit" className="btn-primary" style={{ padding: '10px 24px', borderRadius: 10, fontSize: 13 }}>Save Profile Settings</button>
@@ -1206,7 +1212,9 @@ export default function AdminDashboard({ onBack, onStartCall }) {
             <Bot size={22} color="#fff" />
           </div>
           <div>
-            <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text-primary)', lineHeight: 1.1 }}>Vantara Console</div>
+            <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text-primary)', lineHeight: 1.1 }}>
+              {userRole === 'super_admin' ? 'Vantara Console' : `${localStorage.getItem('ventra_user_name') || 'Company'} Console`}
+            </div>
             <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 4, fontWeight: 700 }}>Management Hub</div>
           </div>
         </div>

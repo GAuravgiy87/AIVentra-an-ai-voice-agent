@@ -5,6 +5,7 @@ import time
 import os
 import psycopg2
 from psycopg2.extras import DictCursor
+import bcrypt
 
 # Configure Gemini with the provided API Key from environment variables
 from dotenv import load_dotenv
@@ -24,9 +25,6 @@ Answer ONLY what the user asks. No extra information or long paragraphs. Keep it
 Do not use markdown formatting like asterisks or bold text, just plain text that is easy to speak out loud.
 """
 
-# Store Gemini ChatSession objects per room (Must remain in-memory as they are live objects)
-# { room_id: ChatSession }
-rooms_sessions: Dict[str, object] = {}
 
 DB_URL = "postgresql://postgres:postgres@localhost:5433/ventra"
 
@@ -283,21 +281,16 @@ def get_admin_metrics(company_id: Optional[int] = None):
 def create_room(room_id: str, extension: Optional[str] = None):
     _update_room_active(room_id, time.time(), extension)
     
-    if room_id not in rooms_sessions:
-        config = types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT)
-        # Start a new chat session for this room
-        chat = client.chats.create(model=DEFAULT_MODEL, config=config)
-        rooms_sessions[room_id] = chat
-        
-        # Check if the room already has history in DB before adding system prompt
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM messages WHERE room_id = %s', (room_id,))
-        count = cursor.fetchone()[0]
-        conn.close()
-        
-        if count == 0:
-            add_report_message(room_id, "system", SYSTEM_PROMPT, None, extension)
+    # Check if the room already has history in DB
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT COUNT(*) FROM messages WHERE room_id = %s', (room_id,))
+    count = cursor.fetchone()[0]
+    conn.close()
+    
+    # If room is completely new, inject the system prompt as the first hidden context
+    if count == 0:
+        add_report_message(room_id, "system", SYSTEM_PROMPT, None, extension)
 
 def get_room_history(room_id: str) -> List[Dict[str, str]]:
     conn = get_db()
@@ -314,11 +307,28 @@ def chat_with_agent(room_id: str, user_message: str, model: str = DEFAULT_MODEL)
     # Add user message to DB
     add_report_message(room_id, "user", user_message, None)
     
-    chat_session = rooms_sessions[room_id]
+    # Fetch complete history for stateless context
+    history = get_room_history(room_id)
+    
+    contents = []
+    system_instruction = None
+    for msg in history:
+        role = msg["role"]
+        if role == "system":
+            system_instruction = msg["content"]
+            continue
+        gemini_role = "user" if role == "user" else "model"
+        contents.append(types.Content(role=gemini_role, parts=[types.Part.from_text(text=msg["content"])]))
+        
+    config = types.GenerateContentConfig(system_instruction=system_instruction)
     start_time = time.time()
     
     try:
-        response = chat_session.send_message(user_message)
+        response = client.models.generate_content(
+            model=model,
+            contents=contents,
+            config=config
+        )
         reply_content = response.text
         
         latency_ms = int((time.time() - start_time) * 1000)
@@ -329,14 +339,14 @@ def chat_with_agent(room_id: str, user_message: str, model: str = DEFAULT_MODEL)
         return reply_content
     except Exception as e:
         error_msg = f"Sorry, I am having trouble connecting to Gemini. Error: {e}"
-        # Do not append error to history to allow retry
         return error_msg
 
 def add_user(user_id, password, name, ai_extension=None, ai_model="gemini", ai_model_name="gemini-3.1-flash-lite", role="agent", company_id=None):
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') if password else None
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)', 
-                   (user_id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, time.time()))
+                   (user_id, hashed_password, name, ai_extension, ai_model, ai_model_name, role, company_id, time.time()))
     conn.commit()
     conn.close()
 
@@ -362,11 +372,14 @@ def delete_user(user_id):
 def check_user_login(user_id, password):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT name, role, company_id FROM users WHERE id = %s AND password = %s', (user_id, password))
+    cursor.execute('SELECT name, role, company_id, password FROM users WHERE id = %s', (user_id,))
     row = cursor.fetchone()
     conn.close()
+    
     if row:
-        return {"id": user_id, "name": row[0], "role": row[1] or "user", "company_id": row[2]}
+        stored_hash = row[3]
+        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+            return {"id": user_id, "name": row[0], "role": row[1] or "user", "company_id": row[2]}
     return None
 
 def add_device(user_id, name, ip_address, extension, device_type, status, company_id=None):
@@ -451,7 +464,7 @@ def get_companies():
     conn.close()
     return companies
 
-def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "alloy"):
+def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
@@ -461,17 +474,18 @@ def add_company(name: str, ai_extension: str, range_start: int, range_end: int, 
     company_id = cursor.fetchone()[0]
 
     if admin_id and admin_password:
+        hashed_password = bcrypt.hashpw(admin_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         cursor.execute('''
             INSERT INTO users (id, password, name, ai_extension, ai_model, ai_model_name, role, company_id, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ''', (admin_id, admin_password, admin_name or "Admin", ai_extension, ai_model, ai_model_name, 'company_admin', company_id, time.time()))
+        ''', (admin_id, hashed_password, admin_name or "Admin", ai_extension, ai_model, ai_model_name, 'company_admin', company_id, time.time()))
 
     conn.commit()
     conn.close()
     # Trigger Asterisk sync
     sync_asterisk_config()
 
-def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "alloy"):
+def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "Ventra", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
@@ -590,7 +604,8 @@ def sync_asterisk_config():
             f.write("\n".join(ext_lines))
         
         # Reload local Asterisk container
-        cmd = ["wsl", "docker", "exec", "voiceagent-asterisk-1", "asterisk", "-rx", "core reload"]
+        docker_cmd = ["wsl", "docker"] if os.name == 'nt' else ["docker"]
+        cmd = docker_cmd + ["exec", "voiceagent-asterisk-1", "asterisk", "-rx", "core reload"]
         subprocess.run(cmd, check=True)
         logging.info(f"[Asterisk Sync]: Successfully synced to local Docker and reloaded configuration.")
     except Exception as e:

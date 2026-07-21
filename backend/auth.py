@@ -1,8 +1,11 @@
 import jwt
 from datetime import datetime, timedelta
 from fastapi import HTTPException, Security, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, APIKeyHeader
 import os
+
+INTERNAL_API_KEY = os.getenv("INTERNAL_API_KEY", "ventra_internal_secure_123")
+internal_api_key_header = APIKeyHeader(name="X-Internal-Token", auto_error=True)
 
 SECRET_KEY = os.getenv("JWT_SECRET", "super_secret_ventra_key_123")
 ALGORITHM = "HS256"
@@ -38,4 +41,9 @@ def verify_company_admin(company_id: int, payload: dict):
     if payload.get('role') != 'company_admin' or str(payload.get('company_id')) != str(company_id):
         raise HTTPException(status_code=403, detail='Company admin access required for this company')
     return payload
+
+def verify_internal_agent(api_key: str = Security(internal_api_key_header)):
+    if api_key != INTERNAL_API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid internal API key")
+    return api_key
 
