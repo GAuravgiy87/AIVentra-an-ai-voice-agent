@@ -3994,3 +3994,80 @@ RuntimeError: AudioEmitter isn't started
 2026-07-22 11:11:00,545 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
 2026-07-22 11:11:17,803 [INFO] root: Participant disconnected: sip_100
 2026-07-22 11:11:37,688 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 11:22:59,963 [INFO] livekit.agents: starting worker
+2026-07-22 11:22:59,963 [INFO] livekit.agents: plugin registered
+2026-07-22 11:22:59,963 [INFO] livekit.agents: plugin registered
+2026-07-22 11:22:59,963 [INFO] livekit.agents: plugin registered
+2026-07-22 11:22:59,982 [INFO] livekit.agents: HTTP server listening on :49881
+2026-07-22 11:23:00,343 [INFO] livekit.agents: registered worker
+2026-07-22 11:23:44,706 [INFO] livekit.agents: received job request
+2026-07-22 11:23:44,706 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 11:23:44,719 [INFO] livekit.agents: initializing job runner
+2026-07-22 11:23:44,720 [INFO] livekit.agents: job runner initialized
+2026-07-22 11:23:45,631 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 11:23:45,958 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 11:23:47,035 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 11:23:47,036 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 11:23:47,425 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_Uk5iUnbRSUNm.
+2026-07-22 11:23:47,426 [INFO] root: [AI Assistant Greeting]: Hello, welcome to D E I Lab! I am AI Assistant. How can I help you?
+2026-07-22 11:23:48,977 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 11:24:07,487 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:24:14,990 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:24:34,380 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:24:35,759 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 100
+2026-07-22 11:24:36,680 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:24:36,680 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 101
+2026-07-22 11:24:37,666 [INFO] root: [Call Transfer]: Requested transfer of caller 100 to extension 101
+2026-07-22 11:24:42,728 [INFO] root: [Call Transfer]: Found channel PJSIP/100-00000040. Redirecting to 101...
+2026-07-22 11:24:43,016 [INFO] root: Participant disconnected: sip_100
+2026-07-22 11:24:43,026 [INFO] root: [DTMF Transfer Complete]: Successfully transferring your call to extension 101. Please hold.
+2026-07-22 11:24:47,595 [INFO] root: [AI Assistant]: You requested call forwarding. Forwarding your call to extension 101. Please hold.
+2026-07-22 11:25:03,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 11:25:03,686 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 11:25:42,624 [INFO] livekit.agents: received job request
+2026-07-22 11:25:42,625 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 11:25:42,639 [INFO] livekit.agents: initializing job runner
+2026-07-22 11:25:42,639 [INFO] livekit.agents: job runner initialized
+2026-07-22 11:25:42,643 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 11:25:42,962 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 11:25:44,203 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 11:25:44,204 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 11:25:44,619 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_100_KpepgTe52h8j.
+2026-07-22 11:25:44,620 [INFO] root: [AI Assistant Greeting]: Hello, welcome to D E I Lab! I am AI Assistant. How can I help you?
+2026-07-22 11:25:45,750 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 11:25:54,900 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:25:59,400 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:00,170 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 100
+2026-07-22 11:26:02,179 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 10
+2026-07-22 11:26:02,179 [WARNING] root: [DTMF Transfer Error]: Extension 10 is invalid or outside the company allowed range of 100 to 200.
+2026-07-22 11:26:02,416 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:26:06,641 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:06,881 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:08,878 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 1
+2026-07-22 11:26:08,879 [WARNING] root: [DTMF Transfer Error]: Extension 1 is invalid or outside the company allowed range of 100 to 200.
+2026-07-22 11:26:10,320 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:10,990 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 100
+2026-07-22 11:26:11,561 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:13,515 [INFO] root: [AI Assistant]: Invalid extension 10. Please try dialing a valid extension.
+2026-07-22 11:26:13,565 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 01
+2026-07-22 11:26:13,565 [WARNING] root: [DTMF Transfer Error]: Extension 01 is invalid or outside the company allowed range of 100 to 200.
+2026-07-22 11:26:21,052 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:26:28,065 [INFO] root: [AI Assistant]: Invalid extension 1. Please try dialing a valid extension.
+2026-07-22 11:26:35,517 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:26:42,961 [INFO] root: [AI Assistant]: Invalid extension 01. Please try dialing a valid extension.
+2026-07-22 11:26:52,960 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:53,460 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 100
+2026-07-22 11:26:54,160 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:26:56,156 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 01
+2026-07-22 11:26:56,157 [WARNING] root: [DTMF Transfer Error]: Extension 01 is invalid or outside the company allowed range of 100 to 200.
+2026-07-22 11:27:02,415 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:27:09,677 [INFO] root: [AI Assistant]: Invalid extension 01. Please try dialing a valid extension.
+2026-07-22 11:27:09,701 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:27:10,360 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 100
+2026-07-22 11:27:10,941 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 100
+2026-07-22 11:27:12,948 [INFO] root: [DTMF Transfer Triggered]: Caller 100 requested keypad transfer to 01
+2026-07-22 11:27:12,948 [WARNING] root: [DTMF Transfer Error]: Extension 01 is invalid or outside the company allowed range of 100 to 200.
+2026-07-22 11:27:19,530 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:27:21,580 [INFO] root: Participant disconnected: sip_100
+2026-07-22 11:27:27,455 [INFO] root: [AI Assistant]: Invalid extension 01. Please try dialing a valid extension.
+2026-07-22 11:27:41,684 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 7486

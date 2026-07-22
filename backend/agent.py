@@ -583,7 +583,9 @@ def sync_asterisk_config():
         ext_lines.append("")
         
     for ext in extensions:
-        ext_lines.append(f"exten => {ext},1,Dial(PJSIP/{ext})")
+        ext_lines.append(f"exten => {ext},1,Dial(PJSIP/{ext},20)")
+        ext_lines.append(f"exten => {ext},n,PlayTones(congestion)")
+        ext_lines.append(f"exten => {ext},n,Wait(3)")
         ext_lines.append(f"exten => {ext},n,Hangup()")
         ext_lines.append("")
         

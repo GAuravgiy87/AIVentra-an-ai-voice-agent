@@ -498,6 +498,130 @@ async def entrypoint(ctx: agents.JobContext):
         logging.info(f"Participant disconnected: {participant.identity}")
         publish_event("call_ended", {"caller": caller_number})
 
+    # ─── DTMF Keypad State Machine ───
+    dtmf_mode = "IDLE"  # "IDLE" or "AWAITING_EXTENSION"
+    dtmf_buffer = ""
+    dtmf_timer_task = None
+    transfer_in_progress = False
+
+    expected_ext_len = 3
+    if range_start:
+        expected_ext_len = len(str(range_start))
+
+    async def execute_dtmf_transfer(target_ext: str):
+        nonlocal transfer_in_progress, dtmf_mode, dtmf_buffer
+        if transfer_in_progress:
+            return
+        transfer_in_progress = True
+        dtmf_mode = "IDLE"
+        dtmf_buffer = ""
+        
+        ext_clean = target_ext.strip()
+        logging.info(f"[DTMF Transfer Triggered]: Caller {caller_number} requested keypad transfer to {ext_clean}")
+        
+        # Check allowed range
+        try:
+            ext_int = int(ext_clean)
+            is_valid = (range_start <= ext_int <= range_end) if (range_start is not None and range_end is not None) else True
+        except ValueError:
+            is_valid = False
+
+        if not is_valid:
+            error_msg = f"Extension {ext_clean} is invalid or outside allowed range ({range_start}-{range_end})."
+            logging.warning(f"[DTMF Transfer Error]: {error_msg}")
+            session.say(f"Extension {ext_clean} is invalid or out of range. Please try again.", allow_interruptions=True)
+            transfer_in_progress = False
+            return
+
+        handle = session.say(f"Forwarding your call to extension {ext_clean}. Please hold.", allow_interruptions=False)
+        try:
+            await handle.wait_for_playout()
+        except Exception:
+            await asyncio.sleep(1.5)
+        
+        res = await fcontext.transfer_call(ext_clean)
+        logging.info(f"[DTMF Transfer Complete]: {res}")
+
+    async def dtmf_timeout_job():
+        nonlocal dtmf_buffer, dtmf_mode
+        await asyncio.sleep(4.0)
+        if transfer_in_progress:
+            return
+        if dtmf_mode == "AWAITING_EXTENSION" and dtmf_buffer:
+            buf = dtmf_buffer.rstrip('#')
+            dtmf_buffer = ""
+            if len(buf) >= 2:
+                asyncio.create_task(execute_dtmf_transfer(buf))
+            else:
+                session.say("Extension entry timed out. Please press 1 to try forwarding again.", allow_interruptions=True)
+                dtmf_mode = "IDLE"
+
+    def handle_dtmf_digit(digit: str):
+        nonlocal dtmf_buffer, dtmf_mode, dtmf_timer_task, last_human_speech_time
+        if transfer_in_progress:
+            return
+            
+        digit = str(digit).strip()
+        if not digit:
+            return
+            
+        logging.info(f"[DTMF Keypad Input]: Digit '{digit}' received from caller {caller_number} (Mode: {dtmf_mode}, Buffer: '{dtmf_buffer}')")
+        last_human_speech_time = asyncio.get_event_loop().time()
+        
+        if dtmf_timer_task and not dtmf_timer_task.done():
+            dtmf_timer_task.cancel()
+
+        # Handle Hash key (immediate submission)
+        if digit == "#":
+            if dtmf_buffer:
+                buf = dtmf_buffer
+                dtmf_buffer = ""
+                asyncio.create_task(execute_dtmf_transfer(buf))
+            return
+
+        # STATE 1: IDLE Mode
+        if dtmf_mode == "IDLE":
+            if digit == "1":
+                dtmf_mode = "AWAITING_EXTENSION"
+                dtmf_buffer = ""
+                session.say("You requested call forwarding. Please type the extension number you want to forward to.", allow_interruptions=True)
+                dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
+                return
+            else:
+                # User typed a digit other than 1 in IDLE mode (e.g. starting a 3-digit extension directly)
+                dtmf_mode = "AWAITING_EXTENSION"
+                dtmf_buffer = digit
+                if len(dtmf_buffer) >= expected_ext_len:
+                    buf = dtmf_buffer
+                    dtmf_buffer = ""
+                    asyncio.create_task(execute_dtmf_transfer(buf))
+                    return
+                dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
+                return
+
+        # STATE 2: AWAITING_EXTENSION Mode
+        if dtmf_mode == "AWAITING_EXTENSION":
+            dtmf_buffer += digit
+            if len(dtmf_buffer) >= expected_ext_len:
+                buf = dtmf_buffer
+                dtmf_buffer = ""
+                asyncio.create_task(execute_dtmf_transfer(buf))
+                return
+            else:
+                dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
+
+    @ctx.room.on("sip_dtmf_received")
+    def on_sip_dtmf_received(dtmf_event: rtc.SipDTMF):
+        d = getattr(dtmf_event, "digit", None) or getattr(dtmf_event, "code", None)
+        if d is not None:
+            handle_dtmf_digit(str(d))
+
+    @ctx.room.on("dtmf_received")
+    def on_dtmf_received(dtmf_event):
+        d = getattr(dtmf_event, "digit", None) or getattr(dtmf_event, "code", None) or getattr(dtmf_event, "key", None)
+        if d is not None:
+            handle_dtmf_digit(str(d))
+
     @session.on("conversation_item_added")
     def on_conversation_item_added(event):
         nonlocal last_human_speech_time, has_warned
