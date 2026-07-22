@@ -111,9 +111,15 @@ export default function UserDashboard({ onBack }) {
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [tab, setTab] = useState('devices'); // 'devices', 'calls'
+  const [tab, setTab] = useState(() => localStorage.getItem('ventra_user_tab') || 'devices'); // 'devices', 'calls'
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [copiedId, setCopiedId] = useState('');
+
+  useEffect(() => {
+    if (tab) {
+      localStorage.setItem('ventra_user_tab', tab);
+    }
+  }, [tab]);
 
   // Device Form States
   const [showAddForm, setShowAddForm] = useState(false);

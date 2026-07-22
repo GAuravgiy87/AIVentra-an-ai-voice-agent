@@ -1055,9 +1055,15 @@ export default function AdminDashboard({ onBack, onStartCall }) {
   const [dateFilter, setDateFilter] = useState('');
   const [durationFilter, setDurationFilter] = useState('all');
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useState(() => localStorage.getItem('ventra_admin_tab') || 'overview');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [copiedId, setCopiedId] = useState('');
+
+  useEffect(() => {
+    if (tab) {
+      localStorage.setItem('ventra_admin_tab', tab);
+    }
+  }, [tab]);
 
   // SaaS User roles
   const userRole = localStorage.getItem('ventra_user_role') || 'super_admin';

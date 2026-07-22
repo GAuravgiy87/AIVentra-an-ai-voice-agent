@@ -40,6 +40,7 @@ import logging
 from dotenv import load_dotenv
 
 load_dotenv()
+from typing import Optional, Dict, List
 import aiohttp
 
 print("Loading AI Models into memory (this will take a few seconds)...")
@@ -47,22 +48,26 @@ stt_model = WhisperSTT(model_name="small")
 vad_model = silero.VAD.load()
 print("Models loaded successfully!")
 
+import agent
+
+def _report_sync(room_id: str, role: str, content: str, latency_ms: Optional[int], extension: Optional[str], company_id: Optional[int]):
+    try:
+        agent.add_report_message(
+            room_id=room_id,
+            role=role,
+            content=content,
+            latency_ms=latency_ms,
+            extension=extension,
+            company_id=company_id
+        )
+    except Exception as e:
+        logging.warning(f"Failed to write report to database: {e}")
+
 async def report_to_dashboard_async(room_id: str, role: str, content: str, latency_ms: int = None, extension: str = None, company_id: int = None):
     try:
-        async with aiohttp.ClientSession() as session_http:
-            payload = {
-                "room_id": room_id,
-                "role": role,
-                "content": content,
-                "latency_ms": latency_ms,
-                "extension": extension,
-                "company_id": company_id
-            }
-            headers = {"X-Internal-Token": os.getenv("INTERNAL_API_KEY", "ventra_internal_secure_123")}
-            async with session_http.post("http://localhost:8001/api/admin/report_message", json=payload, headers=headers) as response:
-                await response.read()
+        await asyncio.to_thread(_report_sync, room_id, role, content, latency_ms, extension, company_id)
     except Exception as e:
-        logging.warning(f"Failed to report message to dashboard: {e}")
+        logging.warning(f"Failed in report_to_dashboard_async: {e}")
 
 class FallbackLLMStream:
     def __init__(self, inner_stream, chat_ctx):
@@ -502,7 +507,9 @@ async def entrypoint(ctx: agents.JobContext):
         if hasattr(item, "role") and item.role in ("assistant", "user"):
             text = item.text_content
             if text and text.strip():
-                role_label = "Vantara" if item.role == "assistant" else "User"
+                if text.strip() == greeting_text.strip():
+                    return
+                role_label = agent_name if item.role == "assistant" else "User"
                 # Report to dashboard & track tokens
                 latency_ms = None
                 token_usage_str = ""
@@ -532,13 +539,15 @@ async def entrypoint(ctx: agents.JobContext):
                     "caller": caller_extension or caller_number
                 })
 
-                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension, company_id))
+                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension or dialed_number, company_id))
 
     # Greet the user immediately when they connect to the room via SIP
-    # Removed short sleep to prevent initial greeting clipping and delay.
-    # await asyncio.sleep(0.1)
     greeting_text = f"Hello, welcome to {company_name}! I am {agent_name}. How can I help you?"
     logging.info(f"[{agent_name} Greeting]: {greeting_text}")
+    
+    # IMMEDIATELY report the call pickup & greeting to database so room is logged right away
+    asyncio.create_task(report_to_dashboard_async(ctx.room.name, "assistant", greeting_text, None, dialed_number or caller_number, company_id))
+
     greeting_handle = session.say(greeting_text, allow_interruptions=False)
     await greeting_handle.wait_for_playout()
     
