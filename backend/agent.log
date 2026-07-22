@@ -4071,3 +4071,298 @@ RuntimeError: AudioEmitter isn't started
 2026-07-22 11:27:21,580 [INFO] root: Participant disconnected: sip_100
 2026-07-22 11:27:27,455 [INFO] root: [AI Assistant]: Invalid extension 01. Please try dialing a valid extension.
 2026-07-22 11:27:41,684 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 7486
+2026-07-22 11:32:39,288 [INFO] livekit.agents: starting worker
+2026-07-22 11:32:39,288 [INFO] livekit.agents: plugin registered
+2026-07-22 11:32:39,288 [INFO] livekit.agents: plugin registered
+2026-07-22 11:32:39,288 [INFO] livekit.agents: plugin registered
+2026-07-22 11:32:39,288 [INFO] livekit.agents: HTTP server listening on :50266
+2026-07-22 11:32:39,710 [INFO] livekit.agents: registered worker
+2026-07-22 11:33:07,558 [INFO] livekit.agents: received job request
+2026-07-22 11:33:07,558 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 11:33:07,573 [INFO] livekit.agents: initializing job runner
+2026-07-22 11:33:07,573 [INFO] livekit.agents: job runner initialized
+2026-07-22 11:33:07,710 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 11:33:08,041 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 11:33:09,182 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 11:33:09,183 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 11:33:09,579 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_101_SAUjPenvnm6Q.
+2026-07-22 11:33:09,580 [INFO] root: [AI Assistant Greeting]: Hello, welcome to D E I Lab! I am AI Assistant. How can I help you?
+2026-07-22 11:33:10,921 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 11:33:19,478 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 101 (Mode: IDLE, Buffer: '')
+2026-07-22 11:33:27,002 [INFO] root: [AI Assistant]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 11:33:28,935 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 101 (Mode: AWAITING_EXTENSION, Buffer: '')
+2026-07-22 11:33:29,896 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 101 (Mode: AWAITING_EXTENSION, Buffer: '1')
+2026-07-22 11:33:30,384 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 101 (Mode: AWAITING_EXTENSION, Buffer: '10')
+2026-07-22 11:33:30,384 [INFO] root: [DTMF Transfer Triggered]: Caller 101 requested keypad transfer to 100
+2026-07-22 11:33:36,785 [INFO] root: [AI Assistant]: Forwarding your call to extension 100. Please hold.
+2026-07-22 11:33:36,788 [INFO] root: [Call Transfer]: Requested transfer of caller 101 to extension 100
+2026-07-22 11:33:37,068 [INFO] root: [Call Transfer]: Found channel PJSIP/101-00000044. Redirecting to 100...
+2026-07-22 11:33:37,324 [INFO] root: Participant disconnected: sip_101
+2026-07-22 11:33:37,329 [INFO] root: [DTMF Transfer Complete]: Successfully transferring your call to extension 100. Please hold.
+2026-07-22 11:33:57,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 11:33:57,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 12:00:05,977 [INFO] livekit.agents: starting worker
+2026-07-22 12:00:06,009 [INFO] livekit.agents: plugin registered
+2026-07-22 12:00:06,009 [INFO] livekit.agents: plugin registered
+2026-07-22 12:00:06,009 [INFO] livekit.agents: plugin registered
+2026-07-22 12:00:06,012 [INFO] livekit.agents: HTTP server listening on :56674
+2026-07-22 12:00:06,369 [INFO] livekit.agents: registered worker
+2026-07-22 12:37:22,552 [INFO] livekit.agents: received job request
+2026-07-22 12:37:22,552 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 12:37:22,558 [INFO] livekit.agents: initializing job runner
+2026-07-22 12:37:22,558 [INFO] livekit.agents: job runner initialized
+2026-07-22 12:37:22,800 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 12:37:23,184 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 12:37:24,306 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 12:37:24,306 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 12:37:24,742 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_idBGFT6rPnyf.
+2026-07-22 12:37:24,742 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 12:37:26,335 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 12:37:50,435 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:37:50,435 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:37:50,435 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 1006 (Mode: IDLE, Buffer: '')
+2026-07-22 12:37:58,302 [INFO] livekit.agents: received job request
+2026-07-22 12:37:58,302 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 12:37:58,319 [INFO] livekit.agents: initializing job runner
+2026-07-22 12:37:58,319 [INFO] livekit.agents: job runner initialized
+2026-07-22 12:37:58,319 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 12:37:58,643 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 12:37:59,752 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 12:37:59,752 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 12:38:00,151 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_BuhDwhzX7t5S.
+2026-07-22 12:38:00,152 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 12:38:00,985 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 12:38:08,402 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 1006 (Mode: IDLE, Buffer: '')
+2026-07-22 12:38:14,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 12:38:16,204 [INFO] root: [swetaa]: You requested call forwarding. Please type the extension number you want to forward to.
+2026-07-22 12:38:16,771 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:38:16,771 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:38:16,772 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 12:38:16,791 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,792 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,792 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,792 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,792 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,792 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,793 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,794 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,795 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,796 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,797 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,805 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 12:38:16,810 [WARNING] livekit.agents: skipping user input, speech scheduling is paused
+2026-07-22 12:38:17,019 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:38:17,020 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 12:38:18,557 [INFO] root: [DTMF Keypad Input]: Digit '1' received from caller 1006 (Mode: AWAITING_EXTENSION, Buffer: '')
+2026-07-22 12:38:19,017 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 1006 (Mode: AWAITING_EXTENSION, Buffer: '1')
+2026-07-22 12:38:19,343 [INFO] root: [DTMF Keypad Input]: Digit '0' received from caller 1006 (Mode: AWAITING_EXTENSION, Buffer: '10')
+2026-07-22 12:38:19,733 [INFO] root: [DTMF Keypad Input]: Digit '5' received from caller 1006 (Mode: AWAITING_EXTENSION, Buffer: '100')
+2026-07-22 12:38:19,733 [INFO] root: [DTMF Transfer Triggered]: Caller 1006 requested keypad transfer to 1005
+2026-07-22 12:38:26,747 [INFO] root: [swetaa]: Forwarding your call to extension 1005. Please hold.
+2026-07-22 12:38:26,750 [INFO] root: [Call Transfer]: Requested transfer of caller 1006 to extension 1005
+2026-07-22 12:38:27,201 [INFO] root: [Call Transfer]: Found channel PJSIP/1006-00000049. Redirecting to 1005...
+2026-07-22 12:38:27,449 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 12:38:27,455 [INFO] root: [DTMF Transfer Complete]: Successfully transferring your call to extension 1005. Please hold.
+2026-07-22 12:38:47,681 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 2768
+2026-07-22 12:38:47,682 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: ClientInitiated
+2026-07-22 12:53:47,365 [INFO] livekit.agents: received job request
+2026-07-22 12:53:47,365 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 12:53:47,383 [INFO] livekit.agents: initializing job runner
+2026-07-22 12:53:47,383 [INFO] livekit.agents: job runner initialized
+2026-07-22 12:53:47,383 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 12:53:47,698 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 12:53:48,775 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 12:53:48,775 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 12:53:49,149 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_9z8FFhxbDWtv.
+2026-07-22 12:53:49,150 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 12:53:50,508 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 12:54:15,065 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 12:54:18,863 [INFO] livekit.agents: received job request
+2026-07-22 12:54:18,869 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 12:54:18,879 [INFO] livekit.agents: initializing job runner
+2026-07-22 12:54:18,880 [INFO] livekit.agents: job runner initialized
+2026-07-22 12:54:18,880 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 12:54:19,197 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 12:54:20,320 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 12:54:20,320 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 12:54:20,702 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_qj7aGjHVLJnN.
+2026-07-22 12:54:20,702 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 12:54:21,521 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 12:54:27,763 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 12:54:35,688 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 12:54:35,688 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 7109
+2026-07-22 12:54:47,681 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 12:54:47,681 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:13:54,438 [INFO] livekit.agents: received job request
+2026-07-22 13:13:54,438 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 13:13:54,452 [INFO] livekit.agents: initializing job runner
+2026-07-22 13:13:54,452 [INFO] livekit.agents: job runner initialized
+2026-07-22 13:13:54,466 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 13:13:54,785 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 13:13:55,893 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 13:13:55,893 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 13:13:56,330 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_Lx9udpkEAH6e.
+2026-07-22 13:13:56,330 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 13:13:57,678 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 13:14:30,731 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:14:30,731 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 13:14:30,880 [INFO] root: [User]: That's my idea.
+2026-07-22 13:14:34,683 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:14:43,247 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:14:43,247 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:14:43,247 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 13:14:43,247 [WARNING] livekit.agents: failed to send binary stream message: engine: connection error: engine is closed
+2026-07-22 13:14:43,264 [INFO] root: [User]: So...
+2026-07-22 13:15:29,213 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:15:29,214 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:15:29,414 [WARNING] livekit.agents: failed to generate LLM completion: gemini llm: error generating content , retrying in 0.1s
+2026-07-22 13:15:29,414 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:15:29,414 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 13:15:29,414 [WARNING] livekit.agents: skipping user input, speech scheduling is paused
+2026-07-22 13:15:29,414 [INFO] root: [User]: Hi, yeah. 2020 you
+2026-07-22 13:44:06,988 [INFO] livekit.agents: received job request
+2026-07-22 13:44:06,988 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 13:44:06,988 [INFO] livekit.agents: initializing job runner
+2026-07-22 13:44:06,988 [INFO] livekit.agents: job runner initialized
+2026-07-22 13:44:06,988 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 13:44:07,321 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 13:44:08,372 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 13:44:08,372 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 13:44:08,755 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_iZBvRnjxYoCg.
+2026-07-22 13:44:08,755 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 13:44:10,305 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 13:44:17,124 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 13:44:37,701 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:44:37,702 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 14238
+2026-07-22 13:48:16,876 [INFO] livekit.agents: received job request
+2026-07-22 13:48:16,878 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 13:48:16,887 [INFO] livekit.agents: initializing job runner
+2026-07-22 13:48:16,887 [INFO] livekit.agents: job runner initialized
+2026-07-22 13:48:16,891 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 13:48:17,220 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 13:48:18,311 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 13:48:18,312 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 13:48:18,697 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1007_zNhfJiKp2B9u.
+2026-07-22 13:48:18,697 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 13:48:20,051 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 13:48:24,833 [INFO] root: Participant disconnected: sip_1007
+2026-07-22 13:48:44,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:55:43,442 [INFO] livekit.agents: received job request
+2026-07-22 13:55:43,442 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 13:55:43,442 [INFO] livekit.agents: initializing job runner
+2026-07-22 13:55:43,457 [INFO] livekit.agents: job runner initialized
+2026-07-22 13:55:43,458 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 13:55:43,742 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 13:55:44,808 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 13:55:44,808 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 13:55:45,198 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1008_QFg6B2pQVMaA.
+2026-07-22 13:55:45,198 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 13:55:46,609 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 13:56:10,609 [INFO] root: [User]: call transfer to 1006
+2026-07-22 13:56:11,662 [INFO] root: [Call Transfer]: Requested transfer of caller 1008 to extension 1006
+2026-07-22 13:56:12,080 [INFO] root: [Call Transfer]: Found channel PJSIP/1008-00000056. Redirecting to 1006...
+2026-07-22 13:56:12,333 [INFO] root: Participant disconnected: sip_1008
+2026-07-22 13:56:18,119 [INFO] root: [swetaa]: Connecting you now. Please hold.
+2026-07-22 13:56:32,675 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:58:19,317 [INFO] livekit.agents: received job request
+2026-07-22 13:58:19,318 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 13:58:19,326 [INFO] livekit.agents: initializing job runner
+2026-07-22 13:58:19,326 [INFO] livekit.agents: job runner initialized
+2026-07-22 13:58:19,329 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 13:58:19,633 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 13:58:20,704 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 13:58:20,704 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 13:58:21,115 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1006_GFd6NKJbPZF7.
+2026-07-22 13:58:21,117 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 13:58:22,029 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-331' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 13:58:22,030 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-717' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 13:58:22,030 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-1351' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 13:58:22,334 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 13:58:47,387 [INFO] root: [User]: Call transfer to 1007
+2026-07-22 13:58:48,531 [INFO] root: [Call Transfer]: Requested transfer of caller 1006 to extension 1007
+2026-07-22 13:58:48,810 [INFO] root: [Call Transfer]: Found channel PJSIP/1006-00000059. Redirecting to 1007...
+2026-07-22 13:58:49,083 [INFO] root: Participant disconnected: sip_1006
+2026-07-22 13:58:53,428 [INFO] root: [swetaa]: Connecting you now.
+2026-07-22 13:59:09,682 [ERROR] livekit: livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_reliable' closed unexpectedly
+2026-07-22 13:59:09,689 [ERROR] livekit: livekit::rtc_engine::rtc_session:646:livekit::rtc_engine::rtc_session - publisher data channel '_lossy' closed unexpectedly
+2026-07-22 13:59:09,690 [WARNING] livekit: livekit_api::signal_client:608:livekit_api::signal_client - dropping pass-through signal — no stream available
+2026-07-22 13:59:09,691 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 13:59:09,692 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 20397
+2026-07-22 14:02:45,044 [INFO] livekit.agents: received job request
+2026-07-22 14:02:45,044 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 14:02:45,061 [INFO] livekit.agents: initializing job runner
+2026-07-22 14:02:45,061 [INFO] livekit.agents: job runner initialized
+2026-07-22 14:02:45,061 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 14:02:45,328 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 14:02:46,474 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 14:02:46,475 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 14:02:46,907 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1008_wcfQ4QM7SBKX.
+2026-07-22 14:02:46,908 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 14:02:47,072 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 14:03:12,128 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 14:03:12,128 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 14:03:12,211 [INFO] root: [User]: forward to 1006.
+2026-07-22 14:03:13,427 [INFO] root: [Call Transfer]: Requested transfer of caller 1008 to extension 1006
+2026-07-22 14:03:13,866 [INFO] root: [Call Transfer]: Found channel PJSIP/1008-00000000. Redirecting to 1006...
+2026-07-22 14:03:14,112 [INFO] root: Participant disconnected: sip_1008
+2026-07-22 14:03:21,178 [INFO] root: [swetaa]: Please hold while I transfer you to extension 1006.
+2026-07-22 14:03:34,678 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 14:03:34,678 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 24162
+2026-07-22 14:03:44,694 [INFO] livekit.agents: received job request
+2026-07-22 14:03:44,694 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 14:03:44,711 [INFO] livekit.agents: initializing job runner
+2026-07-22 14:03:44,711 [INFO] livekit.agents: job runner initialized
+2026-07-22 14:03:44,711 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 14:03:44,855 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 14:03:45,911 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 14:03:45,911 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 14:03:46,261 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1008_evUEcYPPRabs.
+2026-07-22 14:03:46,276 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 14:03:47,877 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 14:03:50,494 [INFO] root: Participant disconnected: sip_1008
+2026-07-22 14:03:59,627 [INFO] livekit.agents: received job request
+2026-07-22 14:03:59,627 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 14:03:59,646 [INFO] livekit.agents: initializing job runner
+2026-07-22 14:03:59,646 [INFO] livekit.agents: job runner initialized
+2026-07-22 14:03:59,646 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 14:03:59,945 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 14:04:01,030 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 14:04:01,030 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 14:04:01,408 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1008_ABb4fshzJ59B.
+2026-07-22 14:04:01,408 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 14:04:02,228 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 14:04:09,678 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 14:04:09,678 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 14:04:24,663 [WARNING] livekit.agents: entrypoint did not exit in time, cancelling
+2026-07-22 14:04:27,495 [INFO] root: [User]: call forward to 1-0-0-6.
+2026-07-22 14:04:28,780 [INFO] root: [Call Transfer]: Requested transfer of caller 1008 to extension 1006
+2026-07-22 14:04:29,043 [INFO] root: [Call Transfer]: Found channel PJSIP/1008-00000004. Redirecting to 1006...
+2026-07-22 14:04:29,310 [INFO] root: Participant disconnected: sip_1008
+2026-07-22 14:04:39,511 [INFO] root: [swetaa]: Certainly, I am transferring your call to extension 1006 now. Please hold.
+2026-07-22 14:04:49,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 14:04:49,685 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 28011

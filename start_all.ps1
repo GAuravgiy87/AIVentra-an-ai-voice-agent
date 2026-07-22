@@ -37,25 +37,24 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# Step 3. Start UDP Media Forwarder in a new window
-Write-Host "[3/5] Launching UDP Media Forwarder..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"Ventra - UDP Forwarder\"; Write-Host \"Starting UDP Forwarder...\"; python udp_forward.py'
+# Step 3. Start UDP RTP Media Relay & Forwarder in new windows
+Write-Host "[3/7] Launching UDP RTP Media Relay (udp_relay.py)..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"AI Voice Agent - UDP RTP Relay\"; Write-Host \"Starting UDP RTP Relay (v3 Auto-Learning)...\"; python udp_relay.py'
 
-# Step 4. Start Ventra Agent Worker in a new window
-Write-Host "[4/5] Launching Ventra Agent Worker..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"Ventra - Agent Worker\"; Write-Host \"Starting Ventra Agent Worker...\"; cd backend; python livekit_agent.py dev --url ws://127.0.0.1:7890'
+Write-Host "[4/7] Launching UDP Media Forwarder (udp_forward.py)..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"AI Voice Agent - UDP Forwarder\"; Write-Host \"Starting UDP Forwarder...\"; python udp_forward.py'
 
-# Step 5. Start Web Backend API in a new window
-Write-Host "[5/5] Launching Web Backend API..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"Ventra - Backend API\"; Write-Host \"Starting FastAPI Backend...\"; cd backend; python main.py'
+# Step 5. Start Agent Worker in a new window
+Write-Host "[5/7] Launching Agent Worker..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"AI Voice Agent - Worker\"; Write-Host \"Starting Agent Worker...\"; cd backend; python livekit_agent.py dev --url ws://127.0.0.1:7890'
 
-# Step 5. Start Dashboard Frontend in a new window
-Write-Host "[5/6] Launching Dashboard Frontend..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"Ventra - Frontend Dashboard\"; Write-Host \"Starting React Frontend...\"; cd frontend; npm run dev'
+# Step 6. Start Web Backend API in a new window
+Write-Host "[6/7] Launching Web Backend API..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"AI Voice Agent - Backend API\"; Write-Host \"Starting FastAPI Backend...\"; cd backend; python main.py'
 
-# Step 6. Start Live Call Monitor in a new window
-Write-Host "[6/6] Launching Live Call Monitor..." -ForegroundColor Yellow
-Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"Ventra - Live Call Monitor\"; cd backend; python call_monitor.py'
+# Step 7. Start Dashboard Frontend in a new window
+Write-Host "[7/7] Launching Dashboard Frontend..." -ForegroundColor Yellow
+Start-Process powershell -ArgumentList "-NoExit", "-Command", '$Host.UI.RawUI.WindowTitle=\"AI Voice Agent - Frontend Dashboard\"; Write-Host \"Starting React Frontend...\"; cd frontend; npm run dev'
 
-Write-Host "`n🚀 All 5 services have been launched successfully!" -ForegroundColor Green
-Write-Host "Please check the newly opened PowerShell windows to monitor logs and calls." -ForegroundColor Green
+Write-Host "`n🚀 All AI Voice Agent System services (including UDP RTP Relay) launched successfully!" -ForegroundColor Green
+Write-Host "Please check the newly opened PowerShell windows to monitor logs, audio relays, and calls." -ForegroundColor Green

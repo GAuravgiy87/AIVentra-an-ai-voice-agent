@@ -7,8 +7,10 @@ from pydub import AudioSegment
 
 class EdgeTTSWrapper(tts.TTS):
     """LiveKit TTS plugin that wraps the free Azure Edge-TTS."""
-    def __init__(self, voice: str = "en-US-AriaNeural"):
+    def __init__(self, voice: str = "en-US-AriaNeural", rate: str = "+0%", volume: str = "+0%"):
         self.voice = voice
+        self.rate = rate
+        self.volume = volume
         super().__init__(
             capabilities=tts.TTSCapabilities(streaming=False),
             sample_rate=24000,
@@ -29,7 +31,7 @@ class EdgeChunkedStream(tts.ChunkedStream):
     async def _run(self, output_emitter: tts.AudioEmitter) -> None:
         try:
             # edge-tts generates mp3 bytes.
-            communicate = edge_tts.Communicate(self._input_text, self._tts.voice)
+            communicate = edge_tts.Communicate(self._input_text, self._tts.voice, rate=self._tts.rate, volume=self._tts.volume)
             
             audio_data = b""
             async for chunk in communicate.stream():

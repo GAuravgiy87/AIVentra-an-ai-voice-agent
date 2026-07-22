@@ -135,8 +135,32 @@ class CreateUserRequest(BaseModel):
 
 @app.post("/api/admin/users")
 def api_create_user(request: CreateUserRequest, payload: dict = Depends(verify_token)):
-    if payload.get("role") not in ["super_admin", "company_admin"] and str(payload.get("company_id")) != str(request.company_id):
+    user_role = payload.get("role")
+    user_comp_id = payload.get("company_id")
+    
+    if user_role not in ["super_admin", "company_admin"]:
         raise HTTPException(status_code=403, detail="Forbidden")
+        
+    target_comp_id = request.company_id or user_comp_id
+    if user_role == "company_admin" and str(target_comp_id) != str(user_comp_id):
+        raise HTTPException(status_code=403, detail="Company Admins can only create users for their assigned company.")
+
+    # Enforce Super Admin extension range boundaries!
+    if request.ai_extension and target_comp_id:
+        conn = agent.get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT range_start, range_end FROM companies WHERE id = %s", (target_comp_id,))
+        row = cursor.fetchone()
+        conn.close()
+        if row and row[0] is not None:
+            r_start, r_end = row[0], row[1]
+            try:
+                ext_int = int(request.ai_extension)
+                if not (r_start <= ext_int <= r_end):
+                    raise HTTPException(status_code=400, detail=f"Extension {request.ai_extension} is outside Super Admin granted range of {r_start} to {r_end} for this company.")
+            except ValueError:
+                pass
+
     try:
         agent.add_user(
             user_id=request.id,
@@ -146,7 +170,7 @@ def api_create_user(request: CreateUserRequest, payload: dict = Depends(verify_t
             ai_model=request.ai_model,
             ai_model_name=request.ai_model_name,
             role=request.role,
-            company_id=request.company_id
+            company_id=target_comp_id
         )
         return {"status": "ok", "message": "User created successfully"}
     except Exception as e:
@@ -161,12 +185,27 @@ def api_list_users(company_id: Optional[int] = None, payload: dict = Depends(ver
 @app.delete("/api/admin/users/{user_id}")
 def api_delete_user(user_id: str, payload: dict = Depends(verify_token)):
     if payload.get("role") != "super_admin":
-        # Need to verify if the user belongs to the company_admin's company, but for simplicity we rely on DB or keep it simple.
-        # Just checking if they are company_admin for now.
         if payload.get("role") != "company_admin":
             raise HTTPException(status_code=403, detail="Forbidden")
     agent.delete_user(user_id)
     return {"status": "ok", "message": "User deleted"}
+
+class UpdatePasswordRequest(BaseModel):
+    user_id: str
+    new_password: str
+
+@app.put("/api/admin/users/password")
+def api_update_password(request: UpdatePasswordRequest, payload: dict = Depends(verify_token)):
+    user_role = payload.get("role")
+    sub_user = payload.get("sub") or payload.get("user_id")
+    if user_role not in ["super_admin", "company_admin"] and str(sub_user) != str(request.user_id):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    
+    if not request.new_password.strip():
+        raise HTTPException(status_code=400, detail="Password cannot be empty")
+        
+    agent.update_user_password(request.user_id, request.new_password.strip())
+    return {"status": "ok", "message": "Password updated successfully"}
 
 @app.get("/api/admin/devices")
 def api_list_all_devices(company_id: Optional[int] = None, payload: dict = Depends(verify_token)):
@@ -277,6 +316,18 @@ class UpdateCompanyRequest(BaseModel):
     agent_name: str
     agent_prompt: str = ""
     agent_voice: str = "en-US-AriaNeural"
+    who_starts: Optional[str] = "AI speaks first"
+    greeting_msg: Optional[str] = "Hello, welcome! How can I help you?"
+    responsiveness: Optional[float] = 0.5
+    interruption_sensitivity: Optional[float] = 0.9
+    allow_interruptions: Optional[bool] = True
+    enable_backchanneling: Optional[bool] = False
+    backchannel_words: Optional[str] = "yeah, hmm, right, ok"
+    speech_speed: Optional[float] = 1.0
+    speech_volume: Optional[float] = 1.0
+    vad_threshold: Optional[float] = 0.5
+    min_endpointing_delay: Optional[float] = 0.5
+    max_endpointing_delay: Optional[float] = 1.0
 
 @app.put("/api/admin/companies/{company_id}")
 def api_update_company(company_id: int, request: UpdateCompanyRequest, payload: dict = Depends(verify_token)):
@@ -285,6 +336,19 @@ def api_update_company(company_id: int, request: UpdateCompanyRequest, payload: 
         raise HTTPException(status_code=400, detail="Company name cannot be empty")
     if not request.ai_extension.strip():
         raise HTTPException(status_code=400, detail="AI Extension cannot be empty")
+
+    user_role = payload.get("role")
+    # If company_admin, lock range_start and range_end to Super Admin set limits!
+    if user_role == "company_admin":
+        conn = agent.get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT range_start, range_end FROM companies WHERE id = %s", (company_id,))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            request.range_start = row[0]
+            request.range_end = row[1]
+
     agent.update_company(
         company_id=company_id,
         name=request.name.strip(),
@@ -295,7 +359,19 @@ def api_update_company(company_id: int, request: UpdateCompanyRequest, payload: 
         ai_model_name=request.ai_model_name.strip(),
         agent_name=request.agent_name.strip() if request.agent_name else "AI Assistant",
         agent_prompt=request.agent_prompt,
-        agent_voice=request.agent_voice
+        agent_voice=request.agent_voice,
+        who_starts=request.who_starts,
+        greeting_msg=request.greeting_msg,
+        responsiveness=request.responsiveness,
+        interruption_sensitivity=request.interruption_sensitivity,
+        allow_interruptions=request.allow_interruptions,
+        enable_backchanneling=request.enable_backchanneling,
+        backchannel_words=request.backchannel_words,
+        speech_speed=request.speech_speed,
+        speech_volume=request.speech_volume,
+        vad_threshold=request.vad_threshold,
+        min_endpointing_delay=request.min_endpointing_delay,
+        max_endpointing_delay=request.max_endpointing_delay
     )
     return {"status": "ok", "message": "Company updated successfully"}
 

@@ -281,11 +281,22 @@ async def entrypoint(ctx: agents.JobContext):
             cursor = conn.cursor()
             
             # 1. Check if dialed_number matches a company's AI extension
-            cursor.execute("SELECT id, name, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice FROM companies WHERE ai_extension = %s", (dialed_number,))
+            cursor.execute("""
+                SELECT id, name, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice,
+                       who_starts, greeting_msg, responsiveness, interruption_sensitivity, allow_interruptions,
+                       enable_backchanneling, backchannel_words, speech_speed, speech_volume, vad_threshold,
+                       min_endpointing_delay, max_endpointing_delay
+                FROM companies WHERE ai_extension = %s
+            """, (dialed_number,))
             company_row = cursor.fetchone()
             
             if company_row:
-                company_id, company_name, range_start, range_end, user_model, user_model_name, agent_name_val, agent_prompt_val, agent_voice_val = company_row
+                (company_id, company_name, range_start, range_end, user_model, user_model_name, 
+                 agent_name_val, agent_prompt_val, agent_voice_val, who_starts_val, greeting_msg_val,
+                 responsiveness_val, interruption_sens_val, allow_interrupt_val, backchannel_val,
+                 backchannel_words_val, speech_speed_val, speech_volume_val, vad_threshold_val,
+                 min_end_val, max_end_val) = company_row
+                
                 res["company_id"] = company_id
                 res["user_name"] = company_name
                 res["company_name"] = company_name
@@ -299,6 +310,14 @@ async def entrypoint(ctx: agents.JobContext):
                     res["agent_prompt"] = agent_prompt_val
                 if agent_voice_val:
                     res["agent_voice"] = agent_voice_val
+                
+                res["who_starts"] = who_starts_val or "AI speaks first"
+                res["greeting_msg"] = greeting_msg_val or "Hello, welcome! How can I help you?"
+                res["allow_interruptions"] = allow_interrupt_val if allow_interrupt_val is not None else True
+                res["min_endpointing_delay"] = min_end_val if min_end_val is not None else 0.5
+                res["max_endpointing_delay"] = max_end_val if max_end_val is not None else 1.0
+                res["speech_speed"] = speech_speed_val if speech_speed_val is not None else 1.0
+                res["speech_volume"] = speech_volume_val if speech_volume_val is not None else 1.0
                 
                 # Verify caller extension falls in range
                 if caller_number and caller_number.isdigit():
@@ -381,8 +400,21 @@ async def entrypoint(ctx: agents.JobContext):
     range_end = route_data["range_end"]
     company_id = route_data["company_id"]
     
-    # Initialize dynamic TTS based on database voice
-    tts = EdgeTTSWrapper(voice=agent_voice)
+    who_starts_opt = route_data.get("who_starts", "AI speaks first")
+    greeting_msg_opt = route_data.get("greeting_msg")
+    responsiveness_opt = route_data.get("responsiveness", 0.5)
+    interruption_sens_opt = route_data.get("interruption_sensitivity", 0.9)
+    allow_interrupt_opt = route_data.get("allow_interruptions", True)
+    min_end_opt = route_data.get("min_endpointing_delay", 0.5)
+    max_end_opt = route_data.get("max_endpointing_delay", 1.0)
+    
+    speech_speed_val = route_data.get("speech_speed", 1.0)
+    speech_vol_val = route_data.get("speech_volume", 1.0)
+    rate_str = f"{int((speech_speed_val - 1.0) * 100):+d}%"
+    vol_str = f"{int((speech_vol_val - 1.0) * 100):+d}%"
+    
+    # Initialize dynamic TTS based on database voice, rate, and volume
+    tts = EdgeTTSWrapper(voice=agent_voice, rate=rate_str, volume=vol_str)
 
     publish_event("incoming_call", {
         "caller": caller_number,
@@ -429,6 +461,12 @@ async def entrypoint(ctx: agents.JobContext):
     if agent_prompt:
         base_instructions += f"\nCRITICAL COMPANY DIRECTIVE: {agent_prompt}\n\n"
         
+    allow_interrupt_opt = routing_info.get("allow_interruptions", True)
+    min_end_opt = routing_info.get("min_endpointing_delay", 0.5)
+    max_end_opt = routing_info.get("max_endpointing_delay", 1.0)
+    who_starts_opt = routing_info.get("who_starts", "AI speaks first")
+    greeting_msg_opt = routing_info.get("greeting_msg")
+
     agent = agents.voice.Agent(
         instructions=(
             base_instructions +
@@ -443,12 +481,13 @@ async def entrypoint(ctx: agents.JobContext):
             "CRITICAL: If the user asks you to transfer, connect, or forward their call to a human agent, extension, or department (e.g. '100', '101', 'agent'), you MUST call the 'transfer_call' function."
         ),
         tools=tools,
-        allow_interruptions=True,
-        min_endpointing_delay=0.5,
-        max_endpointing_delay=1.0,
+        allow_interruptions=allow_interrupt_opt,
+        min_endpointing_delay=min_end_opt,
+        max_endpointing_delay=max_end_opt,
     )
     
     await session.start(agent=agent, room=ctx.room, room_input_options=agents.RoomInputOptions(close_on_disconnect=False))
+    agent.report_room_start(room_name, company_id)
     logging.info(f"[Call Pickup]: Agent session started for room {ctx.room.name}.")
     
     publish_event("agent_pickup", {
@@ -472,6 +511,7 @@ async def entrypoint(ctx: agents.JobContext):
             await handle.wait_for_playout()
         except Exception as e:
             logging.warning(f"Error speaking reject warning: {e}")
+        agent.report_room_end(room_name)
         await ctx.room.disconnect()
         return
     
@@ -496,6 +536,7 @@ async def entrypoint(ctx: agents.JobContext):
     @ctx.room.on("participant_disconnected")
     def on_participant_disconnected(participant: rtc.RemoteParticipant):
         logging.info(f"Participant disconnected: {participant.identity}")
+        agent.report_room_end(room_name)
         publish_event("call_ended", {"caller": caller_number})
 
     # ─── DTMF Keypad State Machine ───
@@ -519,45 +560,48 @@ async def entrypoint(ctx: agents.JobContext):
         ext_clean = target_ext.strip()
         logging.info(f"[DTMF Transfer Triggered]: Caller {caller_number} requested keypad transfer to {ext_clean}")
         
-        # Check allowed range
-        try:
-            ext_int = int(ext_clean)
-            is_valid = (range_start <= ext_int <= range_end) if (range_start is not None and range_end is not None) else True
-        except ValueError:
-            is_valid = False
-
-        if not is_valid:
-            error_msg = f"Extension {ext_clean} is invalid or outside allowed range ({range_start}-{range_end})."
-            logging.warning(f"[DTMF Transfer Error]: {error_msg}")
-            session.say(f"Extension {ext_clean} is invalid or out of range. Please try again.", allow_interruptions=True)
+        # Check authorization
+        valid_ext = False
+        if range_start is not None and range_end is not None:
+            if ext_clean.isdigit() and range_start <= int(ext_clean) <= range_end:
+                valid_ext = True
+        else:
+            valid_ext = True
+            
+        if not valid_ext:
+            session.say(f"Sorry, extension {ext_clean} is not valid or outside allowed range.", allow_interruptions=True)
             transfer_in_progress = False
             return
 
-        handle = session.say(f"Forwarding your call to extension {ext_clean}. Please hold.", allow_interruptions=False)
-        try:
-            await handle.wait_for_playout()
-        except Exception:
-            await asyncio.sleep(1.5)
+        session.say(f"Forwarding your call to extension {ext_clean}, please hold...", allow_interruptions=False)
+        await asyncio.sleep(2.0)
         
-        res = await fcontext.transfer_call(ext_clean)
-        logging.info(f"[DTMF Transfer Complete]: {res}")
+        try:
+            success = await fcontext.transfer_call(ext_clean)
+            if not success:
+                session.say("Transfer failed. Returning to assistant.", allow_interruptions=True)
+                transfer_in_progress = False
+        except Exception as err:
+            logging.error(f"DTMF transfer exception: {err}")
+            transfer_in_progress = False
 
     async def dtmf_timeout_job():
-        nonlocal dtmf_buffer, dtmf_mode
-        await asyncio.sleep(4.0)
-        if transfer_in_progress:
-            return
-        if dtmf_mode == "AWAITING_EXTENSION" and dtmf_buffer:
-            buf = dtmf_buffer.rstrip('#')
+        nonlocal dtmf_mode, dtmf_buffer
+        await asyncio.sleep(3.5)
+        if dtmf_buffer:
+            buf = dtmf_buffer
             dtmf_buffer = ""
-            if len(buf) >= 2:
-                asyncio.create_task(execute_dtmf_transfer(buf))
-            else:
-                session.say("Extension entry timed out. Please press 1 to try forwarding again.", allow_interruptions=True)
-                dtmf_mode = "IDLE"
+            asyncio.create_task(execute_dtmf_transfer(buf))
+        else:
+            dtmf_mode = "IDLE"
 
-    def handle_dtmf_digit(digit: str):
-        nonlocal dtmf_buffer, dtmf_mode, dtmf_timer_task, last_human_speech_time
+    @ctx.room.on("sip_dtmf_received")
+    def on_sip_dtmf_received(dtmf_event):
+        nonlocal dtmf_mode, dtmf_buffer, dtmf_timer_task, last_human_speech_time
+        digit = getattr(dtmf_event, "digit", "")
+        if not digit:
+            digit = getattr(dtmf_event, "digits", "")
+        
         if transfer_in_progress:
             return
             
@@ -565,13 +609,12 @@ async def entrypoint(ctx: agents.JobContext):
         if not digit:
             return
             
-        logging.info(f"[DTMF Keypad Input]: Digit '{digit}' received from caller {caller_number} (Mode: {dtmf_mode}, Buffer: '{dtmf_buffer}')")
+        logging.info(f"[DTMF Keypad Input]: Digit '{digit}' received from caller {caller_number}")
         last_human_speech_time = asyncio.get_event_loop().time()
         
         if dtmf_timer_task and not dtmf_timer_task.done():
             dtmf_timer_task.cancel()
 
-        # Handle Hash key (immediate submission)
         if digit == "#":
             if dtmf_buffer:
                 buf = dtmf_buffer
@@ -579,7 +622,6 @@ async def entrypoint(ctx: agents.JobContext):
                 asyncio.create_task(execute_dtmf_transfer(buf))
             return
 
-        # STATE 1: IDLE Mode
         if dtmf_mode == "IDLE":
             if digit == "1":
                 dtmf_mode = "AWAITING_EXTENSION"
@@ -588,7 +630,6 @@ async def entrypoint(ctx: agents.JobContext):
                 dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
                 return
             else:
-                # User typed a digit other than 1 in IDLE mode (e.g. starting a 3-digit extension directly)
                 dtmf_mode = "AWAITING_EXTENSION"
                 dtmf_buffer = digit
                 if len(dtmf_buffer) >= expected_ext_len:
@@ -599,82 +640,71 @@ async def entrypoint(ctx: agents.JobContext):
                 dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
                 return
 
-        # STATE 2: AWAITING_EXTENSION Mode
-        if dtmf_mode == "AWAITING_EXTENSION":
+        elif dtmf_mode == "AWAITING_EXTENSION":
             dtmf_buffer += digit
             if len(dtmf_buffer) >= expected_ext_len:
                 buf = dtmf_buffer
                 dtmf_buffer = ""
                 asyncio.create_task(execute_dtmf_transfer(buf))
                 return
-            else:
-                dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
-
-    @ctx.room.on("sip_dtmf_received")
-    def on_sip_dtmf_received(dtmf_event: rtc.SipDTMF):
-        d = getattr(dtmf_event, "digit", None) or getattr(dtmf_event, "code", None)
-        if d is not None:
-            handle_dtmf_digit(str(d))
+            dtmf_timer_task = asyncio.create_task(dtmf_timeout_job())
 
     @ctx.room.on("dtmf_received")
     def on_dtmf_received(dtmf_event):
         d = getattr(dtmf_event, "digit", None) or getattr(dtmf_event, "code", None) or getattr(dtmf_event, "key", None)
         if d is not None:
-            handle_dtmf_digit(str(d))
+            # Reusing sip logic
+            on_sip_dtmf_received(dtmf_event)
 
-    @session.on("conversation_item_added")
-    def on_conversation_item_added(event):
-        nonlocal last_human_speech_time, has_warned
-        if is_greeting_playing:
-            return
-        item = event.item
-        if hasattr(item, "role") and item.role in ("assistant", "user"):
-            text = item.text_content
-            if text and text.strip():
-                if text.strip() == greeting_text.strip():
-                    return
-                role_label = agent_name if item.role == "assistant" else "User"
-                # Report to dashboard & track tokens
-                latency_ms = None
-                token_usage_str = ""
-                if item.role == "assistant" and hasattr(item, "metrics") and item.metrics and hasattr(item.metrics, "llm") and item.metrics.llm:
-                    if item.metrics.llm.duration > 0:
-                        latency_ms = int(item.metrics.llm.duration * 1000)
+    @session.on("history_updated")
+    def on_history_updated():
+        if session.history._items:
+            item = session.history._items[-1]
+            if hasattr(item, "role") and item.role in ("assistant", "user"):
+                text = item.text_content
+                if text and text.strip():
+                    if text.strip() == greeting_text.strip():
+                        return
+                    role_label = agent_name if item.role == "assistant" else "User"
+                    latency_ms = None
+                    token_usage_str = ""
+                    if item.role == "assistant" and hasattr(item, "metrics") and item.metrics and hasattr(item.metrics, "llm") and item.metrics.llm:
+                        if item.metrics.llm.duration > 0:
+                            latency_ms = int(item.metrics.llm.duration * 1000)
+                        if hasattr(item.metrics.llm, "usage") and item.metrics.llm.usage:
+                            try:
+                                prompt_tok = item.metrics.llm.usage.prompt_tokens
+                                comp_tok = item.metrics.llm.usage.completion_tokens
+                                token_usage_str = f"\n   -> [Gemini Token Usage: {prompt_tok} Prompt | {comp_tok} Completion]"
+                            except Exception:
+                                pass
                     
-                    if hasattr(item.metrics.llm, "usage") and item.metrics.llm.usage:
-                        try:
-                            prompt_tok = item.metrics.llm.usage.prompt_tokens
-                            comp_tok = item.metrics.llm.usage.completion_tokens
-                            token_usage_str = f"\n   -> [Gemini Token Usage: {prompt_tok} Prompt | {comp_tok} Completion]"
-                        except Exception:
-                            pass
-                
-                logging.info(f"[{role_label}]: {text.strip()}{token_usage_str}")
+                    logging.info(f"[{role_label}]: {text.strip()}{token_usage_str}")
 
-                # Extract caller extension (non-agent participant) to attribute calls to devices
-                caller_extension = None
-                for p in ctx.room.remote_participants.values():
-                    caller_extension = p.attributes.get("sip.phoneNumber") or p.attributes.get("sip.from")
-                    if caller_extension: break
-                
-                publish_event("transcript", {
-                    "role": role_label,
-                    "text": text.strip(),
-                    "caller": caller_extension or caller_number
-                })
+                    caller_extension = None
+                    for p in ctx.room.remote_participants.values():
+                        caller_extension = p.attributes.get("sip.phoneNumber") or p.attributes.get("sip.from")
+                        if caller_extension: break
+                    
+                    publish_event("transcript", {
+                        "role": role_label,
+                        "text": text.strip(),
+                        "caller": caller_extension or caller_number
+                    })
 
-                asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension or dialed_number, company_id))
+                    asyncio.create_task(report_to_dashboard_async(ctx.room.name, item.role, text.strip(), latency_ms, caller_extension or dialed_number, company_id))
 
-    # Greet the user immediately when they connect to the room via SIP
-    greeting_text = f"Hello, welcome to {company_name}! I am {agent_name}. How can I help you?"
-    logging.info(f"[{agent_name} Greeting]: {greeting_text}")
+    # Greet user if who_starts_opt is "AI speaks first"
+    greeting_text = greeting_msg_opt if (greeting_msg_opt and greeting_msg_opt.strip()) else f"Hello, welcome to {company_name}! I am {agent_name}. How can I help you today?"
     
-    # IMMEDIATELY report the call pickup & greeting to database so room is logged right away
-    asyncio.create_task(report_to_dashboard_async(ctx.room.name, "assistant", greeting_text, None, dialed_number or caller_number, company_id))
+    if who_starts_opt == "AI speaks first":
+        logging.info(f"[{agent_name} Greeting]: {greeting_text}")
+        asyncio.create_task(report_to_dashboard_async(ctx.room.name, "assistant", greeting_text, None, dialed_number or caller_number, company_id))
+        greeting_handle = session.say(greeting_text, allow_interruptions=False)
+        await greeting_handle.wait_for_playout()
+    else:
+        logging.info(f"[{agent_name} Ready]: Listening (User speaks first mode).")
 
-    greeting_handle = session.say(greeting_text, allow_interruptions=False)
-    await greeting_handle.wait_for_playout()
-    
     # Greeting playout finished, start tracking user queries and silence monitor
     is_greeting_playing = False
     

@@ -49,7 +49,17 @@ def init_db():
         )
     ''')
     # Alter companies table to add columns if missing
-    for col, col_type in [("ai_extension", "TEXT"), ("range_start", "INTEGER"), ("range_end", "INTEGER"), ("ai_model", "TEXT"), ("ai_model_name", "TEXT"), ("agent_name", "TEXT"), ("agent_prompt", "TEXT"), ("agent_voice", "TEXT")]:
+    for col, col_type in [
+        ("ai_extension", "TEXT"), ("range_start", "INTEGER"), ("range_end", "INTEGER"),
+        ("ai_model", "TEXT"), ("ai_model_name", "TEXT"), ("agent_name", "TEXT"),
+        ("agent_prompt", "TEXT"), ("agent_voice", "TEXT"), ("who_starts", "TEXT"),
+        ("greeting_msg", "TEXT"), ("responsiveness", "DOUBLE PRECISION"),
+        ("interruption_sensitivity", "DOUBLE PRECISION"), ("allow_interruptions", "BOOLEAN"),
+        ("enable_backchanneling", "BOOLEAN"), ("backchannel_words", "TEXT"),
+        ("speech_speed", "DOUBLE PRECISION"), ("speech_volume", "DOUBLE PRECISION"),
+        ("vad_threshold", "DOUBLE PRECISION"), ("min_endpointing_delay", "DOUBLE PRECISION"),
+        ("max_endpointing_delay", "DOUBLE PRECISION")
+    ]:
         cursor.execute(f"ALTER TABLE companies ADD COLUMN IF NOT EXISTS {col} {col_type}")
     
     # 2. Create rooms table
@@ -218,6 +228,16 @@ def add_report_message(room_id: str, role: str, content: str, latency_ms: Option
     conn.commit()
     conn.close()
 
+active_call_rooms = set()
+
+def report_room_start(room_id: str, company_id: Optional[int] = None):
+    if room_id:
+        active_call_rooms.add(room_id)
+
+def report_room_end(room_id: str):
+    if room_id:
+        active_call_rooms.discard(room_id)
+
 def get_admin_metrics(company_id: Optional[int] = None):
     conn = get_db()
     cursor = conn.cursor()
@@ -233,14 +253,15 @@ def get_admin_metrics(company_id: Optional[int] = None):
     cursor.execute(f'SELECT COUNT(*) FROM rooms {where_clause}', params)
     total_chats = cursor.fetchone()[0]
     
-    # Live chats (active in last 5 minutes)
+    # Live chats (Only calls currently running right now in active_call_rooms & active in last 15 seconds)
     current_time = time.time()
-    five_mins_ago = current_time - 300
+    fifteen_secs_ago = current_time - 15
     if company_id is not None:
-        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= %s AND company_id = %s', (five_mins_ago, company_id))
+        cursor.execute('SELECT room_id FROM rooms WHERE last_active >= %s AND company_id = %s', (fifteen_secs_ago, company_id))
     else:
-        cursor.execute('SELECT COUNT(*) FROM rooms WHERE last_active >= %s', (five_mins_ago,))
-    live_chats = cursor.fetchone()[0]
+        cursor.execute('SELECT room_id FROM rooms WHERE last_active >= %s', (fifteen_secs_ago,))
+    recent_rooms = [r[0] for r in cursor.fetchall()]
+    live_chats = len([r for r in recent_rooms if r in active_call_rooms])
     
     # Average latency
     if company_id is not None:
@@ -256,16 +277,18 @@ def get_admin_metrics(company_id: Optional[int] = None):
     avg_latency = int(avg_latency_raw) if avg_latency_raw else 0
     
     # Fetch rooms history map
-    cursor.execute(f'SELECT room_id, last_active FROM rooms {where_clause} ORDER BY last_active DESC', params)
+    cursor.execute(f'SELECT room_id, last_active, extension, company_id FROM rooms {where_clause} ORDER BY last_active DESC', params)
     rows = cursor.fetchall()
     
     rooms_history = {}
-    for r_id, last_active in rows:
+    for r_id, last_active, ext, comp_id in rows:
         cursor.execute('SELECT role, content, latency_ms FROM messages WHERE room_id = %s ORDER BY timestamp ASC', (r_id,))
         messages = [{"role": row[0], "content": row[1], "latency_ms": row[2]} for row in cursor.fetchall()]
         rooms_history[r_id] = {
             "messages": messages,
-            "last_active": last_active
+            "last_active": last_active,
+            "extension": ext or "1000",
+            "company_id": comp_id
         }
         
     conn.close()
@@ -368,6 +391,14 @@ def delete_user(user_id):
     conn.commit()
     conn.close()
 
+def update_user_password(user_id: str, new_password: str):
+    hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET password = %s WHERE id = %s", (hashed_password, user_id))
+    conn.commit()
+    conn.close()
+
 def check_user_login(user_id, password):
     conn = get_db()
     cursor = conn.cursor()
@@ -446,7 +477,13 @@ def delete_device(device_id):
 def get_companies():
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT id, name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at, agent_name, agent_prompt, agent_voice FROM companies')
+    cursor.execute('''
+        SELECT id, name, ai_extension, range_start, range_end, ai_model, ai_model_name, created_at, 
+               agent_name, agent_prompt, agent_voice, who_starts, greeting_msg, responsiveness, 
+               interruption_sensitivity, allow_interruptions, enable_backchanneling, backchannel_words, 
+               speech_speed, speech_volume, vad_threshold, min_endpointing_delay, max_endpointing_delay 
+        FROM companies
+    ''')
     companies = [{
         "id": row[0],
         "name": row[1],
@@ -458,7 +495,19 @@ def get_companies():
         "created_at": row[7],
         "agent_name": row[8],
         "agent_prompt": row[9],
-        "agent_voice": row[10]
+        "agent_voice": row[10],
+        "who_starts": row[11] or "AI speaks first",
+        "greeting_msg": row[12] if (row[12] and row[12].strip() and row[12] != "Hello, welcome! How can I help you?") else f"Hello! Welcome to {row[1]}. My name is {row[8] or 'AI Voice Agent'}, how can I help you today?",
+        "responsiveness": row[13] if row[13] is not None else 0.5,
+        "interruption_sensitivity": row[14] if row[14] is not None else 0.9,
+        "allow_interruptions": row[15] if row[15] is not None else True,
+        "enable_backchanneling": row[16] if row[16] is not None else False,
+        "backchannel_words": row[17] or "yeah, hmm, right, ok",
+        "speech_speed": row[18] if row[18] is not None else 1.0,
+        "speech_volume": row[19] if row[19] is not None else 1.0,
+        "vad_threshold": row[20] if row[20] is not None else 0.5,
+        "min_endpointing_delay": row[21] if row[21] is not None else 0.5,
+        "max_endpointing_delay": row[22] if row[22] is not None else 1.0
     } for row in cursor.fetchall()]
     conn.close()
     return companies
@@ -466,10 +515,11 @@ def get_companies():
 def add_company(name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str = "gemini", ai_model_name: str = "gemini-3.1-flash-lite", admin_id: str = None, admin_name: str = None, admin_password: str = None, agent_name: str = "AI Assistant", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
     conn = get_db()
     cursor = conn.cursor()
+    default_greeting = f"Hello! Welcome to {name}. My name is {agent_name}, how can I help you today?"
     cursor.execute('''
-        INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, created_at) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
-    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, time.time()))
+        INSERT INTO companies (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, greeting_msg, created_at) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, default_greeting, time.time()))
     company_id = cursor.fetchone()[0]
 
     if admin_id and admin_password:
@@ -484,14 +534,34 @@ def add_company(name: str, ai_extension: str, range_start: int, range_end: int, 
     # Trigger Asterisk sync
     sync_asterisk_config()
 
-def update_company(company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, ai_model: str, ai_model_name: str, agent_name: str = "AI Assistant", agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural"):
+def update_company(
+    company_id: int, name: str, ai_extension: str, range_start: int, range_end: int, 
+    ai_model: str, ai_model_name: str, agent_name: str = "AI Assistant", 
+    agent_prompt: str = "", agent_voice: str = "en-US-AriaNeural",
+    who_starts: str = "AI speaks first", greeting_msg: str = "Hello, welcome! How can I help you?",
+    responsiveness: float = 0.5, interruption_sensitivity: float = 0.9,
+    allow_interruptions: bool = True, enable_backchanneling: bool = False,
+    backchannel_words: str = "yeah, hmm, right, ok", speech_speed: float = 1.0,
+    speech_volume: float = 1.0, vad_threshold: float = 0.5,
+    min_endpointing_delay: float = 0.5, max_endpointing_delay: float = 1.0
+):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
         UPDATE companies 
-        SET name = %s, ai_extension = %s, range_start = %s, range_end = %s, ai_model = %s, ai_model_name = %s, agent_name = %s, agent_prompt = %s, agent_voice = %s
+        SET name = %s, ai_extension = %s, range_start = %s, range_end = %s, ai_model = %s, ai_model_name = %s, 
+            agent_name = %s, agent_prompt = %s, agent_voice = %s, who_starts = %s, greeting_msg = %s,
+            responsiveness = %s, interruption_sensitivity = %s, allow_interruptions = %s, enable_backchanneling = %s,
+            backchannel_words = %s, speech_speed = %s, speech_volume = %s, vad_threshold = %s,
+            min_endpointing_delay = %s, max_endpointing_delay = %s
         WHERE id = %s
-    ''', (name, ai_extension, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice, company_id))
+    ''', (
+        name, ai_extension, range_start, range_end, ai_model, ai_model_name,
+        agent_name, agent_prompt, agent_voice, who_starts, greeting_msg,
+        responsiveness, interruption_sensitivity, allow_interruptions, enable_backchanneling,
+        backchannel_words, speech_speed, speech_volume, vad_threshold,
+        min_endpointing_delay, max_endpointing_delay, company_id
+    ))
     
     # Also update the associated company_admin user if their model needs updating
     cursor.execute('''
@@ -634,11 +704,12 @@ def get_user_metrics(user_id):
     cursor.execute(f'SELECT COUNT(*) FROM rooms WHERE extension IN ({placeholders})', extensions)
     total_chats = cursor.fetchone()[0]
     
-    # Live chats (active in last 5 minutes) matching extensions
+    # Live chats (active in last 15 seconds AND running in active_call_rooms)
     current_time = time.time()
-    five_mins_ago = current_time - 300
-    cursor.execute(f'SELECT COUNT(*) FROM rooms WHERE last_active >= %s AND extension IN ({placeholders})', [five_mins_ago] + extensions)
-    live_chats = cursor.fetchone()[0]
+    fifteen_secs_ago = current_time - 15
+    cursor.execute(f'SELECT room_id FROM rooms WHERE last_active >= %s AND extension IN ({placeholders})', [fifteen_secs_ago] + extensions)
+    recent_user_rooms = [r[0] for r in cursor.fetchall()]
+    live_chats = len([r for r in recent_user_rooms if r in active_call_rooms])
     
     # Average latency matching extensions
     cursor.execute(f'''
