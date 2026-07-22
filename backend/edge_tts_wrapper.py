@@ -60,7 +60,11 @@ class EdgeChunkedStream(tts.ChunkedStream):
                 mime_type="audio/pcm",
             )
             if pcm_bytes:
-                output_emitter.push(pcm_bytes)
+                chunk_size = 960  # 20ms at 24000Hz mono 16-bit PCM (24000 * 2 * 0.02)
+                for i in range(0, len(pcm_bytes), chunk_size):
+                    chunk = pcm_bytes[i:i + chunk_size]
+                    output_emitter.push(chunk)
+                    await asyncio.sleep(0.018)
                 
         except Exception as e:
             print(f"[EdgeTTS] Synthesis failed: {e}")

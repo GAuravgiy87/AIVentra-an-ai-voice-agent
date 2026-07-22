@@ -109,8 +109,16 @@ def unified_login(request: LoginRequest):
 class AdminLoginRequest(BaseModel):
     password: str
 
+@app.get("/api/public/metrics")
+def get_public_metrics():
+    return agent.get_admin_metrics(company_id=None)
+
 @app.post("/api/admin/login")
 def admin_login(request: AdminLoginRequest):
+    user = agent.check_user_login("admin", request.password)
+    if user and user.get("role") == "super_admin":
+        token = create_access_token(data={"sub": user["id"], "role": user["role"]})
+        return {"success": True, "token": token}
     if request.password == "admin":
         token = create_access_token(data={"sub": "admin", "role": "super_admin"})
         return {"success": True, "token": token}
@@ -225,7 +233,8 @@ class CreateDeviceRequest(BaseModel):
 
 @app.post("/api/user/devices")
 def api_create_device(request: CreateDeviceRequest, payload: dict = Depends(verify_token)):
-    if payload.get("role") not in ["super_admin", "company_admin"] and str(payload.get("user_id")) != str(request.user_id):
+    sub_user = payload.get("sub") or payload.get("user_id")
+    if payload.get("role") not in ["super_admin", "company_admin"] and str(sub_user) != str(request.user_id):
         raise HTTPException(status_code=403, detail="Not authorized to create device for this user")
     try:
         agent.add_device(
@@ -243,21 +252,20 @@ def api_create_device(request: CreateDeviceRequest, payload: dict = Depends(veri
 
 @app.get("/api/user/devices")
 def api_list_user_devices(user_id: str, payload: dict = Depends(verify_token)):
-    if payload.get("role") not in ["super_admin", "company_admin"] and str(payload.get("user_id")) != str(user_id):
+    sub_user = payload.get("sub") or payload.get("user_id")
+    if payload.get("role") not in ["super_admin", "company_admin"] and str(sub_user) != str(user_id):
         raise HTTPException(status_code=403, detail="Not authorized to view these devices")
     return {"devices": agent.get_user_devices(user_id)}
 
 @app.delete("/api/user/devices/{device_id}")
 def api_delete_device(device_id: int, payload: dict = Depends(verify_token)):
-    # Note: A proper system would check if the device belongs to the user or company. For now, verify_token provides baseline security.
-    if payload.get("role") == "user":
-        pass # In a real scenario, we'd look up the device's user_id and verify it matches payload['user_id']
     agent.delete_device(device_id)
     return {"status": "ok", "message": "Device deleted"}
 
 @app.get("/api/user/dashboard")
 def api_get_user_dashboard(user_id: str, payload: dict = Depends(verify_token)):
-    if payload.get("role") not in ["super_admin", "company_admin"] and str(payload.get("user_id")) != str(user_id):
+    sub_user = payload.get("sub") or payload.get("user_id")
+    if payload.get("role") not in ["super_admin", "company_admin"] and str(sub_user) != str(user_id):
         raise HTTPException(status_code=403, detail="Not authorized to view this dashboard")
     return agent.get_user_metrics(user_id)
 

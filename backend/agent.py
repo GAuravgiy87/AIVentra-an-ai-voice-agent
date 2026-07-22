@@ -26,9 +26,55 @@ Do not use markdown formatting like asterisks or bold text, just plain text that
 """
 
 
-DB_URL = "postgresql://postgres:postgres@localhost:5433/ventra"
+from psycopg2.pool import ThreadedConnectionPool
+
+DB_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5433/ventra")
+
+_db_pool = None
+
+def _get_pool():
+    global _db_pool
+    if _db_pool is None or getattr(_db_pool, 'closed', False):
+        try:
+            _db_pool = ThreadedConnectionPool(minconn=1, maxconn=20, dsn=DB_URL)
+        except Exception as e:
+            print(f"[DB Pool Warning]: Could not create pool: {e}")
+            _db_pool = None
+    return _db_pool
+
+class PooledConnWrapper:
+    """Wrapper around psycopg2 connection to return to ThreadedConnectionPool on close()"""
+    def __init__(self, pool, conn):
+        self._pool = pool
+        self._conn = conn
+
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+
+    def close(self):
+        if self._pool and self._conn and not getattr(self._conn, 'closed', False):
+            try:
+                self._pool.putconn(self._conn)
+            except Exception:
+                try:
+                    self._conn.close()
+                except Exception:
+                    pass
+        elif self._conn and not getattr(self._conn, 'closed', False):
+            try:
+                self._conn.close()
+            except Exception:
+                pass
+        self._conn = None
 
 def get_db():
+    pool = _get_pool()
+    if pool:
+        try:
+            conn = pool.getconn()
+            return PooledConnWrapper(pool, conn)
+        except Exception:
+            pass
     return psycopg2.connect(DB_URL)
 
 def init_db():
@@ -497,7 +543,7 @@ def get_companies():
         "agent_prompt": row[9],
         "agent_voice": row[10],
         "who_starts": row[11] or "AI speaks first",
-        "greeting_msg": row[12] if (row[12] and row[12].strip() and row[12] != "Hello, welcome! How can I help you?") else f"Hello! Welcome to {row[1]}. My name is {row[8] or 'AI Voice Agent'}, how can I help you today?",
+        "greeting_msg": row[12] if (row[12] and row[12].strip()) else f"Hello! Welcome to {row[1]}. My name is {row[8] or 'AI Voice Agent'}, how can I help you today?",
         "responsiveness": row[13] if row[13] is not None else 0.5,
         "interruption_sensitivity": row[14] if row[14] is not None else 0.9,
         "allow_interruptions": row[15] if row[15] is not None else True,

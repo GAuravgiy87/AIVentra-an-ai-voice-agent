@@ -273,22 +273,32 @@ async def entrypoint(ctx: agents.JobContext):
             "company_id": None
         }
         
-        if not dialed_number:
-            return res
-            
         try:
             conn = get_db()
             cursor = conn.cursor()
             
-            # 1. Check if dialed_number matches a company's AI extension
-            cursor.execute("""
-                SELECT id, name, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice,
-                       who_starts, greeting_msg, responsiveness, interruption_sensitivity, allow_interruptions,
-                       enable_backchanneling, backchannel_words, speech_speed, speech_volume, vad_threshold,
-                       min_endpointing_delay, max_endpointing_delay
-                FROM companies WHERE ai_extension = %s
-            """, (dialed_number,))
-            company_row = cursor.fetchone()
+            # 1. Check if dialed_number matches a company's AI extension, or fallback to first company
+            if dialed_number:
+                cursor.execute("""
+                    SELECT id, name, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice,
+                           who_starts, greeting_msg, responsiveness, interruption_sensitivity, allow_interruptions,
+                           enable_backchanneling, backchannel_words, speech_speed, speech_volume, vad_threshold,
+                           min_endpointing_delay, max_endpointing_delay
+                    FROM companies WHERE ai_extension = %s
+                """, (dialed_number,))
+                company_row = cursor.fetchone()
+            else:
+                company_row = None
+
+            if not company_row:
+                cursor.execute("""
+                    SELECT id, name, range_start, range_end, ai_model, ai_model_name, agent_name, agent_prompt, agent_voice,
+                           who_starts, greeting_msg, responsiveness, interruption_sensitivity, allow_interruptions,
+                           enable_backchanneling, backchannel_words, speech_speed, speech_volume, vad_threshold,
+                           min_endpointing_delay, max_endpointing_delay
+                    FROM companies ORDER BY id ASC LIMIT 1
+                """)
+                company_row = cursor.fetchone()
             
             if company_row:
                 (company_id, company_name, range_start, range_end, user_model, user_model_name, 
@@ -461,11 +471,11 @@ async def entrypoint(ctx: agents.JobContext):
     if agent_prompt:
         base_instructions += f"\nCRITICAL COMPANY DIRECTIVE: {agent_prompt}\n\n"
         
-    allow_interrupt_opt = routing_info.get("allow_interruptions", True)
-    min_end_opt = routing_info.get("min_endpointing_delay", 0.5)
-    max_end_opt = routing_info.get("max_endpointing_delay", 1.0)
-    who_starts_opt = routing_info.get("who_starts", "AI speaks first")
-    greeting_msg_opt = routing_info.get("greeting_msg")
+    allow_interrupt_opt = route_data.get("allow_interruptions", True)
+    min_end_opt = route_data.get("min_endpointing_delay", 0.5)
+    max_end_opt = route_data.get("max_endpointing_delay", 1.0)
+    who_starts_opt = route_data.get("who_starts", "AI speaks first")
+    greeting_msg_opt = route_data.get("greeting_msg")
 
     agent = agents.voice.Agent(
         instructions=(

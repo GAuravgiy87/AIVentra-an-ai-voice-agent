@@ -1,6 +1,5 @@
 import numpy as np
 import whisper
-import librosa
 from livekit.agents.stt import STT, SpeechEvent, SpeechData, SpeechEventType, STTCapabilities
 from livekit.agents.utils import AudioBuffer
 from livekit.agents.types import NOT_GIVEN, NotGivenOr, APIConnectOptions

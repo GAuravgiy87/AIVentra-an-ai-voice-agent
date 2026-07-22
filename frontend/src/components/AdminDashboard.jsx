@@ -112,6 +112,7 @@ export default function AdminDashboard({ onBack, onStartCall }) {
   }, [selectedCompanyId]);
 
   const fetchData = useCallback(async () => {
+    if (document.hidden) return;
     try {
       const q = selectedCompanyId ? `?company_id=${selectedCompanyId}` : '';
       const res = await fetch(`http://${window.location.hostname}:8001/api/admin/rooms${q}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });
@@ -380,8 +381,8 @@ export default function AdminDashboard({ onBack, onStartCall }) {
         </div>
       </div>
 
-      {/* CREATE COMPANY / AGENT MODAL */}
-      {showCreateCompanyModal && (
+      {/* CREATE COMPANY / AGENT MODAL (Super Admin Only) */}
+      {userRole === 'super_admin' && showCreateCompanyModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <form onSubmit={handleCreateCompany} style={{ background: '#ffffff', padding: 28, borderRadius: 20, maxWidth: 540, width: '100%', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0 }}>Create Organisation / AI Agent</h3>

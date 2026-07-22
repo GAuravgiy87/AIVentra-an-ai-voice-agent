@@ -7,15 +7,194 @@ import VoiceAgent from './components/VoiceAgent';
 import { Bot, ShieldCheck, Mic, Zap, Phone, ArrowRight, Sparkles, Globe, Cpu, Activity, Clock, CheckCircle2, X, FileText, ChevronRight, Scale, Lock, ShieldAlert, Award } from 'lucide-react';
 
 /* ─────────────────────────────────────────
+   Interactive Canvas Neural Audio Web (User Interactive Background)
+   ───────────────────────────────────────── */
+function InteractiveVoiceCanvas() {
+  const canvasRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const mouse = { x: width / 2, y: height / 2, radius: 140, active: false };
+
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.active = false;
+    };
+
+    const ripples = [];
+    const handleClick = (e) => {
+      ripples.push({
+        x: e.clientX,
+        y: e.clientY,
+        radius: 4,
+        maxRadius: 130,
+        opacity: 0.7,
+        color: Math.random() > 0.5 ? '#ec4899' : '#8b5cf6'
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('click', handleClick);
+
+    const particleCount = 25; // Subtle, minimal node count
+    const particles = [];
+    const colors = ['#ec4899', '#8b5cf6', '#a855f7'];
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        baseRadius: Math.random() * 2 + 1.2,
+        radius: Math.random() * 2 + 1.2,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw Click Ripples
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i];
+        r.radius += 3;
+        r.opacity -= 0.015;
+
+        if (r.opacity <= 0 || r.radius >= r.maxRadius) {
+          ripples.splice(i, 1);
+          continue;
+        }
+
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = r.color;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = Math.max(0, r.opacity);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+      }
+
+      // Update & Render Particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        if (mouse.active) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.x -= (dx / dist) * force * 1.8;
+            p.y -= (dy / dist) * force * 1.8;
+            p.radius = p.baseRadius + force * 2.0;
+          } else {
+            p.radius = p.baseRadius;
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = 0.6;
+            ctx.globalAlpha = (1 - dist / 110) * 0.15;
+            ctx.stroke();
+            ctx.globalAlpha = 1.0;
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('click', handleClick);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 0
+      }}
+    />
+  );
+}
+
+/* ─────────────────────────────────────────
    Background Animated Blobs Wrapper
    ───────────────────────────────────────── */
 function PageBackground({ children }) {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', width: '100%', overflow: 'hidden' }}>
+      <InteractiveVoiceCanvas />
       <div className="animated-bg">
+        {/* Ambient Gradient Blobs */}
         <div className="blob blob-pink"></div>
         <div className="blob blob-purple"></div>
         <div className="blob blob-peach"></div>
+
+        {/* AI Voice Radar Rings in Empty Background Space */}
+        <div className="bg-radar-circle bg-radar-1"></div>
+        <div className="bg-radar-circle bg-radar-2"></div>
+        <div className="bg-radar-circle bg-radar-3"></div>
+
+        {/* Telecom & AI Voice Tech Grid Overlay */}
+        <div className="tech-grid-overlay"></div>
       </div>
       {children}
     </div>
@@ -48,25 +227,14 @@ function LandingPage({ showRoomId = null }) {
   // Fetch real telemetry data on mount
   useEffect(() => {
     const fetchTelemetry = async () => {
+      if (document.hidden) return;
       try {
-        const [metRes, compRes] = await Promise.all([
-          fetch(`http://${window.location.hostname}:8001/api/admin/metrics`),
-          fetch(`http://${window.location.hostname}:8001/api/admin/companies`)
-        ]);
-        
-        let extCount = 4;
-        if (compRes.ok) {
-          const compData = await compRes.json();
-          if (compData.companies && compData.companies.length > 0) {
-            extCount = compData.companies.length;
-          }
-        }
-
+        const metRes = await fetch(`http://${window.location.hostname}:8001/api/public/metrics`);
         if (metRes.ok) {
           const metData = await metRes.json();
           const roomCount = metData.rooms ? Object.keys(metData.rooms).length : (metData.total_chats || 0);
           setLiveMetrics({
-            activeExtensions: extCount,
+            activeExtensions: 4,
             latencyMs: metData.avg_latency_ms || 340,
             totalCalls: roomCount,
             liveChats: metData.live_chats || 0,
@@ -252,16 +420,26 @@ KEY TECHNICAL HIGHLIGHTS:
 
       {/* Hero Section */}
       <main style={{ flex: 1, padding: '40px 30px', maxWidth: 1200, margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
-        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+        <div style={{ textAlign: 'center', marginBottom: 40, position: 'relative' }}>
+          
+          {/* Animated Audio Equalizer Top Indicator */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 18px', borderRadius: 99, background: 'rgba(236,72,153,0.08)', border: '1px solid rgba(236,72,153,0.2)', marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 3, height: 20 }}>
+              <div className="eq-bar eq-bar-1"></div>
+              <div className="eq-bar eq-bar-2"></div>
+              <div className="eq-bar eq-bar-3"></div>
+              <div className="eq-bar eq-bar-4"></div>
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 800, color: '#ec4899', letterSpacing: '0.04em' }}>NEXT-GEN AI VOICE PIPELINE</span>
+            <Sparkles size={14} color="#8b5cf6" className="spin-slow" />
+          </div>
+
           <h1 style={{
-            fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', fontWeight: 900,
+            fontSize: 'clamp(2.4rem, 5.5vw, 3.8rem)', fontWeight: 900,
             letterSpacing: '-0.03em', lineHeight: 1.15,
             color: 'var(--text-primary)', marginBottom: 20
           }}>
-            Your Intelligent <span style={{
-              background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
-            }}>AI Voice Agent</span> is Ready
+            Your Intelligent <span className="shimmer-text">AI Voice Agent</span> is Ready
           </h1>
 
           <p style={{
@@ -271,39 +449,43 @@ KEY TECHNICAL HIGHLIGHTS:
             AI Voice Agent handles business phone lines, answers queries instantly, manages customer bookings, and routes calls seamlessly over SIP trunking.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <button
-              className="btn-primary glow-button"
-              onClick={startRoom}
-              disabled={loading}
-              style={{
-                padding: '14px 32px', borderRadius: 14, fontSize: 16, fontWeight: 800,
-                background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
-                display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer'
-              }}
-            >
-              {loading ? 'Connecting Call...' : 'Initiate Voice Call'}
-              <ArrowRight size={18} />
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, flexWrap: 'wrap', position: 'relative' }}>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <div className="sonar-ring"></div>
+              <div className="sonar-ring sonar-ring-2"></div>
+              <button
+                className="btn-primary btn-magnetic"
+                onClick={startRoom}
+                disabled={loading}
+                style={{
+                  padding: '16px 36px', borderRadius: 16, fontSize: 16, fontWeight: 800,
+                  background: 'linear-gradient(135deg, var(--accent), var(--accent-2))',
+                  display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', position: 'relative', zIndex: 2
+                }}
+              >
+                {loading ? 'Connecting Call...' : 'Initiate Voice Call'}
+                <ArrowRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Dynamic Telemetry Stat Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20, marginBottom: 40 }}>
           {dynamicStats.map(({ value, label, icon: Icon, color }, idx) => (
-            <div key={idx} className="glass" style={{
-              padding: 22, borderRadius: 18, background: 'rgba(255,255,255,0.75)',
+            <div key={idx} className={`glow-card-interactive ${idx % 2 === 0 ? 'float-gentle' : 'float-gentle-delay'}`} style={{
+              padding: 22, borderRadius: 18, background: 'rgba(255,255,255,0.85)',
               border: '1px solid rgba(236,72,153,0.12)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
-              transition: 'transform 0.2s', cursor: 'default'
+              cursor: 'default'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                 <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</span>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={16} color={color} />
+                <div style={{ width: 34, height: 34, borderRadius: 10, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={17} color={color} />
                 </div>
               </div>
-              <div style={{ fontSize: 24, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{value}</div>
-              <div style={{ fontSize: 11, color: '#10b981', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700 }}>
+              <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{value}</div>
+              <div style={{ fontSize: 11, color: '#10b981', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700 }}>
                 <CheckCircle2 size={12} /> Live Real-Time Telemetry
               </div>
             </div>
@@ -317,19 +499,18 @@ KEY TECHNICAL HIGHLIGHTS:
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
             {services.map((ser) => (
-              <div key={ser.id} onClick={() => setSelectedItem(ser)} className="glass" style={{
-                padding: 24, borderRadius: 18, background: 'rgba(255,255,255,0.75)',
-                border: '1px solid rgba(139, 92, 246, 0.15)', display: 'flex', flexDirection: 'column', gap: 12,
-                cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 16px rgba(0,0,0,0.02)'
+              <div key={ser.id} onClick={() => setSelectedItem(ser)} className="glow-card-interactive" style={{
+                padding: 24, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 12,
+                cursor: 'pointer'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{
-                    width: 40, height: 40, borderRadius: 12, background: 'rgba(139, 92, 246, 0.1)',
+                    width: 42, height: 42, borderRadius: 12, background: 'rgba(139, 92, 246, 0.12)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed'
                   }}>
-                    <Cpu size={20} />
+                    <Cpu size={22} />
                   </div>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: '#7c3aed', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 800, color: '#7c3aed', display: 'flex', alignItems: 'center', gap: 4 }}>
                     Learn More <ChevronRight size={14} />
                   </span>
                 </div>
@@ -349,25 +530,23 @@ KEY TECHNICAL HIGHLIGHTS:
             {features.map((feat) => {
               const Icon = feat.icon;
               return (
-                <div key={feat.id} onClick={() => setSelectedItem(feat)} className="glass" style={{
-                  padding: 24, borderRadius: 18, background: 'rgba(255,255,255,0.75)',
-                  border: `1px solid ${feat.color}25`, cursor: 'pointer', transition: 'all 0.2s',
-                  display: 'flex', flexDirection: 'column', gap: 10
+                <div key={feat.id} onClick={() => setSelectedItem(feat)} className="glow-card-interactive" style={{
+                  padding: 24, borderRadius: 18, display: 'flex', flexDirection: 'column', gap: 12,
+                  cursor: 'pointer'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{
-                      width: 44, height: 44, borderRadius: 12, backgroundColor: `${feat.color}12`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      border: `1px solid ${feat.color}30`
+                      width: 42, height: 42, borderRadius: 12, background: `${feat.color}15`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
-                      <Icon size={20} color={feat.color} />
+                      <Icon size={22} color={feat.color} />
                     </div>
-                    <span style={{ fontSize: 11, fontWeight: 800, color: feat.color, display: 'flex', alignItems: 'center', gap: 2 }}>
-                      Read Info <ChevronRight size={13} />
+                    <span style={{ fontSize: 12, fontWeight: 800, color: feat.color, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      Explore <ChevronRight size={14} />
                     </span>
                   </div>
                   <h3 style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{feat.title}</h3>
-                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{feat.desc}</p>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{feat.desc}</p>
                 </div>
               );
             })}

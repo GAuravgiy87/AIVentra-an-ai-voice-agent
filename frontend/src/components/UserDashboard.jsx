@@ -136,7 +136,7 @@ export default function UserDashboard({ onBack }) {
   };
 
   const fetchDashboardData = useCallback(async () => {
-    if (!userId) return;
+    if (!userId || document.hidden) return;
     try {
       // 1. Fetch user devices
       const devRes = await fetch(`http://${window.location.hostname}:8001/api/user/devices?user_id=${userId}`, { headers: { "Authorization": `Bearer ${localStorage.getItem("ventra_token")}` } });

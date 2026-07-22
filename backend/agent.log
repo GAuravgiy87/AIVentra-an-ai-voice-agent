@@ -4366,3 +4366,35 @@ task: <Task pending name='Task-1351' coro=<entrypoint.<locals>.monitor_silence()
 2026-07-22 14:04:39,511 [INFO] root: [swetaa]: Certainly, I am transferring your call to extension 1006 now. Please hold.
 2026-07-22 14:04:49,685 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
 2026-07-22 14:04:49,685 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 28011
+2026-07-22 14:13:49,213 [INFO] livekit.agents: received job request
+2026-07-22 14:13:49,214 [WARNING] livekit.agents: no warmed process available for job, waiting for one to be created
+2026-07-22 14:13:49,228 [INFO] livekit.agents: initializing job runner
+2026-07-22 14:13:49,229 [INFO] livekit.agents: job runner initialized
+2026-07-22 14:13:49,231 [INFO] livekit: livekit_api::signal_client::signal_stream:104:livekit_api::signal_client::signal_stream - connecting to ws://127.0.0.1:7890/rtc?sdk=python&os=Windows&os_version=10.0.26200&device_model=HP+EliteDesk+800+G4+TWR&protocol=17&client_protocol=1&auto_subscribe=1&adaptive_stream=0&version=1.1.13&capabilities=CAP_PACKET_TRAILER
+2026-07-22 14:13:49,544 [WARNING] google_genai._api_client: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2026-07-22 14:13:50,650 [WARNING] livekit.agents: allow_interruptions, discard_audio_if_uninterruptible are deprecated and will be removed in v2.0. Use turn_handling=TurnHandlingOptions(...) instead
+2026-07-22 14:13:50,651 [WARNING] livekit.agents: RoomInputOptions and RoomOutputOptions are deprecated, use RoomOptions instead
+2026-07-22 14:13:51,025 [INFO] root: [Call Pickup]: Agent session started for room sip-call-_1008_tDi4BeXrkvHe.
+2026-07-22 14:13:51,025 [INFO] root: [swetaa Greeting]: Hello, welcome to phone! I am swetaa. How can I help you?
+2026-07-22 14:13:52,432 [WARNING] livekit.agents: cloud turn detector failed (message='Invalid response status (401 Unauthorized)', status_code=401, retryable=False); falling back to local mini model
+2026-07-22 14:14:19,998 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 14:14:19,998 [WARNING] livekit.plugins.silero: inference is slower than realtime
+2026-07-22 14:14:20,070 [INFO] root: [User]: call transfer to 1006.
+2026-07-22 14:14:21,233 [INFO] root: [Call Transfer]: Requested transfer of caller 1008 to extension 1006
+2026-07-22 14:14:21,659 [INFO] root: [Call Transfer]: Found channel PJSIP/1008-00000007. Redirecting to 1006...
+2026-07-22 14:14:21,917 [INFO] root: Participant disconnected: sip_1008
+2026-07-22 14:14:24,514 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-1963' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 14:14:24,514 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-2248' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 14:14:24,515 [ERROR] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-2641' coro=<entrypoint.<locals>.monitor_silence() running at D:\voiceagent\backend\livekit_agent.py:692> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-07-22 14:14:28,114 [INFO] root: [swetaa]: Transferring your call now. Please hold.
+2026-07-22 14:14:41,687 [INFO] livekit: livekit::room:1687:livekit::room - disconnected from room with reason: RoomClosed
+2026-07-22 14:14:41,687 [WARNING] livekit: livekit_ffi::server:260:livekit_ffi::server - Attempted to drop unknown FFI handle: 32094
+2026-07-22 14:22:32,118 [INFO] livekit.agents: starting worker
+2026-07-22 14:22:32,118 [INFO] livekit.agents: plugin registered
+2026-07-22 14:22:32,118 [INFO] livekit.agents: plugin registered
+2026-07-22 14:22:32,118 [INFO] livekit.agents: plugin registered
+2026-07-22 14:22:32,127 [INFO] livekit.agents: HTTP server listening on :50293
+2026-07-22 14:22:32,474 [INFO] livekit.agents: registered worker
